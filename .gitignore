@@ -173,6 +173,9 @@ docs/_templates/
 # CogOS runtime
 .cogos/
 
+# Website (separate repository)
+cogos-site/
+
 # Generated files
 generated/
 output/
