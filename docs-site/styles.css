@@ -677,25 +677,13 @@ footer {
 .cognitive-mechanical-section {
     text-align: center;
     padding: 4rem 2rem;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+    background: rgba(15, 23, 42, 0.95);
     border-radius: 12px;
     margin: 2rem 0;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    border: 2px solid;
+    border-image: linear-gradient(135deg, #f59e0b, #06b6d4) 1;
     position: relative;
-}
-
-.cognitive-mechanical-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    margin: -2px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, #f59e0b, #06b6d4);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
 }
 
 .brain-cog-fusion {
@@ -709,10 +697,19 @@ footer {
 
 .brain-cog-item {
     text-align: center;
-    padding: 1.5rem;
-    background: rgba(15, 23, 42, 0.8);
-    border-radius: 8px;
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 2rem;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 12px;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.brain-cog-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    border-color: rgba(99, 102, 241, 0.5);
 }
 
 .brain-cog-item h4 {
@@ -745,4 +742,7 @@ footer {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
