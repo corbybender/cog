@@ -18,7 +18,7 @@ Welcome to CogOS! This guide will get you up and running with super-intelligent 
 ## ⚡ Quick Install (One Command)
 
 ```bash
-pip install cogos && cd /path/to/project && python -m cogos.install_cogos
+pip install cogos && cd /path/to/project && python install_cogos.py
 ```
 
 That's it! CogOS is now integrated into your project.
@@ -63,7 +63,7 @@ Open `web-ui/frontend/index.html` in your web browser.
 **That's it! You can now:**
 - Create tasks by clicking
 - Monitor progress in real-time
-- Browse all 49+ modules
+- Browse all 40+ modules
 - View performance analytics
 
 **Full Web UI Guide:** [web-ui/README.md](../web-ui/README.md)
@@ -171,7 +171,7 @@ cogos "Build a microservice" > output.md
 
 ## 🧩 Using Expert Modules
 
-CogOS has 49+ expert modules for different technologies:
+CogOS has 40+ expert modules for different technologies:
 
 ### Auto-Detection (Default)
 
@@ -271,7 +271,7 @@ Generate documentation for this API:
 
 ## 🎨 What CogOS Actually Does
 
-When you give CogOS a task, it deploys 8 specialized AI agents:
+When you give CogOS a task, it deploys 10 specialized AI agents:
 
 1. **🔬 Research Agent** - Researches best practices and patterns
 2. **💻 Code Agent** - Writes production code

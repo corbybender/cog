@@ -3,413 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CogOS - Multi-Agent Cognitive System for AI</title>
-    <meta name="description" content="Super-intelligent AI system with 49+ expert modules. Auto-integrates into any project. Better than single-pass LLMs.">
+    <title>CogOS — Multi-Agent AI Orchestration System</title>
+    <meta name="description" content="CogOS is a multi-agent cognitive AI system with 40+ expert modules. Auto-integrates into any project. Free, local, and open source.">
+    <meta name="theme-color" content="#09090b">
+    <meta property="og:title" content="CogOS — Multi-Agent AI Orchestration">
+    <meta property="og:description" content="40+ expert modules. 10 cognitive agents. 70+ tools. Free, local, open source.">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg">
-        <svg class="cog-bg" viewBox="0 0 100 100">
-            <path fill="currentColor" d="M94.5,43.6l-8.6-1.9c-0.6-2.8-1.6-5.5-2.9-8.1l5.8-6.7c1.3-1.5,1.3-3.7,0-5.1l-6.4-6.4c-1.5-1.3-3.7-1.3-5.1,0l-6.7,5.8c-2.6-1.3-5.3-2.3-8.1-2.9l-1.9-8.6C60.3,8.3,58.7,7,57,7H43c-1.7,0-3.3,1.3-3.6,2.9l-1.9,8.6c-2.8,0.6-5.5,1.6-8.1,2.9l-6.7-5.8c-1.5-1.3-3.7-1.3-5.1,0l-6.4,6.4c-1.3,1.5-1.3,3.7,0,5.1l5.8,6.7c-1.3,2.6-2.3,5.3-2.9,8.1l-8.6,1.9C4.3,44,3,45.6,3,47.3V57c0,1.7,1.3,3.3,2.9,3.6l8.6,1.9c0.6,2.8,1.6,5.5,2.9,8.1l-5.8,6.7c-1.3,1.5-1.3,3.7,0,5.1l6.4,6.4c1.5,1.3,3.7,1.3,5.1,0l6.7-5.8c2.6,1.3,5.3,2.3,8.1,2.9l1.9,8.6c0.3,1.6,1.9,2.9,3.6,2.9h14c1.7,0,3.3-1.3,3.6-2.9l1.9-8.6c2.8-0.6,5.5-1.6,8.1-2.9l6.7,5.8c1.5,1.3,3.7,1.3,5.1,0l6.4-6.4c1.3-1.5,1.3-3.7,0-5.1l-5.8-6.7c1.3-2.6,2.3-5.3,2.9-8.1l8.6-1.9c1.6-0.3,2.9-1.9,2.9-3.6V47.3C97,45.6,95.7,44,94.5,43.6z M50,68c-9.9,0-18-8.1-18-18s8.1-18,18-18s18,8.1,18,18S59.9,68,50,68z"/>
-        </svg>
-        <svg class="cog-bg" viewBox="0 0 100 100">
-            <path fill="currentColor" d="M94.5,43.6l-8.6-1.9c-0.6-2.8-1.6-5.5-2.9-8.1l5.8-6.7c1.3-1.5,1.3-3.7,0-5.1l-6.4-6.4c-1.5-1.3-3.7-1.3-5.1,0l-6.7,5.8c-2.6-1.3-5.3-2.3-8.1-2.9l-1.9-8.6C60.3,8.3,58.7,7,57,7H43c-1.7,0-3.3,1.3-3.6,2.9l-1.9,8.6c-2.8,0.6-5.5,1.6-8.1,2.9l-6.7-5.8c-1.5-1.3-3.7-1.3-5.1,0l-6.4,6.4c-1.3,1.5-1.3,3.7,0,5.1l5.8,6.7c-1.3,2.6-2.3,5.3-2.9,8.1l-8.6,1.9C4.3,44,3,45.6,3,47.3V57c0,1.7,1.3,3.3,2.9,3.6l8.6,1.9c0.6,2.8,1.6,5.5,2.9,8.1l-5.8,6.7c-1.3,1.5-1.3,3.7,0,5.1l6.4,6.4c1.5,1.3,3.7,1.3,5.1,0l6.7-5.8c2.6,1.3,5.3,2.3,8.1,2.9l1.9,8.6c0.3,1.6,1.9,2.9,3.6,2.9h14c1.7,0,3.3-1.3,3.6-2.9l1.9-8.6c2.8-0.6,5.5-1.6,8.1-2.9l6.7,5.8c1.5,1.3,3.7,1.3,5.1,0l6.4-6.4c1.3-1.5,1.3-3.7,0-5.1l-5.8-6.7c1.3-2.6,2.3-5.3,2.9-8.1l8.6-1.9c1.6-0.3,2.9-1.9,2.9-3.6V47.3C97,45.6,95.7,44,94.5,43.6z M50,68c-9.9,0-18-8.1-18-18s8.1-18,18-18s18,8.1,18,18S59.9,68,50,68z"/>
-        </svg>
-        <svg class="cog-bg" viewBox="0 0 100 100">
-            <path fill="currentColor" d="M94.5,43.6l-8.6-1.9c-0.6-2.8-1.6-5.5-2.9-8.1l5.8-6.7c1.3-1.5,1.3-3.7,0-5.1l-6.4-6.4c-1.5-1.3-3.7-1.3-5.1,0l-6.7,5.8c-2.6-1.3-5.3-2.3-8.1-2.9l-1.9-8.6C60.3,8.3,58.7,7,57,7H43c-1.7,0-3.3,1.3-3.6,2.9l-1.9,8.6c-2.8,0.6-5.5,1.6-8.1,2.9l-6.7-5.8c-1.5-1.3-3.7-1.3-5.1,0l-6.4,6.4c-1.3,1.5-1.3,3.7,0,5.1l5.8,6.7c-1.3,2.6-2.3,5.3-2.9,8.1l-8.6,1.9C4.3,44,3,45.6,3,47.3V57c0,1.7,1.3,3.3,2.9,3.6l8.6,1.9c0.6,2.8,1.6,5.5,2.9,8.1l-5.8,6.7c-1.3,1.5-1.3,3.7,0,5.1l6.4,6.4c1.5,1.3,3.7,1.3,5.1,0l6.7-5.8c2.6,1.3,5.3,2.3,8.1,2.9l1.9,8.6c0.3,1.6,1.9,2.9,3.6,2.9h14c1.7,0,3.3-1.3,3.6-2.9l1.9-8.6c2.8-0.6,5.5-1.6,8.1-2.9l6.7,5.8c1.5,1.3,3.7,1.3,5.1,0l6.4-6.4c1.3-1.5,1.3-3.7,0-5.1l-5.8-6.7c1.3-2.6,2.3-5.3,2.9-8.1l8.6-1.9c1.6-0.3,2.9-1.9,2.9-3.6V47.3C97,45.6,95.7,44,94.5,43.6z M50,68c-9.9,0-18-8.1-18-18s8.1-18,18-18s18,8.1,18,18S59.9,68,50,68z"/>
-        </svg>
-        <svg class="brain-bg" viewBox="0 0 100 100">
-            <path fill="currentColor" d="M50,15c-2.8,0-5.5,0.5-8,1.4c-0.7-4.7-4.7-8.3-9.5-8.3c-5.3,0-9.6,4.3-9.6,9.6c0,0.8,0.1,1.6,0.3,2.3C17.6,22.1,13,27.3,13,33.5c0,2.6,0.7,5,1.9,7.1c-2.3,2.5-3.7,5.8-3.7,9.4c0,4.8,2.3,9.1,5.8,11.8c-0.1,0.9-0.2,1.8-0.2,2.7c0,9.9,8,18,18,18c2.8,0,5.5-0.6,7.9-1.7c2.5,4.2,7,7,12.1,7c5.1,0,9.6-2.8,12.1-7c2.4,1.1,5.1,1.7,7.9,1.7c9.9,0,18-8,18-18c0-0.9-0.1-1.8-0.2-2.7c3.5-2.7,5.8-7,5.8-11.8c0-3.6-1.4-6.9-3.7-9.4c1.2-2.1,1.9-4.5,1.9-7.1c0-6.2-4.6-11.4-10.2-12.5c0.2-0.8,0.3-1.5,0.3-2.3c0-5.3-4.3-9.6-9.6-9.6c-4.8,0-8.8,3.6-9.5,8.3C55.5,15.5,52.8,15,50,15z"/>
-        </svg>
-        <svg class="brain-bg" viewBox="0 0 100 100">
-            <path fill="currentColor" d="M50,15c-2.8,0-5.5,0.5-8,1.4c-0.7-4.7-4.7-8.3-9.5-8.3c-5.3,0-9.6,4.3-9.6,9.6c0,0.8,0.1,1.6,0.3,2.3C17.6,22.1,13,27.3,13,33.5c0,2.6,0.7,5,1.9,7.1c-2.3,2.5-3.7,5.8-3.7,9.4c0,4.8,2.3,9.1,5.8,11.8c-0.1,0.9-0.2,1.8-0.2,2.7c0,9.9,8,18,18,18c2.8,0,5.5-0.6,7.9-1.7c2.5,4.2,7,7,12.1,7c5.1,0,9.6-2.8,12.1-7c2.4,1.1,5.1,1.7,7.9,1.7c9.9,0,18-8,18-18c0-0.9-0.1-1.8-0.2-2.7c3.5-2.7,5.8-7,5.8-11.8c0-3.6-1.4-6.9-3.7-9.4c1.2-2.1,1.9-4.5,1.9-7.1c0-6.2-4.6-11.4-10.2-12.5c0.2-0.8,0.3-1.5,0.3-2.3c0-5.3-4.3-9.6-9.6-9.6c-4.8,0-8.8,3.6-9.5,8.3C55.5,15.5,52.8,15,50,15z"/>
-        </svg>
-    </div>
 
+    <!-- ─── NAV ─────────────────────────────────────── -->
     <header>
         <nav>
-            <div class="logo">
-                <div class="logo-fusion">
-                    <span class="brain">🧠</span>
-                    <span class="cog">⚙️</span>
-                    <span>CogOS</span>
+            <a href="/" class="logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2.5a7.5 7.5 0 1 1 0 15 7.5 7.5 0 0 1 0-15zm0 2.5a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0 2.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>
                 </div>
-            </div>
+                <span class="logo-text">CogOS</span>
+                <span class="logo-version">v1.1</span>
+            </a>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#modules">Modules</a>
+                <a href="#features" class="nav-hide">Features</a>
+                <a href="#modules" class="nav-hide">Modules</a>
                 <a href="#install">Install</a>
-                <a href="https://github.com/corbybender/cog" target="_blank">GitHub</a>
+                <a href="https://github.com/corbybender/cog" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
             </div>
         </nav>
     </header>
 
     <main>
+
+        <!-- ─── HERO ─────────────────────────────────── -->
         <section class="hero">
             <div class="container">
-                <div class="hero-icon">
-                    <svg width="80" height="80" viewBox="0 0 100 100" style="filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.5));">
-                        <path fill="url(#cogBrainGradient)" d="M94.5,43.6l-8.6-1.9c-0.6-2.8-1.6-5.5-2.9-8.1l5.8-6.7c1.3-1.5,1.3-3.7,0-5.1l-6.4-6.4c-1.5-1.3-3.7-1.3-5.1,0l-6.7,5.8c-2.6-1.3-5.3-2.3-8.1-2.9l-1.9-8.6C60.3,8.3,58.7,7,57,7H43c-1.7,0-3.3,1.3-3.6,2.9l-1.9,8.6c-2.8,0.6-5.5,1.6-8.1,2.9l-6.7-5.8c-1.5-1.3-3.7-1.3-5.1,0l-6.4,6.4c-1.3,1.5-1.3,3.7,0,5.1l5.8,6.7c-1.3,2.6-2.3,5.3-2.9,8.1l-8.6,1.9C4.3,44,3,45.6,3,47.3V57c0,1.7,1.3,3.3,2.9,3.6l8.6,1.9c0.6,2.8,1.6,5.5,2.9,8.1l-5.8,6.7c-1.3,1.5-1.3,3.7,0,5.1l6.4,6.4c1.5,1.3,3.7,1.3,5.1,0l6.7-5.8c2.6,1.3,5.3,2.3,8.1,2.9l1.9,8.6c0.3,1.6,1.9,2.9,3.6,2.9h14c1.7,0,3.3-1.3,3.6-2.9l1.9-8.6c2.8-0.6,5.5-1.6,8.1-2.9l6.7,5.8c1.5,1.3,3.7,1.3,5.1,0l6.4-6.4c1.3-1.5,1.3-3.7,0-5.1l-5.8-6.7c1.3-2.6,2.3-5.3,2.9-8.1l8.6-1.9c1.6-0.3,2.9-1.9,2.9-3.6V47.3C97,45.6,95.7,44,94.5,43.6z M50,68c-9.9,0-18-8.1-18-18s8.1-18,18-18s18,8.1,18,18S59.9,68,50,68z"/>
-                        <circle cx="50" cy="50" r="8" fill="url(#brainGradient)"/>
-                        <defs>
-                            <linearGradient id="cogBrainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
-                            </linearGradient>
-                            <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Multi-Agent AI Orchestration System
                 </div>
-                <div class="hero-subtitle">🧠 Cognitive + ⚙️ Mechanical = 🚀 Super-Intelligent</div>
-                <h1>Super-Intelligent AI System</h1>
-                <p class="tagline">49+ expert modules. Enhanced CLI. Self-improvement. 100% free. Runs locally on your machine.</p>
-                <div class="cta-buttons">
-                    <a href="#install" class="btn primary">Get Started Free</a>
-                    <a href="demo.html" class="btn secondary">🎬 Try Interactive Demo</a>
-                    <a href="https://github.com/corbybender/cog" class="btn secondary">⭐ Star on GitHub</a>
+                <h1>
+                    AI that thinks,<br>
+                    <span class="gradient-word">executes, and learns.</span>
+                </h1>
+                <p class="hero-sub">
+                    CogOS orchestrates 40+ expert modules and 10 specialized cognitive agents to deliver results that single-pass LLMs can't match — free, local, and open source.
+                </p>
+                <div class="hero-actions">
+                    <a href="#install" class="btn btn-primary btn-lg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        Get Started Free
+                    </a>
+                    <a href="demo.html" class="btn btn-secondary btn-lg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Try the Demo
+                    </a>
+                    <a href="https://github.com/corbybender/cog" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                        Star on GitHub
+                    </a>
                 </div>
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-number">🧠 + ⚙️</div>
-                        <div class="stat-label">Cog + OS</div>
+
+                <div class="hero-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                        </div>
+                        <span class="terminal-title">bash — cogos quickstart</span>
                     </div>
-                    <div class="stat">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Free & Local</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">49+</div>
-                        <div class="stat-label">Expert Modules</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">Cognitive Agents</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">100+</div>
-                        <div class="stat-label">AI Tools</div>
+                    <div class="terminal-body">
+                        <div><span class="t-prompt">$</span> <span class="t-cmd">pip install cogos</span></div>
+                        <div><span class="t-output">Collecting cogos...</span></div>
+                        <div><span class="t-success">✓</span> <span class="t-output">40+ expert modules loaded</span></div>
+                        <div><span class="t-success">✓</span> <span class="t-output">10 cognitive agents initialized</span></div>
+                        <div><span class="t-success">✓</span> <span class="t-output">70+ AI tools ready</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-prompt">$</span> <span class="t-cmd">cd my-project &amp;&amp; python install_cogos.py</span></div>
+                        <div><span class="t-success">✓</span> <span class="t-output">CogOS integrated into project</span></div>
+                        <div><span class="t-key">agents</span><span class="t-output">:</span> <span class="t-val">research, code, test, architect, validate</span></div>
+                        <div><span class="t-key">status</span><span class="t-output">:</span> <span class="t-success">ready</span></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Cognitive + Mechanical Concept Section -->
-        <section class="cognitive-mechanical-section">
-            <div class="container">
-                <h2 class="gradient-text-cog" style="font-size: 2.5rem; margin-bottom: 1rem;">🧠 Cognition + ⚙️ Mechanics = 🚀 Super-Intelligence</h2>
-                <p style="font-size: 1.2rem; color: #cbd5e1; margin-bottom: 2rem; font-weight: 500;">CogOS combines the power of cognitive AI with mechanical precision</p>
-
-                <div class="brain-cog-fusion">
-                    <div class="brain-cog-item">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
-                        <h4 style="color: #f59e0b; margin-bottom: 0.5rem; font-size: 1.3rem;">Cognitive</h4>
-                        <p style="color: #94a3b8; font-size: 1rem; font-weight: 400;">Research, Planning, Learning</p>
-                    </div>
-                    <div style="font-size: 2.5rem; color: #6366f1; font-weight: bold;">+</div>
-                    <div class="brain-cog-item">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚙️</div>
-                        <h4 class="cog-enhanced" style="margin-bottom: 0.5rem; font-size: 1.3rem;">Mechanical</h4>
-                        <p style="color: #94a3b8; font-size: 1rem; font-weight: 400;">Execution, Precision, Reliability</p>
-                    </div>
-                    <div style="font-size: 2.5rem; color: #6366f1; font-weight: bold;">=</div>
-                    <div class="brain-cog-item">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
-                        <h4 style="background: linear-gradient(135deg, #f59e0b, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; font-size: 1.3rem; font-weight: 700;">CogOS</h4>
-                        <p style="color: #94a3b8; font-size: 1rem; font-weight: 400;">Super-Intelligent System</p>
-                    </div>
+        <!-- ─── STATS BAR ──────────────────────────────── -->
+        <div class="stats-bar">
+            <div class="stats-inner">
+                <div class="stat-item">
+                    <div class="stat-num">40+</div>
+                    <div class="stat-desc">Expert Modules</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">10</div>
+                    <div class="stat-desc">Cognitive Agents</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">70+</div>
+                    <div class="stat-desc">AI Tools</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">40-60%</div>
+                    <div class="stat-desc">Token Reduction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">100%</div>
+                    <div class="stat-desc">Free &amp; Local</div>
                 </div>
             </div>
-        </section>
+        </div>
 
+        <!-- ─── FEATURES ───────────────────────────────── -->
         <section id="features" class="features">
             <div class="container">
-                <h2>Everything Included - No Waiting Needed</h2>
+                <div class="features-header">
+                    <span class="section-eyebrow">Capabilities</span>
+                    <h2 class="section-heading">Everything you need.<br>Nothing you don't.</h2>
+                    <p class="section-desc">CogOS ships with a complete multi-agent orchestration stack. No plugins, no paid tiers, no vendor lock-in.</p>
+                </div>
+
                 <div class="feature-grid">
+
                     <div class="feature-card">
-                        <div class="emoji brain-icon">
-                            <svg width="50" height="50" viewBox="0 0 100 100">
-                                <path fill="url(#featureBrain)" d="M50,10c-2.8,0-5.5,0.5-8,1.4c-0.7-4.7-4.7-8.3-9.5-8.3c-5.3,0-9.6,4.3-9.6,9.6c0,0.8,0.1,1.6,0.3,2.3C17.6,17.1,13,22.3,13,28.5c0,2.6,0.7,5,1.9,7.1c-2.3,2.5-3.7,5.8-3.7,9.4c0,4.8,2.3,9.1,5.8,11.8c-0.1,0.9-0.2,1.8-0.2,2.7c0,9.9,8,18,18,18c2.8,0,5.5-0.6,7.9-1.7c2.5,4.2,7,7,12.1,7c5.1,0,9.6-2.8,12.1-7c2.4,1.1,5.1,1.7,7.9,1.7c9.9,0,18-8,18-18c0-0.9-0.1-1.8-0.2-2.7c3.5-2.7,5.8-7,5.8-11.8c0-3.6-1.4-6.9-3.7-9.4c1.2-2.1,1.9-4.5,1.9-7.1c0-6.2-4.6-11.4-10.2-12.5c0.2-0.8,0.3-1.5,0.3-2.3c0-5.3-4.3-9.6-9.6-9.6c-4.8,0-8.8,3.6-9.5,8.3C55.5,10.5,52.8,10,50,10z M50,75c-5,0-9-4-9-9s4-9,9-9s9,4,9,9S55,75,50,75z"/>
-                                <defs>
-                                    <linearGradient id="featureBrain" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M9.5 17.5l2.5-6.5M14.5 17.5L12 11"/></svg>
                         </div>
-                        <h3>8 Specialized Agents</h3>
-                        <p>Research, code, test, document, architect, critique, validate, optimize - cognitive agents working together for superior results.</p>
+                        <h3>10 Specialized Agents</h3>
+                        <p>Research, code, test, document, architect, critique, validate, optimize, secure, and plan — cognitive agents that collaborate on every task.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji cog-icon">
-                            <svg width="50" height="50" viewBox="0 0 100 100">
-                                <path fill="url(#featureCog)" d="M94.5,43.6l-8.6-1.9c-0.6-2.8-1.6-5.5-2.9-8.1l5.8-6.7c1.3-1.5,1.3-3.7,0-5.1l-6.4-6.4c-1.5-1.3-3.7-1.3-5.1,0l-6.7,5.8c-2.6-1.3-5.3-2.3-8.1-2.9l-1.9-8.6C60.3,8.3,58.7,7,57,7H43c-1.7,0-3.3,1.3-3.6,2.9l-1.9,8.6c-2.8,0.6-5.5,1.6-8.1,2.9l-6.7-5.8c-1.5-1.3-3.7-1.3-5.1,0l-6.4,6.4c-1.3,1.5-1.3,3.7,0,5.1l5.8,6.7c-1.3,2.6-2.3,5.3-2.9,8.1l-8.6,1.9C4.3,44,3,45.6,3,47.3V57c0,1.7,1.3,3.3,2.9,3.6l8.6,1.9c0.6,2.8,1.6,5.5,2.9,8.1l-5.8,6.7c-1.3,1.5-1.3,3.7,0,5.1l6.4,6.4c1.5,1.3,3.7,1.3,5.1,0l6.7-5.8c2.6,1.3,5.3,2.3,8.1,2.9l1.9,8.6c0.3,1.6,1.9,2.9,3.6,2.9h14c1.7,0,3.3-1.3,3.6-2.9l1.9-8.6c2.8-0.6,5.5-1.6,8.1-2.9l6.7,5.8c1.5,1.3,3.7,1.3,5.1,0l6.4-6.4c1.3-1.5,1.3-3.7,0-5.1l-5.8-6.7c1.3-2.6,2.3-5.3,2.9-8.1l8.6-1.9c1.6-0.3,2.9-1.9,2.9-3.6V47.3C97,45.6,95.7,44,94.5,43.6z M50,68c-9.9,0-18-8.1-18-18s8.1-18,18-18s18,8.1,18,18S59.9,68,50,68z"/>
-                                <defs>
-                                    <linearGradient id="featureCog" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                         </div>
-                        <h3>49+ Expert Modules</h3>
-                        <p>JavaScript, Python, Rust, Go, Swift, Kotlin, AWS, Azure, GCP, Docker, Kubernetes, and more. Mechanical precision for every task.</p>
+                        <h3>40+ Expert Modules</h3>
+                        <p>Domain-specific expertise for JavaScript, Python, Rust, Go, AWS, Azure, Docker, Kubernetes, SQL, and 30+ more technologies.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">🚀</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                        </div>
                         <h3>Enhanced CLI</h3>
-                        <p>Project initialization (cog init), 5 configuration profiles, autocomplete, batch processing, and status monitoring.</p>
+                        <p>Project init, 5 configuration profiles, shell autocomplete, batch processing, and real-time status monitoring built in.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">⚡</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
                         <h3>Real-Time Collaboration</h3>
-                        <p>WebSocket-powered live updates. Watch cognitive and mechanical processes work together in real-time.</p>
+                        <p>WebSocket-powered live updates. Observe cognitive and mechanical processes synchronize as they execute tasks.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">🔄</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        </div>
                         <h3>Self-Improvement</h3>
-                        <p>Automatic pattern extraction, knowledge base maintenance, and code improvement generation. Learns from every task.</p>
+                        <p>Automatic pattern extraction, knowledge base maintenance, and improvement suggestions. Learns from every completed task.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">⚡</div>
-                        <h3>Performance Optimized</h3>
-                        <p>Multi-level caching (memory + disk), batch processing, distributed execution framework. 40-60% less token usage.</p>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                        </div>
+                        <h3>40-60% Token Savings</h3>
+                        <p>Multi-level caching across memory and disk, plus smart deduplication. Reduce API costs while maintaining full output quality.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">📊</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                        </div>
                         <h3>Performance Analytics</h3>
-                        <p>Track tokens, tasks completed, agent usage, and more. See how your brain meets machine performance.</p>
+                        <p>Track tokens consumed, tasks completed, agent utilization, and module popularity. Full observability into every run.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">🔧</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </div>
                         <h3>Custom Agent Creation</h3>
-                        <p>Create custom agents via API. Define workflows, configure tools, build your perfect AI team.</p>
+                        <p>Define custom agents via API. Set workflows, configure tool access, and compose the exact AI team your project needs.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">🔌</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </div>
                         <h3>Auto-Integration</h3>
-                        <p>One command installs CogOS into any project. AI agents can use it transparently.</p>
+                        <p>A single command installs CogOS into any existing project. AI agents then use it transparently without configuration.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">📚</div>
-                        <h3>49+ Expert Modules</h3>
-                        <p>JavaScript, Python, Rust, AWS, Docker, Kubernetes, MySQL, PostgreSQL, and more.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="emoji">💰</div>
-                        <h3>40-60% Less Tokens</h3>
-                        <p>Smart caching reduces API calls and costs while maintaining quality. Save money with every task.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="emoji">🔒</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
                         <h3>Sandboxed Execution</h3>
-                        <p>Docker containers protect your system. Interactive approval for dangerous operations.</p>
+                        <p>Docker containers isolate execution from your system. Interactive approval gates protect against dangerous operations.</p>
                     </div>
+
                     <div class="feature-card">
-                        <div class="emoji">🎯</div>
-                        <h3>Better Results</h3>
-                        <p>Hierarchical planning, self-reflection, and validation produce superior results than single-pass LLMs.</p>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <h3>Hierarchical Planning</h3>
+                        <p>Every task goes through structured planning, execution, reflection, and validation — producing results that hold up in production.</p>
                     </div>
-                </div>
 
-                <div style="text-align: center; margin-top: 40px; padding: 30px; background: rgba(0, 255, 0, 0.05); border-radius: 8px; border: 2px solid #00ff00;">
-                    <h3 style="margin-bottom: 15px;">🎬 Want to see CogOS in action?</h3>
-                    <p style="margin-bottom: 20px;">Try our interactive demo - no installation required!</p>
-                    <a href="demo.html" class="btn primary" style="font-size: 18px; padding: 15px 30px;">Launch Interactive Demo →</a>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <h3>Multi-Source Research</h3>
+                        <p>Research agents query your codebase, live web, and documentation simultaneously — not just static training data.</p>
+                    </div>
+
                 </div>
             </div>
         </section>
 
-        <section class="webui-showcase">
+        <!-- ─── HOW IT WORKS / INSTALL ─────────────────── -->
+        <section id="install" class="how-it-works">
             <div class="container">
-                <h2>🎨 The Web UI - Included & Ready to Use</h2>
-                <p class="section-subtitle">No coding required. Point, click, and create amazing AI-powered solutions.</p>
-                
-                <div class="webui-grid">
-                    <div class="webui-feature">
-                        <div class="webui-emoji">🖱️</div>
-                        <h3>Task Management</h3>
-                        <p>Create tasks by describing what you want. Monitor progress in real-time. View results when complete.</p>
-                    </div>
-                    <div class="webui-feature">
-                        <div class="webui-emoji">📊</div>
-                        <h3>Analytics Dashboard</h3>
-                        <p>Track your usage: tasks completed, tokens used, agent performance, module popularity.</p>
-                    </div>
-                    <div class="webui-feature">
-                        <div class="webui-emoji">🔧</div>
-                        <h3>Module Browser</h3>
-                        <p>Browse all 49+ expert modules. See descriptions, tool counts, and capabilities.</p>
-                    </div>
-                    <div class="webui-feature">
-                        <div class="webui-emoji">⚡</div>
-                        <h3>Real-Time Updates</h3>
-                        <p>Watch tasks execute live. See status changes, agent collaboration, and results appear instantly.</p>
-                    </div>
-                </div>
+                <div class="how-inner">
+                    <div>
+                        <span class="section-eyebrow">Getting Started</span>
+                        <h2 class="section-heading">Up and running<br>in three steps.</h2>
+                        <p class="section-desc" style="margin-bottom: 2.5rem;">No account. No cloud. No vendor lock-in. Everything executes locally on your machine.</p>
 
-                <div class="webui-demo">
-                    <h3>Start the Web UI in 3 Steps</h3>
-                    <div class="steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <code>pip install cogos</code>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <code>cd cogos/web-ui && ./start.sh</code>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <code>Open web-ui/frontend/index.html in your browser</code>
+                        <div class="how-steps">
+                            <div class="how-step">
+                                <div class="how-step-num">01</div>
+                                <div class="how-step-content">
+                                    <h4>Install CogOS</h4>
+                                    <p>Install via pip. All 40+ modules and 10 cognitive agents are included by default. <span class="inline-cmd">pip install cogos</span></p>
+                                </div>
+                            </div>
+                            <div class="how-step">
+                                <div class="how-step-num">02</div>
+                                <div class="how-step-content">
+                                    <h4>Integrate into your project</h4>
+                                    <p>Run the installer from your project root. CogOS scans your stack and configures itself automatically. <span class="inline-cmd">python install_cogos.py</span></p>
+                                </div>
+                            </div>
+                            <div class="how-step">
+                                <div class="how-step-num">03</div>
+                                <div class="how-step-content">
+                                    <h4>Launch the Web UI (optional)</h4>
+                                    <p>A local dashboard for task management, analytics, and module browsing. <span class="inline-cmd">cd cogos/web-ui &amp;&amp; ./start.sh</span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <p class="webui-note">✓ Runs locally on your machine • ✓ No signup required • ✓ 100% free</p>
+
+                    <div class="install-terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <div class="terminal-dot red"></div>
+                                <div class="terminal-dot yellow"></div>
+                                <div class="terminal-dot green"></div>
+                            </div>
+                            <span class="terminal-title">bash — installation</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div><span class="t-prompt">$</span> <span class="t-cmd">pip install cogos</span></div>
+                            <div><span class="t-output">Collecting cogos==1.1.0</span></div>
+                            <div><span class="t-output">  Downloading cogos-1.1.0-py3-none-any.whl</span></div>
+                            <div><span class="t-success">Successfully installed cogos-1.1.0</span></div>
+                            <div>&nbsp;</div>
+                            <div><span class="t-prompt">$</span> <span class="t-cmd">cd ~/my-project</span></div>
+                            <div><span class="t-prompt">$</span> <span class="t-cmd">python install_cogos.py</span></div>
+                            <div><span class="t-output">CogOS Installer</span></div>
+                            <div><span class="t-success">✓</span> <span class="t-output">Created .cogos/ directory</span></div>
+                            <div><span class="t-success">✓</span> <span class="t-output">Created .cogos/config.yaml</span></div>
+                            <div><span class="t-success">✓</span> <span class="t-output">Created .cogos/USAGE.md</span></div>
+                            <div><span class="t-success">✓</span> <span class="t-output">Updated .gitignore</span></div>
+                            <div><span class="t-success">✓ CogOS installed successfully!</span></div>
+                            <div>&nbsp;</div>
+                            <div><span class="t-prompt">$</span> <span class="t-cmd">cog status</span></div>
+                            <div><span class="t-output">Modules: 34 active / 38 discovered</span></div>
+                            <div><span class="t-output">Tools: filesystem, shell, web, aws, gcp,</span></div>
+                            <div><span class="t-output">       azure, git, postgres, docker... (+61)</span></div>
+                            <div><span class="t-key">Provider</span><span class="t-output">: openai</span></div>
+                            <div><span class="t-key">Memory</span><span class="t-output">:   sqlite</span></div>
+                            <div><span class="t-success">✓ CogOS kernel ready</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="modules" class="modules">
+        <!-- ─── MODULES ────────────────────────────────── -->
+        <section id="modules" class="modules-section">
             <div class="container">
-                <h2>Expert Modules</h2>
-                <p class="section-subtitle">Domain-specific expertise for every technology</p>
+                <div class="modules-header">
+                    <span class="section-eyebrow">Module Ecosystem</span>
+                    <h2 class="section-heading">Deep expertise across<br>every major stack.</h2>
+                    <p class="section-desc">Each module encapsulates domain-specific knowledge, tooling, and best practices for its technology.</p>
+                </div>
+
                 <div class="module-grid">
-                    <div class="module-category">
-                        <h3>🌐 Web</h3>
-                        <p>CSS, HTML</p>
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <h3>Languages</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">JavaScript</span>
+                            <span class="module-tag">TypeScript</span>
+                            <span class="module-tag">Python</span>
+                            <span class="module-tag">Rust</span>
+                            <span class="module-tag">Go</span>
+                            <span class="module-tag">Java</span>
+                            <span class="module-tag">C#</span>
+                            <span class="module-tag">Ruby</span>
+                            <span class="module-tag">PHP</span>
+                            <span class="module-tag">Swift</span>
+                            <span class="module-tag">Kotlin</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>⚙️ Languages</h3>
-                        <p>JavaScript, Python, Java, C#, Ruby, PHP, Rust</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </div>
+                        <h3>Backend</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">Node.js</span>
+                            <span class="module-tag">Express</span>
+                            <span class="module-tag">FastAPI</span>
+                            <span class="module-tag">Django</span>
+                            <span class="module-tag">NestJS</span>
+                            <span class="module-tag">Fastify</span>
+                            <span class="module-tag">Rails</span>
+                            <span class="module-tag">Spring</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>🔧 Backend</h3>
-                        <p>Node.js, Express, Fastify, NestJS</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                        </div>
+                        <h3>Databases</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">PostgreSQL</span>
+                            <span class="module-tag">MySQL</span>
+                            <span class="module-tag">MongoDB</span>
+                            <span class="module-tag">Redis</span>
+                            <span class="module-tag">Elasticsearch</span>
+                            <span class="module-tag">SQLite</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>🗄️ Databases</h3>
-                        <p>MySQL, PostgreSQL, MongoDB, Redis, Elasticsearch</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                        </div>
+                        <h3>Cloud</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">AWS</span>
+                            <span class="module-tag">Azure</span>
+                            <span class="module-tag">GCP</span>
+                            <span class="module-tag">Terraform</span>
+                            <span class="module-tag">Pulumi</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>💻 OS</h3>
-                        <p>Windows (PowerShell), Mac (Zsh), Linux (Bash)</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <h3>Containers</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">Docker</span>
+                            <span class="module-tag">Kubernetes</span>
+                            <span class="module-tag">Helm</span>
+                            <span class="module-tag">Compose</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>☁️ Cloud</h3>
-                        <p>AWS, Azure, GCP</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                        </div>
+                        <h3>OS &amp; Tooling</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">Linux/Bash</span>
+                            <span class="module-tag">macOS/Zsh</span>
+                            <span class="module-tag">PowerShell</span>
+                            <span class="module-tag">Git</span>
+                            <span class="module-tag">CI/CD</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>🐳 Containers</h3>
-                        <p>Docker, Kubernetes</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                        <h3>Web &amp; Frontend</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">React</span>
+                            <span class="module-tag">Vue</span>
+                            <span class="module-tag">CSS</span>
+                            <span class="module-tag">HTML</span>
+                            <span class="module-tag">Tailwind</span>
+                        </div>
                     </div>
-                    <div class="module-category">
-                        <h3>🔨 Tools</h3>
-                        <p>Git</p>
+
+                    <div class="module-card">
+                        <div class="module-card-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                        </div>
+                        <h3>AI &amp; ML</h3>
+                        <div class="module-tags">
+                            <span class="module-tag">LangChain</span>
+                            <span class="module-tag">HuggingFace</span>
+                            <span class="module-tag">PyTorch</span>
+                            <span class="module-tag">OpenAI API</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="install" class="install">
-            <div class="container">
-                <h2>Get Started in 3 Steps (100% Free)</h2>
-                <p class="section-subtitle">No account needed. No cloud required. Everything runs locally on your machine.</p>
-                <div class="install-card">
-                    <div class="install-steps">
-                        <div class="install-step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h3>Install CogOS</h3>
-                                <code class="install-command">pip install cogos</code>
-                            </div>
-                        </div>
-                        <div class="install-step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h3>Integrate into Project</h3>
-                                <code class="install-command">cd /path/to/project && python -m cogos.install_cogos</code>
-                            </div>
-                        </div>
-                        <div class="install-step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h3>Launch Web UI (Optional)</h3>
-                                <code class="install-command">cd cogos/web-ui && ./start.sh</code>
-                                <p class="install-note">Then open <code>web-ui/frontend/index.html</code> in your browser</p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="install-note">✓ 100% local &nbsp; ✓ No signup &nbsp; ✓ Free forever &nbsp; ✓ Open source</p>
-                </div>
-            </div>
-        </section>
-
+        <!-- ─── COMPARISON ─────────────────────────────── -->
         <section class="comparison">
             <div class="container">
-                <h2>Why CogOS Beats Single-Pass LLMs</h2>
+                <div class="comparison-header">
+                    <span class="section-eyebrow">Why CogOS</span>
+                    <h2 class="section-heading">Built for results that matter.</h2>
+                    <p class="section-desc" style="margin: 0 auto;">Single-pass LLMs hit a ceiling. CogOS breaks it.</p>
+                </div>
+
                 <div class="comparison-table">
-                    <div class="comparison-row">
-                        <div class="comparison-feature">Feature</div>
-                        <div class="comparison-cogos">CogOS</div>
-                        <div class="comparison-llm">Single LLM</div>
+                    <div class="comparison-row comparison-thead">
+                        <div>Capability</div>
+                        <div class="col-cogos">CogOS</div>
+                        <div>Single LLM</div>
                     </div>
                     <div class="comparison-row">
-                        <div class="comparison-feature">Agent Collaboration</div>
-                        <div class="comparison-cogos">✅ 8 specialized agents</div>
-                        <div class="comparison-llm">❌ Single pass</div>
+                        <div class="col-feature">Agent Collaboration</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            10 specialized agents
+                        </div>
+                        <div class="col-llm">Single pass</div>
                     </div>
                     <div class="comparison-row">
-                        <div class="comparison-feature">Self-Reflection</div>
-                        <div class="comparison-cogos">✅ Learns from mistakes</div>
-                        <div class="comparison-llm">❌ No learning</div>
+                        <div class="col-feature">Self-Reflection &amp; Learning</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Learns from every task
+                        </div>
+                        <div class="col-llm">No learning</div>
                     </div>
                     <div class="comparison-row">
-                        <div class="comparison-feature">Multi-Source Research</div>
-                        <div class="comparison-cogos">✅ Codebase + Web + Docs</div>
-                        <div class="comparison-llm">❌ Training data only</div>
+                        <div class="col-feature">Multi-Source Research</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Codebase + web + docs
+                        </div>
+                        <div class="col-llm">Training data only</div>
                     </div>
                     <div class="comparison-row">
-                        <div class="comparison-feature">Token Efficiency</div>
-                        <div class="comparison-cogos">✅ 40-60% reduction</div>
-                        <div class="comparison-llm">❌ No caching</div>
+                        <div class="col-feature">Token Efficiency</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            40-60% reduction via cache
+                        </div>
+                        <div class="col-llm">No caching</div>
                     </div>
                     <div class="comparison-row">
-                        <div class="comparison-feature">Domain Expertise</div>
-                        <div class="comparison-cogos">✅ 49+ expert modules</div>
-                        <div class="comparison-llm">❌ General knowledge</div>
+                        <div class="col-feature">Domain Expertise</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            40+ expert modules
+                        </div>
+                        <div class="col-llm">General knowledge</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="col-feature">Output Validation</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Dedicated validator agent
+                        </div>
+                        <div class="col-llm">No validation</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div class="col-feature">Cost</div>
+                        <div class="col-cogos">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Free, open source
+                        </div>
+                        <div class="col-llm">Per-token pricing</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="cta">
+        <!-- ─── CTA ────────────────────────────────────── -->
+        <section class="cta-section">
             <div class="container">
-                <h2>Ready to Use Super-Intelligent AI?</h2>
-                <p>100% FREE. 100% LOCAL. No signup required. Get started in 7 minutes.</p>
-                <div class="cta-buttons">
-                    <a href="#install" class="btn primary">Get Started Now 🚀</a>
-                    <a href="https://github.com/corbybender/cog" class="btn secondary">⭐ Star on GitHub</a>
+                <h2>Ready to build with<br><span style="background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">super-intelligent AI?</span></h2>
+                <p>Free forever. Runs locally. No account required. Set up in under 7 minutes.</p>
+                <div class="hero-actions">
+                    <a href="#install" class="btn btn-primary btn-lg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Get Started Now
+                    </a>
+                    <a href="https://github.com/corbybender/cog" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">
+                        View on GitHub
+                    </a>
                 </div>
             </div>
         </section>
+
     </main>
 
+    <!-- ─── FOOTER ─────────────────────────────────────── -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 CogOS. 100% Free. 100% Local. 100% Open Source.</p>
-            <p class="footer-links">
-                <a href="https://github.com/corbybender/cog">⭐ GitHub Repository</a>
-                <a href="https://github.com/corbybender/cog/blob/main/QUICKSTART.md">📖 Quick Start Guide</a>
-                <a href="https://github.com/corbybender/cog/blob/main/docs/START_HERE.md">🚀 Documentation</a>
-                <a href="https://github.com/corbybender/cog/issues">🐛 Report Issues</a>
-                <a href="https://github.com/corbybender/cog/blob/main/LICENSE">📜 MIT License</a>
-                <a href="https://github.com/corbybender/cog/stargazers">⭐ Star History</a>
-            </p>
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="logo-mark" style="width:24px;height:24px;">
+                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#fff;"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2.5a7.5 7.5 0 1 1 0 15 7.5 7.5 0 0 1 0-15zm0 2.5a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0 2.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>
+                    </div>
+                    <span class="footer-copy">&copy; 2026 CogOS — MIT License</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/corbybender/cog" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://github.com/corbybender/cog/blob/main/QUICKSTART.md" target="_blank" rel="noopener">Quickstart</a>
+                    <a href="https://github.com/corbybender/cog/blob/main/docs/START_HERE.md" target="_blank" rel="noopener">Docs</a>
+                    <a href="https://github.com/corbybender/cog/issues" target="_blank" rel="noopener">Issues</a>
+                    <a href="demo.html">Demo</a>
+                </div>
+            </div>
         </div>
     </footer>
+
 </body>
 </html>

@@ -2,11 +2,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-green.svg)](https://www.python.org/downloads/)
-[![Modules](https://img.shields.io/badge/Modules-49%2B-purple.svg)](https://github.com/corbybender/cog#modules)
-[![Tools](https://img.shields.io/badge/AI%20Tools-100%2B-orange.svg)](https://github.com/corbybender/cog#tools)
+[![Modules](https://img.shields.io/badge/Modules-40%2B-purple.svg)](https://github.com/corbybender/cog#modules)
+[![Tools](https://img.shields.io/badge/AI%20Tools-70%2B-orange.svg)](https://github.com/corbybender/cog#tools)
 [![100% Free](https://img.shields.io/badge/Price-Free%20Forever-success.svg)](https://github.com/corbybender/cog)
 
-**Super-intelligent AI system with 49+ expert modules, modern web UI, and multi-agent collaboration. 100% FREE and runs locally on your machine.**
+**Super-intelligent AI system with 40+ expert modules, modern web UI, and multi-agent collaboration. 100% FREE and runs locally on your machine.**
 
 [📖 **Quick Start**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [🎬 **Live Demo**](https://cogos.vercel.app/demo.html) • [🌐 **Live Site**](https://cogos.vercel.app) • [📚 **Docs**](#documentation) • [🔧 **Modules**](#modules)
 
@@ -18,9 +18,9 @@
 
 CogOS is a **multi-agent cognitive system** that enhances any LLM (Claude, GPT-4, etc.) with:
 
- - 🧠 **8 Specialized AI Agents** - Research, code, critique, validate, optimize, test, document, and architect
+ - 🧠 **10 Specialized AI Agents** - Research, code, critique, validate, optimize, test, document, architect, plan, and secure
  - 🔌 **Auto-Integration** - Drop-in replacement for any project with one command
- - 📚 **49+ Expert Modules** - Domain-specific knowledge for every major technology
+ - 📚 **40+ Expert Modules** - Domain-specific knowledge for every major technology
  - ⚡ **40-60% Less Token Usage** - Multi-level caching reduces API costs
  - 🚀 **Enhanced CLI** - Project initialization, config profiles, autocomplete
  - 🧠 **Self-Improvement** - Automatic pattern extraction and code generation
@@ -60,7 +60,7 @@ See CogOS in action with our simulated terminal. Watch how multi-agent collabora
 ### Installation (One Command)
 
 ```bash
-pip install cogos && cd /path/to/project && python -m cogos.install_cogos
+pip install cogos && cd /path/to/project && python install_cogos.py
 ```
 
 That's it! CogOS is now integrated into your project.
@@ -161,7 +161,7 @@ cd cogos/web-ui
 
 ✅ **Create Tasks** - Describe what you want, click "Create Task"
 ✅ **Monitor Progress** - Watch tasks execute in real-time
-✅ **Browse Modules** - Explore all 49+ expert modules
+✅ **Browse Modules** - Explore all 40+ expert modules
 ✅ **View Analytics** - Track tokens, tasks, and performance
 ✅ **Manage History** - See all your past tasks and results
 
@@ -193,10 +193,11 @@ See [web-ui/README.md](web-ui/README.md) for complete Web UI documentation.
 
 ### Multi-Agent Orchestration
 
-8 specialized AI agents collaborate on every task:
+10 specialized AI agents collaborate on every task:
 
 | Agent | Role |
 |-------|------|
+| 📋 **Planner** | Decompose complex tasks into structured steps |
 | 🔬 **Research** | Multi-source research (codebase, web, docs) |
 | 💻 **Code** | Write production code with best practices |
 | 🧪 **Test** | Comprehensive testing strategies |
@@ -205,6 +206,7 @@ See [web-ui/README.md](web-ui/README.md) for complete Web UI documentation.
 | 🔍 **Critique** | Review and identify issues |
 | ✅ **Validate** | Verify requirements are met |
 | ⚡ **Optimize** | Performance and cost optimization |
+| 🔒 **Security** | Security analysis and hardening |
 
 ### Hierarchical Task Planning
 
@@ -240,7 +242,7 @@ Multi-source information gathering:
 
 ## 📚 Expert Modules
 
-49+ domain-specific modules with 5,000+ prompt extensions:
+40+ domain-specific modules with deep prompt extensions:
 
 ### 🌐 Web Development
 - **CSS** - Modern styling, animations, responsive design
@@ -383,11 +385,11 @@ Design AWS infrastructure for:
 
 | Feature | CogOS | Single LLM |
 |---------|-------|------------|
-| Agent Collaboration | ✅ 8 specialized agents | ❌ Single pass |
+| Agent Collaboration | ✅ 10 specialized agents | ❌ Single pass |
 | Self-Reflection | ✅ Learns from mistakes | ❌ No learning |
 | Multi-Source Research | ✅ Codebase + Web + Docs | ❌ Training data only |
 | Token Efficiency | ✅ 40-60% reduction | ❌ No caching |
-| Domain Expertise | ✅ 49+ expert modules | ❌ General knowledge |
+| Domain Expertise | ✅ 40+ expert modules | ❌ General knowledge |
 | Validation | ✅ Multi-stage verification | ❌ No validation |
 | Testing | ✅ Comprehensive test strategies | ❌ Basic tests |
 | Documentation | ✅ Auto-generated docs | ❌ Manual only |
@@ -396,9 +398,9 @@ Design AWS infrastructure for:
 
 | Feature | CogOS | LangChain | AutoGPT | CrewAI |
 |---------|-------|-----------|---------|---------|
-| Multi-Agent | ✅ 8 specialized | ⚠️ Generic | ⚠️ Generic | ⚠️ Generic |
+| Multi-Agent | ✅ 10 specialized | ⚠️ Generic | ⚠️ Generic | ⚠️ Generic |
 | Auto-Integration | ✅ One command | ❌ Manual | ❌ Manual | ❌ Manual |
-| Expert Modules | ✅ 49+ domains | ⚠️ Limited | ❌ None | ❌ None |
+| Expert Modules | ✅ 40+ domains | ⚠️ Limited | ❌ None | ❌ None |
 | Self-Reflection | ✅ Learning system | ❌ None | ❌ None | ❌ None |
 | Research Engine | ✅ Multi-source | ❌ None | ⚠️ Web only | ❌ None |
 | Token Efficiency | ✅ 40-60% reduction | ❌ None | ❌ None | ❌ None |
@@ -504,7 +506,7 @@ ruff check
 ## 🗺️ Roadmap
 
 ### v1.0 (Current)
-- ✅ 49+ expert modules
+- ✅ 40+ expert modules
 - ✅ Multi-agent orchestration
 - ✅ Auto-integration
 - ✅ Self-reflection system

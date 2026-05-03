@@ -148,7 +148,7 @@ print(optimized.benchmarks)   # Performance data
 
 ### Agent Types
 
-CogOS uses 8 specialized agents:
+CogOS uses 10 specialized agents:
 
 #### Research Agent
 

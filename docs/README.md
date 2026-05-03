@@ -69,8 +69,8 @@ Welcome to the CogOS documentation. This system provides super-intelligent AI ca
 - [Configuration](guides/configuration.md) - Configure CogOS
 
 ### Core Features
-- [Multi-Agent System](architecture/multi_agent.md) - 8 specialized agents
-- [Expert Modules](architecture/modules.md) - 49+ domain modules
+- [Multi-Agent System](architecture/multi_agent.md) - 10 specialized agents
+- [Expert Modules](architecture/modules.md) - 40+ domain modules
 - [Self-Reflection](architecture/self_reflection.md) - Learning system
 - [Research Engine](architecture/research.md) - Multi-source research
 
@@ -99,9 +99,9 @@ Use the search function to find specific topics:
 
 ## 📊 Key Metrics
 
-- **49++ Expert Modules** - Domain-specific knowledge
+- **40+ Expert Modules** - Domain-specific knowledge
 - **8 Specialized Agents** - Collaborative intelligence
-- **100+ AI Tools** - Production-ready tools
+- **70+ AI Tools** - Production-ready tools
 - **3,863 Prompt Extensions** - Comprehensive expertise
 - **40-60% Token Reduction** - Cost optimization
 - **100% Test Pass Rate** - Quality assurance
@@ -111,7 +111,7 @@ Use the search function to find specific topics:
 ### Install CogOS
 ```bash
 pip install cogos
-python -m cogos.install_cogos
+python install_cogos.py
 ```
 
 ### Use Multi-Agent Intelligence

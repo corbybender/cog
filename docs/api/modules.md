@@ -537,8 +537,8 @@ module.register()
 
 ## Module Statistics
 
-- **Total Modules: 49+
-- **Total Tools**: 100+
+- **Total Modules: 40+
+- **Total Tools: 70+
 - **Total Prompts**: 3,863+
 - **Categories**: 8
 - **Average Tools per Module**: 7-12
