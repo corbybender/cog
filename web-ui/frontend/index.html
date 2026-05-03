@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogOS Web UI</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #334155;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav button {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav button:hover,
+        .nav button.active {
+            color: #6366f1;
+        }
+
+        .main {
+            padding: 2rem 0;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .task-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .task-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.3s;
+        }
+
+        .task-item:hover {
+            border-color: #6366f1;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .task-id {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status.pending {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status.running {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .status.completed {
+            background: #10b981;
+            color: white;
+        }
+
+        .status.failed {
+            background: #ef4444;
+            color: white;
+        }
+
+        .task-content {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .task-result {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #10b981;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .module-card {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .module-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .module-card.selected {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .module-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-desc {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // API base URL
+        const API_BASE = 'http://localhost:8000';
+
+        // Main App Component
+        function App() {
+            const [activeTab, setActiveTab] = useState('tasks');
+            const [isConnected, setIsConnected] = useState(false);
+
+            useEffect(() => {
+                // Check API connection
+                fetch(`${API_BASE}/api/health`)
+                    .then(() => setIsConnected(true))
+                    .catch(() => setIsConnected(false));
+            }, []);
+
+            return (
+                <div>
+                    <header>
+                        <div className="header-content">
+                            <div className="logo">🤖 CogOS</div>
+                            <nav className="nav">
+                                <button
+                                    className={activeTab === 'tasks' ? 'active' : ''}
+                                    onClick={() => setActiveTab('tasks')}
+                                >
+                                    Tasks
+                                </button>
+                                <button
+                                    className={activeTab === 'new' ? 'active' : ''}
+                                    onClick={() => setActiveTab('new')}
+                                >
+                                    New Task
+                                </button>
+                                <button
+                                    className={activeTab === 'modules' ? 'active' : ''}
+                                    onClick={() => setActiveTab('modules')}
+                                >
+                                    Modules
+                                </button>
+                                <button
+                                    className={activeTab === 'analytics' ? 'active' : ''}
+                                    onClick={() => setActiveTab('analytics')}
+                                >
+                                    Analytics
+                                </button>
+                            </nav>
+                        </div>
+                    </header>
+
+                    <div className="container main">
+                        {!isConnected && (
+                            <div className="error">
+                                ⚠️ Not connected to CogOS backend. Make sure the server is running on port 8000.
+                            </div>
+                        )}
+
+                        {activeTab === 'tasks' && <TasksList />}
+                        {activeTab === 'new' && <NewTaskForm />}
+                        {activeTab === 'modules' && <ModulesList />}
+                        {activeTab === 'analytics' && <Analytics />}
+                    </div>
+                </div>
+            );
+        }
+
+        // Tasks List Component
+        function TasksList() {
+            const [tasks, setTasks] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                fetchTasks();
+                const interval = setInterval(fetchTasks, 2000);
+                return () => clearInterval(interval);
+            }, []);
+
+            async function fetchTasks() {
+                try {
+                    const response = await fetch(`${API_BASE}/api/tasks`);
+                    const data = await response.json();
+                    setTasks(data.tasks || []);
+                    setLoading(false);
+                } catch (error) {
+                    console.error('Error fetching tasks:', error);
+                    setLoading(false);
+                }
+            }
+
+            async function deleteTask(taskId) {
+                try {
+                    await fetch(`${API_BASE}/api/task/${taskId}`, { method: 'DELETE' });
+                    fetchTasks();
+                } catch (error) {
+                    console.error('Error deleting task:', error);
+                }
+            }
+
+            if (loading) {
+                return <div className="loading">Loading tasks...</div>;
+            }
+
+            return (
+                <div>
+                    <div className="card">
+                        <h2><span className="live-indicator"></span>Task History</h2>
+                        {tasks.length === 0 ? (
+                            <p style={{ color: '#64748b' }}>No tasks yet. Create your first task!</p>
+                        ) : (
+                            <div className="task-list">
+                                {tasks.map(task => (
+                                    <div key={task.id} className="task-item">
+                                        <div className="task-header">
+                                            <span className="task-id">{task.id.slice(0, 8)}...</span>
+                                            <span className={`status ${task.status}`}>{task.status}</span>
+                                        </div>
+                                        <div className="task-content">{task.task}</div>
+                                        {task.result && (
+                                            <div className="task-result">
+                                                <strong>Result:</strong>
+                                                {task.result.summary}
+                                            </div>
+                                        )}
+                                        {task.error && (
+                                            <div className="error">{task.error}</div>
+                                        )}
+                                        <button
+                                            className="btn"
+                                            onClick={() => deleteTask(task.id)}
+                                            style={{ marginTop: '1rem', padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // New Task Form Component
+        function NewTaskForm() {
+            const [task, setTask] = useState('');
+            const [modules, setModules] = useState([]);
+            const [allModules, setAllModules] = useState([]);
+            const [loading, setLoading] = useState(false);
+            const [taskId, setTaskId] = useState(null);
+
+            useEffect(() => {
+                fetchModules();
+            }, []);
+
+            async function fetchModules() {
+                try {
+                    const response = await fetch(`${API_BASE}/api/modules`);
+                    const data = await response.json();
+                    setAllModules(data.modules || []);
+                } catch (error) {
+                    console.error('Error fetching modules:', error);
+                }
+            }
+
+            async function handleSubmit(e) {
+                e.preventDefault();
+                setLoading(true);
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/task`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            task,
+                            modules: modules.length > 0 ? modules : null
+                        })
+                    });
+
+                    const data = await response.json();
+                    setTaskId(data.task_id);
+                    setTask('');
+                    setModules([]);
+                } catch (error) {
+                    console.error('Error creating task:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+
+            function toggleModule(moduleName) {
+                setModules(prev =>
+                    prev.includes(moduleName)
+                        ? prev.filter(m => m !== moduleName)
+                        : [...prev, moduleName]
+                );
+            }
+
+            return (
+                <div className="card">
+                    <h2>Create New Task</h2>
+
+                    {taskId && (
+                        <div style={{ marginBottom: '1rem', padding: '1rem', background: '#0f172a', borderRadius: '6px' }}>
+                            ✓ Task created! ID: {taskId}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label>Task Description</label>
+                            <textarea
+                                value={task}
+                                onChange={(e) => setTask(e.target.value)}
+                                placeholder="Describe your task... (e.g., 'Create a REST API with FastAPI and PostgreSQL')"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Select Modules (Optional)</label>
+                            <div className="module-grid">
+                                {allModules.map(module => (
+                                    <div
+                                        key={module.name}
+                                        className={`module-card ${modules.includes(module.name) ? 'selected' : ''}`}
+                                        onClick={() => toggleModule(module.name)}
+                                    >
+                                        <div className="module-name">{module.displayName || module.name}</div>
+                                        <div className="module-desc">{module.description}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <button type="submit" className="btn" disabled={loading}>
+                            {loading ? 'Creating...' : 'Create Task'}
+                        </button>
+                    </form>
+                </div>
+            );
+        }
+
+        // Modules List Component
+        function ModulesList() {
+            const [modules, setModules] = useState([]);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                fetchModules();
+            }, []);
+
+            async function fetchModules() {
+                try {
+                    const response = await fetch(`${API_BASE}/api/modules`);
+                    const data = await response.json();
+                    setModules(data.modules || []);
+                    setLoading(false);
+                } catch (error) {
+                    console.error('Error fetching modules:', error);
+                    setLoading(false);
+                }
+            }
+
+            if (loading) {
+                return <div className="loading">Loading modules...</div>;
+            }
+
+            return (
+                <div className="card">
+                    <h2>Available Modules</h2>
+                    <div className="module-grid">
+                        {modules.map(module => (
+                            <div key={module.name} className="module-card">
+                                <div className="module-name">{module.displayName || module.name}</div>
+                                <div className="module-desc">{module.description}</div>
+                                <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#64748b' }}>
+                                    📦 {module.tools} tools | 💬 {module.prompts} prompts
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Analytics Component
+        function Analytics() {
+            const [analytics, setAnalytics] = useState(null);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                fetchAnalytics();
+                const interval = setInterval(fetchAnalytics, 5000);
+                return () => clearInterval(interval);
+            }, []);
+
+            async function fetchAnalytics() {
+                try {
+                    const response = await fetch(`${API_BASE}/api/analytics`);
+                    const data = await response.json();
+                    setAnalytics(data);
+                    setLoading(false);
+                } catch (error) {
+                    console.error('Error fetching analytics:', error);
+                    setLoading(false);
+                }
+            }
+
+            if (loading) {
+                return <div className="loading">Loading analytics...</div>;
+            }
+
+            return (
+                <div>
+                    <div className="card">
+                        <h2><span className="live-indicator"></span>Performance Analytics</h2>
+                        <div className="metrics">
+                            <div className="metric-card">
+                                <div className="metric-value">{analytics?.tasks_completed || 0}</div>
+                                <div className="metric-label">Tasks Completed</div>
+                            </div>
+                            <div className="metric-card">
+                                <div className="metric-value">{analytics?.tokens_used || 0}</div>
+                                <div className="metric-label">Tokens Used</div>
+                            </div>
+                            <div className="metric-card">
+                                <div className="metric-value">{analytics?.tokens_used && analytics?.tasks_completed ? (analytics.tokens_used / analytics.tasks_completed).toFixed(0) : 0}</div>
+                                <div className="metric-label">Avg Tokens/Task</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
