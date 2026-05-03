@@ -4,10 +4,13 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-green.svg)](https://www.python.org/downloads/)
 [![Modules](https://img.shields.io/badge/Modules-24%2B-purple.svg)](https://github.com/corbybender/cog#modules)
 [![Tools](https://img.shields.io/badge/AI%20Tools-85%2B-orange.svg)](https://github.com/corbybender/cog#tools)
+[![100% Free](https://img.shields.io/badge/Price-Free%20Forever-success.svg)](https://github.com/corbybender/cog)
 
-**Super-intelligent AI system with 24+ expert modules that outperforms single-pass LLMs through multi-agent collaboration, self-reflection, and hierarchical planning.**
+**Super-intelligent AI system with 24+ expert modules, modern web UI, and multi-agent collaboration. 100% FREE and runs locally on your machine.**
 
-[🚀 Get Started](#quick-start) • [📚 Documentation](#documentation) • [🔧 Modules](#modules) • [💡 Examples](#examples) • [🤝 Contributing](#contributing)
+[📖 **Quick Start Guide**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [📚 Documentation](#documentation) • [🔧 Modules](#modules) • [💡 Examples](#examples)
+
+**NEW:** Web UI included! [Start using it now →](#web-ui)
 
 ---
 
@@ -37,16 +40,62 @@ Traditional single-pass LLMs have limitations:
 
 ## 🚀 Quick Start
 
-### Installation
+### Installation (One Command)
 
 ```bash
-# Install CogOS
-pip install cogos
-
-# Auto-integrate into your project
-cd /path/to/project
-python -m cogos.install_cogos
+pip install cogos && cd /path/to/project && python -m cogos.install_cogos
 ```
+
+That's it! CogOS is now integrated into your project.
+
+### Option 1: Use the Web UI (Easiest)
+
+```bash
+# Navigate to CogOS directory
+cd cogos
+cd web-ui
+
+# Start the Web UI
+./start.sh
+
+# Open web-ui/frontend/index.html in your browser
+# Create tasks visually, monitor progress, view analytics
+```
+
+**Web UI Features:**
+- 🎨 Modern, intuitive interface
+- 📊 Real-time task monitoring
+- 📈 Performance analytics
+- 🔧 Module browser
+- ⚡ No setup required
+
+### Option 2: Use Python API
+
+```python
+from cogos import CogOS
+
+# Initialize with your LLM
+cogos = CogOS(llm="claude-3.5-sonnet")
+
+# Use multi-agent intelligence
+result = cogos.think("Build a REST API with Node.js and PostgreSQL")
+print(result.summary)
+```
+
+### Option 3: Use Command Line
+
+```bash
+# Interactive mode
+cogos chat
+
+# Direct task
+cogos "Create a React component with TypeScript"
+
+# Use specific modules
+cogos --modules python,aws "Deploy a Flask app to AWS ECS"
+```
+
+**All options are 100% FREE and run locally on your machine!**
 
 This creates a `.cogos/` directory that AI agents can use transparently.
 
@@ -75,6 +124,51 @@ cogos "Create a React component with TypeScript"
 # Use specific modules
 cogos --modules python,aws "Deploy a Flask app to AWS ECS"
 ```
+
+---
+
+## 🎨 Web UI (NEW!)
+
+**The easiest way to use CogOS - Point, click, and create!**
+
+### Start the Web UI (30 seconds)
+
+```bash
+cd cogos/web-ui
+./start.sh
+
+# Then open web-ui/frontend/index.html in your browser
+```
+
+### What You Can Do
+
+✅ **Create Tasks** - Describe what you want, click "Create Task"
+✅ **Monitor Progress** - Watch tasks execute in real-time
+✅ **Browse Modules** - Explore all 24+ expert modules
+✅ **View Analytics** - Track tokens, tasks, and performance
+✅ **Manage History** - See all your past tasks and results
+
+### Web UI Features
+
+- 🎨 **Modern Interface** - Clean, beautiful design
+- ⚡ **Real-time Updates** - Watch tasks as they execute
+- 📊 **Analytics Dashboard** - Track your usage and performance
+- 🔧 **Module Browser** - See all available modules
+- 📱 **Responsive** - Works on desktop, tablet, and mobile
+- 🔒 **100% Local** - Everything runs on your machine
+- 💰 **100% Free** - No costs, no signup, no account
+
+### Why Use the Web UI?
+
+- **Easiest to use** - No coding required
+- **Visual feedback** - See progress in real-time
+- **Perfect for beginners** - Get started immediately
+- **Great for collaboration** - Share with your team
+- **No setup** - Just run and go
+
+### Full Documentation
+
+See [web-ui/README.md](web-ui/README.md) for complete Web UI documentation.
 
 ---
 
