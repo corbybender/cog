@@ -7,7 +7,7 @@
 ✅ **Web UI Dashboard** - Beautiful, modern React interface
 ✅ **Real-time Updates** - Watch tasks progress live
 ✅ **Task Management** - Create, monitor, and manage tasks
-✅ **Module Browser** - Browse and select from 24+ expert modules
+✅ **Module Browser** - Browse and select from 49+ expert modules
 ✅ **Performance Analytics** - Track tokens, tasks, and performance metrics
 ✅ **100% Local** - Everything runs on YOUR machine
 ✅ **100% Free** - No account, no signup, no costs
@@ -71,7 +71,7 @@ This script:
 
 ### 3. Browse Modules
 
-- Click "Modules" to see all 24+ expert modules
+- Click "Modules" to see all 49+ expert modules
 - See what each module does
 - Check tool and prompt counts
 
@@ -123,7 +123,7 @@ web-ui/
 - Delete old tasks
 
 ### Module Browser
-- See all 24+ expert modules
+- See all 49+ expert modules
 - Read descriptions
 - Check tool counts
 - Select modules for tasks

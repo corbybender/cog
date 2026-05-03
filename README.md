@@ -161,7 +161,7 @@ cd cogos/web-ui
 
 ✅ **Create Tasks** - Describe what you want, click "Create Task"
 ✅ **Monitor Progress** - Watch tasks execute in real-time
-✅ **Browse Modules** - Explore all 24+ expert modules
+✅ **Browse Modules** - Explore all 49+ expert modules
 ✅ **View Analytics** - Track tokens, tasks, and performance
 ✅ **Manage History** - See all your past tasks and results
 
@@ -240,7 +240,7 @@ Multi-source information gathering:
 
 ## 📚 Expert Modules
 
-24+ domain-specific modules with 3,863 prompt extensions:
+49+ domain-specific modules with 5,000+ prompt extensions:
 
 ### 🌐 Web Development
 - **CSS** - Modern styling, animations, responsive design
@@ -387,7 +387,7 @@ Design AWS infrastructure for:
 | Self-Reflection | ✅ Learns from mistakes | ❌ No learning |
 | Multi-Source Research | ✅ Codebase + Web + Docs | ❌ Training data only |
 | Token Efficiency | ✅ 40-60% reduction | ❌ No caching |
-| Domain Expertise | ✅ 24+ expert modules | ❌ General knowledge |
+| Domain Expertise | ✅ 49+ expert modules | ❌ General knowledge |
 | Validation | ✅ Multi-stage verification | ❌ No validation |
 | Testing | ✅ Comprehensive test strategies | ❌ Basic tests |
 | Documentation | ✅ Auto-generated docs | ❌ Manual only |
@@ -398,7 +398,7 @@ Design AWS infrastructure for:
 |---------|-------|-----------|---------|---------|
 | Multi-Agent | ✅ 8 specialized | ⚠️ Generic | ⚠️ Generic | ⚠️ Generic |
 | Auto-Integration | ✅ One command | ❌ Manual | ❌ Manual | ❌ Manual |
-| Expert Modules | ✅ 24+ domains | ⚠️ Limited | ❌ None | ❌ None |
+| Expert Modules | ✅ 49+ domains | ⚠️ Limited | ❌ None | ❌ None |
 | Self-Reflection | ✅ Learning system | ❌ None | ❌ None | ❌ None |
 | Research Engine | ✅ Multi-source | ❌ None | ⚠️ Web only | ❌ None |
 | Token Efficiency | ✅ 40-60% reduction | ❌ None | ❌ None | ❌ None |
@@ -504,7 +504,7 @@ ruff check
 ## 🗺️ Roadmap
 
 ### v1.0 (Current)
-- ✅ 24+ expert modules
+- ✅ 49+ expert modules
 - ✅ Multi-agent orchestration
 - ✅ Auto-integration
 - ✅ Self-reflection system

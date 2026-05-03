@@ -50,12 +50,12 @@
 ### 1. Hero Section
 
 **Before:**
-- "24+ expert modules. Auto-integration. Better than single-pass LLMs."
-- Stats: Free & Local, 24+ modules, 85+ tools
+- "49+ expert modules. Auto-integration. Better than single-pass LLMs."
+- Stats: Free & Local, 49+ modules, 100+ tools
 
 **After:**
-- "24+ expert modules. Beautiful Web UI included. 100% free. Runs locally."
-- Stats: Free & Local, 24+ modules, 8 agents, 85+ tools
+- "49+ expert modules. Beautiful Web UI included. 100% free. Runs locally."
+- Stats: Free & Local, 49+ modules, 8 agents, 100+ tools
 
 ### 2. Features Section
 
@@ -290,7 +290,7 @@ cog/ (root)
 ├── install_cogos.py                    # Auto-integration
 │
 ├── cog/                                # Main package
-│   ├── modules/                        # 24+ expert modules
+│   ├── modules/                        # 49+ expert modules
 │   ├── *.py                           # Core system files
 │   ├── web-ui/                         # Web UI application
 │   │   ├── backend/

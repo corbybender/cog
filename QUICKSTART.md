@@ -8,7 +8,7 @@
 
 **CogOS is a super-intelligent AI system that:**
 - Uses 8 specialized AI agents working together
-- Has 24+ expert modules (Python, JavaScript, AWS, Docker, etc.)
+- Has 49+ expert modules (Python, JavaScript, AWS, Docker, etc.)
 - Includes a beautiful web UI
 - Runs 100% locally on your machine
 - Is 100% free and open source
@@ -66,7 +66,7 @@ Open `web-ui/frontend/index.html` in your web browser.
 
 1. **Create Tasks** - Click "New Task" and describe what you want
 2. **Monitor Progress** - Watch tasks execute in real-time
-3. **Browse Modules** - Explore 24+ expert modules
+3. **Browse Modules** - Explore 49+ expert modules
 4. **View Analytics** - Track your tokens and performance
 
 ---
@@ -330,7 +330,7 @@ python app.py
 1. ✅ CogOS installed
 2. ✅ API key configured
 3. ✅ Web UI ready (or Python API, or CLI)
-4. ✅ 24+ expert modules at your fingertips
+4. ✅ 49+ expert modules at your fingertips
 5. ✅ 8 specialized AI agents ready to help
 
 **Start creating amazing things with AI!**
@@ -341,7 +341,7 @@ python app.py
 
 1. **Start Simple** - Begin with basic tasks to get familiar
 2. **Use the Web UI** - It's the easiest way to get started
-3. **Explore Modules** - Check out all 24+ modules available
+3. **Explore Modules** - Check out all 49+ modules available
 4. **Be Specific** - More specific tasks = better results
 5. **Iterate** - You can always refine and improve results
 

@@ -63,7 +63,7 @@ Open `web-ui/frontend/index.html` in your web browser.
 **That's it! You can now:**
 - Create tasks by clicking
 - Monitor progress in real-time
-- Browse all 24+ modules
+- Browse all 49+ modules
 - View performance analytics
 
 **Full Web UI Guide:** [web-ui/README.md](../web-ui/README.md)
@@ -171,7 +171,7 @@ cogos "Build a microservice" > output.md
 
 ## 🧩 Using Expert Modules
 
-CogOS has 24+ expert modules for different technologies:
+CogOS has 49+ expert modules for different technologies:
 
 ### Auto-Detection (Default)
 

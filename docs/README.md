@@ -70,7 +70,7 @@ Welcome to the CogOS documentation. This system provides super-intelligent AI ca
 
 ### Core Features
 - [Multi-Agent System](architecture/multi_agent.md) - 8 specialized agents
-- [Expert Modules](architecture/modules.md) - 24+ domain modules
+- [Expert Modules](architecture/modules.md) - 49+ domain modules
 - [Self-Reflection](architecture/self_reflection.md) - Learning system
 - [Research Engine](architecture/research.md) - Multi-source research
 
@@ -99,9 +99,9 @@ Use the search function to find specific topics:
 
 ## 📊 Key Metrics
 
-- **24+ Expert Modules** - Domain-specific knowledge
+- **49++ Expert Modules** - Domain-specific knowledge
 - **8 Specialized Agents** - Collaborative intelligence
-- **85+ AI Tools** - Production-ready tools
+- **100+ AI Tools** - Production-ready tools
 - **3,863 Prompt Extensions** - Comprehensive expertise
 - **40-60% Token Reduction** - Cost optimization
 - **100% Test Pass Rate** - Quality assurance

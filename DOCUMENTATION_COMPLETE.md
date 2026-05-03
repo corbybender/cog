@@ -128,7 +128,7 @@
 - ✅ Web UI fully documented
 - ✅ Python API fully documented
 - ✅ CLI fully documented
-- ✅ All 24+ modules documented
+- ✅ All 49+ modules documented
 - ✅ Configuration fully documented
 - ✅ Examples provided
 - ✅ Troubleshooting included
