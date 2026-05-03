@@ -2,13 +2,16 @@
 
 Welcome to CogOS! This guide will get you up and running with super-intelligent AI in 5 minutes.
 
+**Important:** CogOS is 100% FREE and runs locally on your machine. No signup, no account, no cloud required.
+
 ## What You'll Learn
 
-- ✅ How to install CogOS
-- ✅ Basic usage examples
-- ✅ How to use expert modules
+- ✅ How to install CogOS (one command)
+- ✅ **Option 1: Use the Web UI (easiest)**
+- ✅ Option 2: Use Python API (for developers)
+- ✅ Option 3: Use Command Line (quick tasks)
+- ✅ How to configure your API key
 - ✅ Common workflows
-- ✅ Next steps
 
 ---
 
@@ -28,17 +31,50 @@ That's it! CogOS is now integrated into your project.
 - pip (Python package manager)
 - An LLM API key (Claude, GPT-4, or compatible)
 
+**That's all you need!**
+
 ---
 
-## 🔧 Installation
+## 🎨 Option 1: Use the Web UI (EASIEST)
 
-### Step 1: Install CogOS
+This is the simplest way to use CogOS - no coding required!
+
+### Step 1: Navigate to Web UI
 
 ```bash
-pip install cogos
+cd cogos/web-ui
 ```
 
-### Step 2: Configure Your LLM
+### Step 2: Start the Web UI
+
+```bash
+./start.sh
+```
+
+This will:
+- Install all dependencies automatically
+- Start the backend server
+- Show you instructions
+
+### Step 3: Open in Browser
+
+Open `web-ui/frontend/index.html` in your web browser.
+
+**That's it! You can now:**
+- Create tasks by clicking
+- Monitor progress in real-time
+- Browse all 24+ modules
+- View performance analytics
+
+**Full Web UI Guide:** [web-ui/README.md](../web-ui/README.md)
+
+---
+
+## 💻 Option 2: Use Python API (For Developers)
+
+If you prefer coding over clicking:
+
+### Configure Your LLM First
 
 ```bash
 # Set your API key as environment variable
@@ -52,7 +88,25 @@ ANTHROPIC_API_KEY=your-api-key
 OPENAI_API_KEY=your-api-key
 ```
 
-### Step 3: Verify Installation
+### Basic Usage
+
+```python
+from cogos import CogOS
+
+# Initialize CogOS
+cogos = CogOS()
+
+# Create a task
+result = cogos.think("Build a REST API with FastAPI and PostgreSQL")
+
+# See the result
+print(result.summary)
+print(result.code)
+```
+
+---
+
+## 🖥️ Option 3: Use Command Line (Quick Tasks)
 
 ```bash
 cogos --version
