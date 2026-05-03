@@ -1,7 +1,7 @@
 provider: openai
 model: glm-5.1
 base_url: https://api.z.ai/api/coding/paas/v4
-api_key: 1c907538cf204446987b686b72b55878.bco6ItZKayz9LZyc
+api_key: YOUR_API_KEY_HERE
 memory_backend: sqlite
 modules_path: modules
 memory_path: cog_memory.db
