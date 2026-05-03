@@ -1,0 +1,9 @@
+{
+  "name": "cog-infra-kubernetes",
+  "version": "1.0.0",
+  "description": "Kubernetes container orchestration expertise including deployments, services, ingress, and cluster management",
+  "capabilities": ["k8s_deployments", "k8s_services", "k8s_ingress", "k8s_configmaps", "k8s_secrets", "helm_charts", "k8s_monitoring"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

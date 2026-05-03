@@ -1,0 +1,9 @@
+{
+  "name": "cog-cloud-aws",
+  "version": "1.0.0",
+  "description": "Amazon Web Services operations module",
+  "capabilities": ["s3_operations", "ec2_management", "lambda_functions", "cloudformation"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "web.fetch"],
+  "entrypoint": "module.py"
+}

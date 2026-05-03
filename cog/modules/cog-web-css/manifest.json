@@ -1,0 +1,18 @@
+{
+  "name": "cog-web-css",
+  "version": "1.0.0",
+  "description": "CSS expertise including Tailwind, Bootstrap, and pure CSS",
+  "capabilities": [
+    "read_css",
+    "write_css", 
+    "optimize_css",
+    "tailwind_css",
+    "bootstrap_css",
+    "responsive_design",
+    "css_animations",
+    "css_grid_flexbox"
+  ],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["filesystem.read", "filesystem.write", "shell.execute"],
+  "entrypoint": "module.py"
+}

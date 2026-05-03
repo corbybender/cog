@@ -1,0 +1,9 @@
+{
+  "name": "cog-api-graphql",
+  "version": "1.0.0",
+  "description": "GraphQL API design and implementation expertise including schema design, resolvers, and best practices",
+  "capabilities": ["graphql_schema", "graphql_resolvers", "graphql_subscriptions", "apollo_server", "graphql_optimization"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

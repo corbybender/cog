@@ -1,0 +1,18 @@
+{
+  "name": "cog-os-windows",
+  "version": "1.0.0",
+  "description": "Windows operating system expertise including PowerShell, CMD, and Windows-specific commands",
+  "capabilities": [
+    "powershell_commands",
+    "cmd_commands",
+    "windows_registry",
+    "windows_services",
+    "windows_filesystem",
+    "windows_networking",
+    "active_directory",
+    "windows_updates"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

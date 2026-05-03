@@ -1,0 +1,9 @@
+{
+  "name": "cog-db-postgres",
+  "version": "1.0.0",
+  "description": "PostgreSQL database operations module",
+  "capabilities": ["query_postgres", "schema_analysis", "data_migration", "backup_restore"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

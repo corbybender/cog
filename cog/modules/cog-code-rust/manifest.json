@@ -1,0 +1,9 @@
+{
+  "name": "cog-code-rust",
+  "version": "1.0.0",
+  "description": "Rust code reasoning and tooling module",
+  "capabilities": ["read_rust", "write_rust", "cargo_operations", "rust_analysis"],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["filesystem.read", "filesystem.write", "shell.execute"],
+  "entrypoint": "module.py"
+}

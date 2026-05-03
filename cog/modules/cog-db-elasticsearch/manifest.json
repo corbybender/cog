@@ -1,0 +1,9 @@
+{
+  "name": "cog-db-elasticsearch",
+  "version": "1.0.0",
+  "description": "Elasticsearch search engine expertise including indexing, querying, aggregations, and cluster management",
+  "capabilities": ["es_indexing", "es_querying", "es_aggregations", "es_mapping", "es_cluster", "es_analyzers"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

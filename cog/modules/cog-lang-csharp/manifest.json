@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-csharp",
+  "version": "1.0.0",
+  "description": "C# and .NET expertise including ASP.NET Core, Entity Framework, LINQ, and modern C# features",
+  "capabilities": ["csharp_core", "aspnet_core", "entity_framework", "linq", "dotnet_cli", "csharp_testing"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

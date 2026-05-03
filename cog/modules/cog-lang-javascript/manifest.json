@@ -1,0 +1,22 @@
+{
+  "name": "cog-lang-javascript",
+  "version": "1.0.0",
+  "description": "Complete JavaScript expertise: vanilla JS, jQuery, React, Vue, Angular, Svelte, Node.js, TypeScript integration",
+  "capabilities": [
+    "vanilla_javascript",
+    "es6_plus_features",
+    "jquery_operations",
+    "react_development",
+    "vue_development",
+    "angular_development",
+    "svelte_development",
+    "nodejs_server",
+    "javascript_testing",
+    "javascript_debugging",
+    "npm_package_management",
+    "webpack_vite_bundlers"
+  ],
+  "requires": ["code-core", "language-core", "web-core"],
+  "permissions": ["filesystem.read", "filesystem.write", "shell.execute", "network.request"],
+  "entrypoint": "module.py"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "cog-db-mysql",
+  "version": "1.0.0",
+  "description": "MySQL database expertise including design, optimization, replication, and administration",
+  "capabilities": [
+    "mysql_query",
+    "mysql_design",
+    "mysql_optimization",
+    "mysql_backup",
+    "mysql_replication",
+    "mysql_user_management",
+    "mysql_performance"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

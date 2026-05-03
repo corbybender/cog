@@ -1,0 +1,9 @@
+{
+  "name": "cog-db-mongodb",
+  "version": "1.0.0",
+  "description": "MongoDB NoSQL database expertise including document modeling, aggregation, replication, and sharding",
+  "capabilities": ["mongodb_query", "document_modeling", "aggregation_pipeline", "mongodb_backup", "mongodb_replication", "mongodb_indexing"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

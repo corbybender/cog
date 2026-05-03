@@ -1,0 +1,12 @@
+{
+  "name": "cog-code-python",
+  "version": "1.0.0",
+  "description": "Python code reasoning module",
+  "capabilities": ["read_code", "write_code", "debug", "test"],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["filesystem.read", "filesystem.write", "shell.execute"],
+  "entrypoint": "module.py",
+  "verification": {
+    "required": true
+  }
+}

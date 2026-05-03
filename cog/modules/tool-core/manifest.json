@@ -1,0 +1,9 @@
+{
+  "name": "tool-core",
+  "version": "1.0.0",
+  "description": "Core tool execution and command understanding foundations",
+  "capabilities": ["command_execution", "tool_safety", "permission_handling"],
+  "requires": [],
+  "permissions": ["shell.execute"],
+  "entrypoint": "module.py"
+}

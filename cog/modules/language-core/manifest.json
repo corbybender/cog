@@ -1,0 +1,9 @@
+{
+  "name": "language-core",
+  "version": "1.0.0",
+  "description": "Core language understanding and parsing foundations",
+  "capabilities": ["grammar_understanding", "syntax_parsing", "semantic_analysis"],
+  "requires": [],
+  "permissions": [],
+  "entrypoint": "module.py"
+}

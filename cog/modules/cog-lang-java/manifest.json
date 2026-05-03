@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-java",
+  "version": "1.0.0",
+  "description": "Java programming language expertise including Spring Boot, Maven, Gradle, and enterprise Java development",
+  "capabilities": ["java_core", "spring_boot", "maven", "gradle", "jvm", "java_testing"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

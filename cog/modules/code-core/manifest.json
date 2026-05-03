@@ -1,0 +1,9 @@
+{
+  "name": "code-core",
+  "version": "1.0.0",
+  "description": "Core programming abstractions and code understanding foundations",
+  "capabilities": ["parse_code", "understand_ast", "code_structure"],
+  "requires": [],
+  "permissions": ["filesystem.read"],
+  "entrypoint": "module.py"
+}

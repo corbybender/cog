@@ -1,0 +1,12 @@
+{
+  "name": "cog-git",
+  "version": "1.0.0",
+  "description": "Git operations module",
+  "capabilities": ["git_status", "git_log", "git_diff", "git_commit", "git_branch"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute"],
+  "entrypoint": "module.py",
+  "verification": {
+    "required": true
+  }
+}

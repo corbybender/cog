@@ -1,0 +1,9 @@
+{
+  "name": "cog-cloud-azure",
+  "version": "1.0.0",
+  "description": "Microsoft Azure cloud platform expertise including compute, storage, databases, networking, and serverless",
+  "capabilities": ["azure_compute", "azure_storage", "azure_db", "azure_networking", "azure_serverless", "azure_cli"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

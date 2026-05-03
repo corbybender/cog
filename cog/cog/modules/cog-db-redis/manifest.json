@@ -1,0 +1,9 @@
+{
+  "name": "cog-db-redis",
+  "version": "1.0.0",
+  "description": "Redis in-memory data store expertise including caching, pub/sub, streams, and clustering",
+  "capabilities": ["redis_cache", "redis_pub_sub", "redis_streams", "redis_clustering", "redis_persistence", "redis_transactions"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "network.request"],
+  "entrypoint": "module.py"
+}

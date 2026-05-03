@@ -1,0 +1,20 @@
+{
+  "name": "cog-os-linux",
+  "version": "1.0.0",
+  "description": "Linux operating system expertise covering all major distributions (Ubuntu, Debian, CentOS, RHEL, Fedora, Arch, etc.)",
+  "capabilities": [
+    "bash_commands",
+    "linux_filesystem",
+    "package_management",
+    "systemd_services",
+    "linux_networking",
+    "user_management",
+    "permissions_chmod",
+    "process_management",
+    "log_management",
+    "cron_jobs"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

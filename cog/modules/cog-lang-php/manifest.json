@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-php",
+  "version": "1.0.0",
+  "description": "PHP programming language expertise including Laravel, Symfony, WordPress, Composer, and modern PHP features",
+  "capabilities": ["php_core", "laravel", "symfony", "wordpress", "composer", "php_testing"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

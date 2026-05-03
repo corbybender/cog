@@ -1,0 +1,9 @@
+{
+  "name": "cog-cloud-gcp",
+  "version": "1.0.0",
+  "description": "Google Cloud Platform expertise including compute, storage, databases, networking, and serverless",
+  "capabilities": ["gcp_compute", "gcp_storage", "gcp_db", "gcp_networking", "gcp_serverless", "gcp_gcloud"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

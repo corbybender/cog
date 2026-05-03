@@ -1,0 +1,18 @@
+{
+  "name": "cog-os-mac",
+  "version": "1.0.0",
+  "description": "macOS operating system expertise including Zsh, Bash, Homebrew, and macOS-specific commands",
+  "capabilities": [
+    "zsh_commands",
+    "bash_commands",
+    "homebrew_management",
+    "macos_filesystem",
+    "spotlight_search",
+    "macos_defaults",
+    "macos_services",
+    "xcode_tools"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

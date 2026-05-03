@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-ruby",
+  "version": "1.0.0",
+  "description": "Ruby programming language expertise including Ruby on Rails, Sinatra, RSpec, and modern Ruby features",
+  "capabilities": ["ruby_core", "rails", "sinatra", "rspec", "bundler", "rubygems"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}
