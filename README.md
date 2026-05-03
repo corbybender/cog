@@ -8,9 +8,9 @@
 
 **Super-intelligent AI system with 24+ expert modules, modern web UI, and multi-agent collaboration. 100% FREE and runs locally on your machine.**
 
-[📖 **Quick Start Guide**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [📚 Documentation](#documentation) • [🔧 Modules](#modules) • [💡 Examples](#examples)
+[📖 **Quick Start**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [🌐 **Live Site**](https://cogos.vercel.app) • [📚 **Docs**](#documentation) • [🔧 **Modules**](#modules)
 
-**NEW:** Web UI included! [Start using it now →](#web-ui)
+**NEW:** Web UI included! [Try the live demo →](https://cogos.vercel.app) | [Get started locally →](#quick-start)
 
 ---
 
