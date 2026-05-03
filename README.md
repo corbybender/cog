@@ -8,9 +8,9 @@
 
 **Super-intelligent AI system with 24+ expert modules, modern web UI, and multi-agent collaboration. 100% FREE and runs locally on your machine.**
 
-[📖 **Quick Start**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [🌐 **Live Site**](https://cogos.vercel.app) • [📚 **Docs**](#documentation) • [🔧 **Modules**](#modules)
+[📖 **Quick Start**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [🎬 **Interactive Demo**](docs-site/demo.html) • [🌐 **Live Site**](https://cogos.vercel.app) • [📚 **Docs**](#documentation) • [🔧 **Modules**](#modules)
 
-**NEW:** Web UI included! [Try the live demo →](https://cogos.vercel.app) | [Get started locally →](#quick-start)
+**NEW:** Web UI included! [🎬 Try the interactive demo →](docs-site/demo.html) | [🌐 View live site →](https://cogos.vercel.app) | [🚀 Get started locally →](#quick-start)
 
 ---
 
@@ -35,6 +35,20 @@ Traditional single-pass LLMs have limitations:
 - ❌ No validation or testing
 
 **CogOS solves all of this** with a multi-agent system that produces superior results while reducing costs.
+
+---
+
+## 🎬 Try It Right Now - No Installation Required!
+
+**[🎬 Click here to launch the interactive demo →](docs-site/demo.html)**
+
+See CogOS in action with our simulated terminal. Watch how multi-agent collaboration works:
+- 🧠 Multiple specialized agents working together
+- 📊 Real-time task execution and validation
+- ⚡ Smart caching and performance optimization
+- 🔒 Sandboxed execution for safety
+
+**No API key required.** The demo shows typical CogOS output so you can experience the system before installing.
 
 ---
 
