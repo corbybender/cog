@@ -156,6 +156,11 @@ node_modules/
 .env.local
 .env.*.local
 
+# Configuration files with API keys
+cog.yaml
+*.yaml
+!cog.yaml.example
+
 # CI/CD
 .github/workflows/*.log
 
