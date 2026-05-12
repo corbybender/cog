@@ -1,566 +1,236 @@
-# 🤖 CogOS - Multi-Agent Cognitive System for AI
+# CogOS - Modular Cognitive Runtime System
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-green.svg)](https://www.python.org/downloads/)
-[![Modules](https://img.shields.io/badge/Modules-40%2B-purple.svg)](https://github.com/corbybender/cog#modules)
-[![Tools](https://img.shields.io/badge/AI%20Tools-70%2B-orange.svg)](https://github.com/corbybender/cog#tools)
-[![100% Free](https://img.shields.io/badge/Price-Free%20Forever-success.svg)](https://github.com/corbybender/cog)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-green.svg)](https://www.python.org/downloads/)
+[![Modules](https://img.shields.io/badge/Modules-40-purple.svg)](https://github.com/corbybender/cog#modules)
+[![Free](https://img.shields.io/badge/Price-Free-success.svg)](https://github.com/corbybender/cog)
 
-**Super-intelligent AI system with 40+ expert modules, modern web UI, and multi-agent collaboration. 100% FREE and runs locally on your machine.**
+**A modular cognitive runtime with expert modules, web UI, and multi-agent collaboration. Free, open source, runs locally.**
 
-[📖 **Quick Start**](QUICKSTART.md) • [🎨 **Web UI**](#web-ui) • [🎬 **Live Demo**](https://cogos.vercel.app/demo.html) • [🌐 **Live Site**](https://cogos.vercel.app) • [📚 **Docs**](#documentation) • [🔧 **Modules**](#modules)
-
-**NEW:** Web UI included! [🎬 Try the live demo →](https://cogos.vercel.app/demo.html) | [🌐 View live site →](https://cogos.vercel.app) | [🚀 Get started locally →](#quick-start)
+[Quick Start](#quick-start) • [Web UI](#web-ui) • [Live Site](https://cogos.vercel.app) • [Docs](#documentation) • [Modules](#modules)
 
 ---
 
-## ✨ What is CogOS?
+## What is CogOS?
 
-CogOS is a **multi-agent cognitive system** that enhances any LLM (Claude, GPT-4, etc.) with:
+CogOS is a **modular cognitive runtime** that enhances any LLM with:
 
- - 🧠 **10 Specialized AI Agents** - Research, code, critique, validate, optimize, test, document, architect, plan, and secure
- - 🔌 **Auto-Integration** - Drop-in replacement for any project with one command
- - 📚 **40+ Expert Modules** - Domain-specific knowledge for every major technology
- - ⚡ **40-60% Less Token Usage** - Multi-level caching reduces API costs
- - 🚀 **Enhanced CLI** - Project initialization, config profiles, autocomplete
- - 🧠 **Self-Improvement** - Automatic pattern extraction and code generation
- - ⚡ **Performance Optimized** - Batch processing, distributed execution
- - 🎯 **Better Results** - Hierarchical planning, self-reflection, and validation
- - 🔒 **Sandboxed Execution** - Docker containers protect your system
-
-### 🎯 Why CogOS?
-
-Traditional single-pass LLMs have limitations:
-- ❌ No collaboration or debate
-- ❌ No self-reflection or learning
-- ❌ No domain-specific expertise
-- ❌ No caching or optimization
-- ❌ No validation or testing
-
-**CogOS solves all of this** with a multi-agent system that produces superior results while reducing costs.
+- **38 Domain Modules** - Prompt extensions, tools, and verifiers for Python, JavaScript, AWS, Docker, Kubernetes, and more
+- **Multi-Agent Orchestration** - Specialized agents that collaborate on complex tasks (planner, researcher, coder, reviewer, tester, critic, documenter, optimizer, security, architect)
+- **Built-in Tools** - Filesystem operations, shell execution, web fetching/search, plus 60+ module-contributed tools
+- **Caching** - Response and tool-result caching to reduce token usage
+- **Memory** - SQLite or Mem0-backed conversation and task memory
+- **Approval Gates** - Require user approval for destructive operations
+- **Web UI** - Optional dashboard for task management and analytics
 
 ---
 
-## 🎬 Try It Right Now - No Installation Required!
+## Quick Start
 
-**[🎬 Click here to launch the live interactive demo →](https://cogos.vercel.app/demo.html)**
-
-See CogOS in action with our simulated terminal. Watch how multi-agent collaboration works:
-- 🧠 Multiple specialized agents working together
-- 📊 Real-time task execution and validation
-- ⚡ Smart caching and performance optimization
-- 🔒 Sandboxed execution for safety
-
-**No API key required.** The demo shows typical CogOS output so you can experience the system before installing.
-
----
-
-## 🚀 Quick Start
-
-### Installation (One Command)
+### Installation
 
 ```bash
-pip install cogos && cd /path/to/project && python install_cogos.py
+pip install -e .
 ```
 
-That's it! CogOS is now integrated into your project.
-
-### Option 1: Use the Web UI (Easiest)
+Or for development:
 
 ```bash
-# Navigate to CogOS directory
-cd cogos
+git clone https://github.com/corbybender/cog.git
+cd cog
+python -m venv venv
+source venv/bin/activate
+pip install -e ".[dev]"
+```
+
+### Option 1: Python API
+
+```python
+from cog import CogOS
+
+cogos = CogOS(llm="gpt-4o")
+
+result = cogos.run("Build a REST API with Node.js and PostgreSQL")
+print(result["output"])
+```
+
+### Option 2: Command Line
+
+```bash
+# Run a task
+cog run "Create a React component with TypeScript"
+
+# Interactive chat
+cog chat
+
+# Show status
+cog status
+
+# Initialize a project
+cog init my-project
+```
+
+Both `cog` and `cogos` commands work identically.
+
+### Option 3: Use the Kernel Directly
+
+```python
+from cog.kernel import Kernel, KernelConfig
+
+config = KernelConfig(
+    provider="openai",
+    model="gpt-4o",
+    modules_path="modules",
+    memory_backend="sqlite",
+)
+kernel = Kernel(config)
+kernel.start()
+
+result = kernel.run("Analyze this codebase")
+print(result["output"])
+
+kernel.stop()
+```
+
+---
+
+## Web UI
+
+An optional local dashboard for task management, analytics, and module browsing.
+
+### Start the Web UI
+
+```bash
 cd web-ui
-
-# Start the Web UI
 ./start.sh
-
-# Open web-ui/frontend/index.html in your browser
-# Create tasks visually, monitor progress, view analytics
+# Opens http://localhost:8000
 ```
 
-**Web UI Features:**
-- 🎨 Modern, intuitive interface
-- 📊 Real-time task monitoring
-- 📈 Performance analytics
-- 🔧 Module browser
-- ⚡ No setup required
+### Features
 
-### Option 2: Use Python API
+- Create and monitor tasks
+- Browse available modules
+- Track token usage and task completion
+- Real-time WebSocket updates
 
-```python
-from cogos import CogOS
-
-# Initialize with your LLM
-cogos = CogOS(llm="claude-3.5-sonnet")
-
-# Use multi-agent intelligence
-result = cogos.think("Build a REST API with Node.js and PostgreSQL")
-print(result.summary)
-```
-
-### Option 3: Use Command Line
-
-```bash
-# Interactive mode
-cogos chat
-
-# Direct task
-cogos "Create a React component with TypeScript"
-
-# Use specific modules
-cogos --modules python,aws "Deploy a Flask app to AWS ECS"
-```
-
-**All options are 100% FREE and run locally on your machine!**
-
-This creates a `.cogos/` directory that AI agents can use transparently.
-
-### Basic Usage
-
-```python
-from cogos import CogOS
-
-# Initialize with your LLM
-cogos = CogOS(llm="claude-3.5-sonnet")
-
-# Use multi-agent intelligence
-result = cogos.think("Build a REST API with Node.js and PostgreSQL")
-print(result.summary)
-```
-
-### Command Line
-
-```bash
-# Interactive mode
-cogos chat
-
-# Direct task
-cogos "Create a React component with TypeScript"
-
-# Use specific modules
-cogos --modules python,aws "Deploy a Flask app to AWS ECS"
-```
+See [web-ui/README.md](web-ui/README.md) for details.
 
 ---
 
-## 🎨 Web UI (NEW!)
+## Modules
 
-**The easiest way to use CogOS - Point, click, and create!**
+40 domain-specific modules with prompt extensions, tools, and verifiers:
 
-### Start the Web UI (30 seconds)
+### Programming Languages
+- **JavaScript** - ES6+, Node.js, TypeScript
+- **Python** - Django, Flask, FastAPI, data science
+- **Java** - Spring Boot, Maven
+- **C#** - .NET, ASP.NET
+- **Ruby** - Rails, Sinatra
+- **PHP** - Laravel, Symfony
+- **Rust** - Memory safety, async
+- **Go** - Concurrency, microservices
+- **Swift** - iOS/macOS development
+- **Kotlin** - Android, JVM
 
-```bash
-cd cogos/web-ui
-./start.sh
+### Databases
+- **PostgreSQL**, **MySQL**, **SQLite**, **Elasticsearch**, **Cassandra**
 
-# Then open web-ui/frontend/index.html in your browser
-```
+### Cloud Platforms
+- **AWS** - EC2, S3, Lambda
+- **Azure** - App Service, Functions
+- **GCP** - Compute Engine, Cloud Run
+- **DigitalOcean**, **Linode**
 
-### What You Can Do
+### Containers & Infrastructure
+- **Docker** - Build, compose, optimization
+- **Kubernetes** - Deployments, services
 
-✅ **Create Tasks** - Describe what you want, click "Create Task"
-✅ **Monitor Progress** - Watch tasks execute in real-time
-✅ **Browse Modules** - Explore all 40+ expert modules
-✅ **View Analytics** - Track tokens, tasks, and performance
-✅ **Manage History** - See all your past tasks and results
+### Web & Frontend
+- **CSS**, **HTML**
+- **Vue**, **Angular**, **Svelte**
 
-### Web UI Features
+### API Styles
+- **REST**, **GraphQL**, **gRPC**
 
-- 🎨 **Modern Interface** - Clean, beautiful design
-- ⚡ **Real-time Updates** - Watch tasks as they execute
-- 📊 **Analytics Dashboard** - Track your usage and performance
-- 🔧 **Module Browser** - See all available modules
-- 📱 **Responsive** - Works on desktop, tablet, and mobile
-- 🔒 **100% Local** - Everything runs on your machine
-- 💰 **100% Free** - No costs, no signup, no account
+### Testing
+- **Playwright**, **Selenium**
 
-### Why Use the Web UI?
+### Operating Systems
+- **Linux**, **macOS**, **Windows**
 
-- **Easiest to use** - No coding required
-- **Visual feedback** - See progress in real-time
-- **Perfect for beginners** - Get started immediately
-- **Great for collaboration** - Share with your team
-- **No setup** - Just run and go
-
-### Full Documentation
-
-See [web-ui/README.md](web-ui/README.md) for complete Web UI documentation.
+### Development Tools
+- **70 Tools** - 7 built-in plus 63 from modules
 
 ---
 
-## 🧠 Super-Intelligence Features
+## Multi-Agent System
 
-### Multi-Agent Orchestration
-
-10 specialized AI agents collaborate on every task:
+10 specialized agent roles that can collaborate on tasks:
 
 | Agent | Role |
 |-------|------|
-| 📋 **Planner** | Decompose complex tasks into structured steps |
-| 🔬 **Research** | Multi-source research (codebase, web, docs) |
-| 💻 **Code** | Write production code with best practices |
-| 🧪 **Test** | Comprehensive testing strategies |
-| 📝 **Document** | Clear documentation and comments |
-| 🎨 **Architect** | System design and architecture |
-| 🔍 **Critique** | Review and identify issues |
-| ✅ **Validate** | Verify requirements are met |
-| ⚡ **Optimize** | Performance and cost optimization |
-| 🔒 **Security** | Security analysis and hardening |
-
-### Hierarchical Task Planning
-
-```python
-# Complex tasks are automatically decomposed
-cogos.plan("Build an e-commerce platform with microservices")
-
-# Creates:
-# 1. User Service (Node.js + MongoDB)
-# 2. Product Service (Python + PostgreSQL)
-# 3. Order Service (Java + Redis)
-# 4. API Gateway (NestJS)
-# 5. Deployment (Kubernetes + AWS)
-```
-
-### Self-Reflection & Learning
-
-The system learns from mistakes:
-- 🔄 Reviews past failures
-- 📈 Tracks success patterns
-- 🎯 Adjusts strategies
-- 💡 Improves over time
-
-### Research Engine
-
-Multi-source information gathering:
-- 🔍 Codebase analysis
-- 🌐 Web search
-- 📚 Documentation lookup
-- 💬 Stack Overflow research
+| Planner | Decompose complex tasks into steps |
+| Researcher | Multi-source information gathering |
+| Coder | Write production code |
+| Reviewer | Review and critique code |
+| Tester | Comprehensive testing strategies |
+| Critic | Find flaws and propose alternatives |
+| Documenter | Clear documentation |
+| Optimizer | Performance optimization |
+| Security | Security analysis |
+| Architect | System design |
 
 ---
 
-## 📚 Expert Modules
-
-40+ domain-specific modules with deep prompt extensions:
-
-### 🌐 Web Development
-- **CSS** - Modern styling, animations, responsive design
-- **HTML** - Semantic markup, accessibility, SEO
-
-### ⚙️ Programming Languages
-- **JavaScript** - ES6+, Node.js, TypeScript, React, Vue
-- **Python** - Django, Flask, FastAPI, async, data science
-- **Java** - Spring Boot, Maven, enterprise patterns
-- **C#** - .NET, ASP.NET, Entity Framework
-- **Ruby** - Rails, Sinatra, gems
-- **PHP** - Laravel, Symfony, WordPress
-- **Rust** - Memory safety, async, WebAssembly
-
-### 🔧 Backend Frameworks
-- **Node.js** - Express, Fastify, NestJS, Hapi
-- **Python** - Django, Flask, FastAPI, Tornado
-- **Java** - Spring Boot, Micronaut
-- **C#** - ASP.NET Core
-
-### 🗄️ Databases
-- **PostgreSQL** - Advanced queries, indexing, optimization
-- **MySQL** - Replication, sharding, performance
-- **MongoDB** - Aggregation, indexing, schema design
-- **Redis** - Caching, pub/sub, data structures
-- **Elasticsearch** - Search, analytics, mapping
-
-### 💻 Operating Systems
-- **Windows** - PowerShell, batch, registry
-- **macOS** - Zsh, Homebrew, plist
-- **Linux** - Bash, systemd, containers
-
-### ☁️ Cloud Platforms
-- **AWS** - EC2, S3, Lambda, ECS, EKS
-- **Azure** - App Service, Functions, AKS
-- **GCP** - Compute Engine, Cloud Run, GKE
-
-### 🐳 Containers & Orchestration
-- **Docker** - Multi-stage builds, compose, optimization
-- **Kubernetes** - Deployments, services, helm, monitoring
-
-### 🔨 Development Tools
-- **Git** - Workflows, rebasing, CI/CD integration
-
----
-
-## 📖 Documentation
+## Documentation
 
 ### Getting Started
 - [Quick Start Guide](docs/START_HERE.md)
-- [Installation](docs/guides/AUTO_INTEGRATION_GUIDE.md)
 - [Configuration](docs/api/configuration.md)
 
 ### Architecture
-- [Super-Intelligence System](docs/architecture/README_SUPER_INTELLIGENCE.md)
 - [Multi-Agent System](docs/architecture/multi_agent.md)
 - [Module System](docs/architecture/modules.md)
-
-### Guides
-- [Auto-Integration](docs/guides/AUTO_INTEGRATION_GUIDE.md)
-- [Creating Custom Modules](docs/guides/custom_modules.md)
-- [Performance Optimization](docs/guides/performance.md)
 
 ### API Reference
 - [Python API](docs/api/python.md)
 - [CLI Reference](docs/api/cli.md)
 - [Module API](docs/api/modules.md)
 
-### Examples
-- [Web Development](docs/examples/web.md)
-- [Data Science](docs/examples/data_science.md)
-- [DevOps](docs/examples/devops.md)
-
 ---
 
-## 💡 Use Cases
-
-### 🚀 Production Development
-
-```python
-# Build a complete microservice
-cogos.think("""
-Create a Node.js microservice with:
-- Express.js framework
-- PostgreSQL database
-- Redis caching
-- Docker deployment
-- Kubernetes manifests
-""")
-
-# Result: Complete production-ready code with tests, docs, and deployment config
-```
-
-### 🔧 Legacy Code Migration
-
-```python
-# Migrate from monolith to microservices
-cogos.plan("""
-Migrate this monolithic Rails app to microservices:
-- User service (Node.js)
-- Payment service (Python)
-- Notification service (Go)
-- API Gateway (Kong)
-""")
-```
-
-### 📊 Data Science Projects
-
-```python
-# Build ML pipeline
-cogos.think("""
-Create a ML pipeline with:
-- Python + FastAPI backend
-- PostgreSQL for data storage
-- Redis for caching
-- Docker deployment
-- Kubernetes scaling
-""")
-```
-
-### ☁️ Cloud Infrastructure
-
-```python
-# Design cloud architecture
-cogos.architect("""
-Design AWS infrastructure for:
-- Multi-region deployment
-- Auto-scaling
-- CI/CD pipeline
-- Monitoring & logging
-- Cost optimization
-""")
-```
-
----
-
-## 🎯 Key Advantages
-
-### vs Single-Pass LLMs
-
-| Feature | CogOS | Single LLM |
-|---------|-------|------------|
-| Agent Collaboration | ✅ 10 specialized agents | ❌ Single pass |
-| Self-Reflection | ✅ Learns from mistakes | ❌ No learning |
-| Multi-Source Research | ✅ Codebase + Web + Docs | ❌ Training data only |
-| Token Efficiency | ✅ 40-60% reduction | ❌ No caching |
-| Domain Expertise | ✅ 40+ expert modules | ❌ General knowledge |
-| Validation | ✅ Multi-stage verification | ❌ No validation |
-| Testing | ✅ Comprehensive test strategies | ❌ Basic tests |
-| Documentation | ✅ Auto-generated docs | ❌ Manual only |
-
-### vs Competitors
-
-| Feature | CogOS | LangChain | AutoGPT | CrewAI |
-|---------|-------|-----------|---------|---------|
-| Multi-Agent | ✅ 10 specialized | ⚠️ Generic | ⚠️ Generic | ⚠️ Generic |
-| Auto-Integration | ✅ One command | ❌ Manual | ❌ Manual | ❌ Manual |
-| Expert Modules | ✅ 40+ domains | ⚠️ Limited | ❌ None | ❌ None |
-| Self-Reflection | ✅ Learning system | ❌ None | ❌ None | ❌ None |
-| Research Engine | ✅ Multi-source | ❌ None | ⚠️ Web only | ❌ None |
-| Token Efficiency | ✅ 40-60% reduction | ❌ None | ❌ None | ❌ None |
-| Drop-in Replacement | ✅ Any project | ❌ Framework specific | ❌ Standalone | ❌ Standalone |
-
----
-
-## 🧪 Testing
+## Testing
 
 ```bash
-# Run all tests
 pytest
-
-# Run specific test
-pytest tests/test_multi_agent.py
-
-# Run with coverage
-pytest --cov=cog --cov-report=html
 ```
-
-**Current Status:** ✅ 79/79 tests passing (100%)
 
 ---
 
-## 🚢 Deployment
+## Contributing
 
-### Production Deployment
-
-```bash
-# Build Docker image
-docker build -t cogos:latest .
-
-# Run with Docker
-docker run -v $(pwd):/workspace cogos:latest
-
-# Deploy to Kubernetes
-kubectl apply -f k8s/deployment.yaml
-```
-
-### Cloud Deployment
-
-- **AWS ECS**: See [AWS deployment guide](docs/examples/deployment_aws.md)
-- **Google Cloud Run**: See [GCP deployment guide](docs/examples/deployment_gcp.md)
-- **Azure Container Instances**: See [Azure deployment guide](docs/examples/deployment_azure.md)
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
-### Areas for Contribution
-
-- 🌟 **New Modules** - Add support for more technologies
-- 🔧 **Bug Fixes** - Fix issues and improve stability
-- 📚 **Documentation** - Improve docs and add examples
-- 🧪 **Tests** - Add test coverage
-- ⚡ **Performance** - Optimize caching and performance
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ### Development Setup
 
 ```bash
-# Clone repository
 git clone https://github.com/corbybender/cog.git
 cd cog
-
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install development dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Run linting
-ruff check
+source venv/bin/activate
+pip install -e .
 ```
 
 ---
 
-## 📊 Performance
+## License
 
-### Benchmarks
-
-| Metric | CogOS | Single LLM | Improvement |
-|--------|-------|------------|-------------|
-| Task Completion | 94% | 67% | +40% |
-| Code Quality | 91% | 72% | +26% |
-| Token Usage | 60% | 100% | -40% |
-| Test Coverage | 88% | 54% | +63% |
-| Documentation | 95% | 61% | +56% |
-
-### Real-World Results
-
-- **FileSearchTool Improvement:** 94% task completion, 88% test coverage
-- **Token Reduction:** 40-60% less API usage
-- **Quality:** 26% better code quality scores
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-## 🗺️ Roadmap
-
-### v1.0 (Current)
-- ✅ 40+ expert modules
-- ✅ Multi-agent orchestration
-- ✅ Auto-integration
-- ✅ Self-reflection system
-- ✅ Research engine
-- ✅ **Web UI dashboard** (NEW!)
-- ✅ **Real-time collaboration** (NEW!)
-- ✅ **Custom agent creation** (NEW!)
-- ✅ **Performance analytics** (NEW!)
-
-### v1.1 (Coming Soon)
-- Enhanced agent templates
-- Visual workflow builder
-- Advanced collaboration features
-- Enterprise authentication
-
-### v2.0 (Future)
-- ⏳ Distributed execution
-- ⏳ Federated learning
-- ⏳ Cross-project sharing
-- ⏳ Enterprise features
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- Built on top of amazing LLMs (Claude, GPT-4, etc.)
-- Inspired by multi-agent systems research
-- Community contributions and feedback
-
----
-
-## 📞 Support
+## Support
 
 - **GitHub Issues**: [github.com/corbybender/cog/issues](https://github.com/corbybender/cog/issues)
 - **Documentation**: [docs/](docs/)
-- **Examples**: [docs/examples/](docs/examples/)
-- **Discord**: Coming soon!
-
----
-
-## ⭐ Star History
-
-If you find CogOS useful, please consider giving us a star on GitHub!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=corbybender/cog&type=Date)](https://star-history.com/#corbybender/cog&Date)
-
----
-
-**Made with ❤️ by the CogOS community**
-
-*Better AI through collaboration*

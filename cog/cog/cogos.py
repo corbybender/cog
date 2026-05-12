@@ -18,9 +18,9 @@ import asyncio
 from datetime import datetime
 from pathlib import Path
 
-from cog.llm.provider import LLMProvider
-from cog.memory.backend import MemoryBackend
-from cog.cache.smart_cache import SmartCache
+from cog.providers.base import LLMProvider
+from cog.memory.base import MemoryBackend
+from cog.cache import SmartCache
 from cog.multi_agent import (
     MultiAgentOrchestrator,
     Agent,

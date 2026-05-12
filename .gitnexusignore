@@ -1,0 +1,8 @@
+node_modules/
+*.egg-info/
+cogos-site/
+docs-site/
+web-ui/
+.venv/
+__pycache__/
+*.pyc

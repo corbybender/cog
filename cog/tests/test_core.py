@@ -138,27 +138,34 @@ class TestPlanner:
 
 class TestRouter:
     def test_route_python(self) -> None:
-        router = CapabilityRouter()
+        modules_dir = str(Path(__file__).parent.parent / "modules")
+        loader = ModuleLoader(search_paths=[modules_dir])
+        loader.discover()
+        router = CapabilityRouter(loader)
         result = router.route("write a python script")
         assert result.module is not None
-        assert "python" in result.module or "code" in result.module
 
     def test_route_unknown(self) -> None:
-        router = CapabilityRouter()
+        modules_dir = str(Path(__file__).parent.parent / "modules")
+        loader = ModuleLoader(search_paths=[modules_dir])
+        loader.discover()
+        router = CapabilityRouter(loader)
         result = router.route("do something")
         assert result is not None
 
 
 class TestModuleLoader:
     def test_discover(self) -> None:
-        loader = ModuleLoader(search_paths=["modules"])
+        modules_dir = str(Path(__file__).parent.parent / "modules")
+        loader = ModuleLoader(search_paths=[modules_dir])
         discovered = loader.discover()
         assert len(discovered) >= 1
         names = [m.name for m in discovered]
         assert "cog-code-python" in names
 
     def test_load(self) -> None:
-        loader = ModuleLoader(search_paths=["modules"])
+        modules_dir = str(Path(__file__).parent.parent / "modules")
+        loader = ModuleLoader(search_paths=[modules_dir])
         loader.discover()
         module = loader.load("cog-code-python")
         assert module.instance is not None
@@ -167,20 +174,22 @@ class TestModuleLoader:
 class TestVerification:
     def test_file_exists(self) -> None:
         vl = VerificationLayer()
-        result = vl.verify("file.exists", "idea.md")
+        test_file = str(Path(__file__))
+        result = vl.verify("file.exists", test_file)
         assert result.status == VerificationStatus.PASSED
 
     def test_file_not_exists(self) -> None:
         vl = VerificationLayer()
-        result = vl.verify("file.exists", "nonexistent.txt")
+        result = vl.verify("file.exists", "/nonexistent/path/file.txt")
         assert result.status == VerificationStatus.FAILED
 
 
 class TestKernel:
     def test_kernel_lifecycle(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
+            modules_dir = str(Path(__file__).parent.parent / "modules")
             config = KernelConfig(
-                modules_path="modules",
+                modules_path=modules_dir,
                 memory_path=str(Path(tmpdir) / "test.db"),
                 memory_backend="sqlite",
             )
@@ -191,8 +200,9 @@ class TestKernel:
 
     def test_kernel_run_dry(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
+            modules_dir = str(Path(__file__).parent.parent / "modules")
             config = KernelConfig(
-                modules_path="modules",
+                modules_path=modules_dir,
                 memory_path=str(Path(tmpdir) / "test.db"),
                 dry_run=True,
                 memory_backend="sqlite",

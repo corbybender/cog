@@ -19,9 +19,9 @@ import asyncio
 from datetime import datetime
 from pathlib import Path
 
-from cog.llm.provider import LLMProvider
-from cog.memory.backend import MemoryBackend
-from cog.cache.smart_cache import SmartCache
+from cog.providers.base import LLMProvider
+from cog.memory.base import MemoryBackend
+from cog.cache import SmartCache
 
 
 class AgentRole(Enum):
@@ -592,6 +592,8 @@ def create_orchestrator(
         ("tester", AgentRole.TESTER),
         ("documenter", AgentRole.DOCUMENTER),
         ("optimizer", AgentRole.OPTIMIZER),
+        ("security", AgentRole.SECURITY),
+        ("architect", AgentRole.ARCHITECT),
     ]
 
     for name, role in default_agents:

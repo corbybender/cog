@@ -10,3 +10,7 @@ cog.local.yaml
 cog_memory.db
 *.db
 .env
+
+# CogOS
+.cogos/
+.vercel
