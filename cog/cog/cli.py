@@ -417,6 +417,11 @@ _TOOL_CONFIGS = {
         "key": "mcpServers",
         "format": "json",
     },
+    "opencode": {
+        "file": "~/.config/opencode/opencode.json",
+        "key": "mcp",
+        "format": "opencode",
+    },
 }
 
 
@@ -449,6 +454,8 @@ def _register_all() -> None:
                 registered.append(f"{tool_name} ({cfg_path})")
             elif cfg["format"] == "toml":
                 _register_toml(cfg_path, server_entry, tool_name, registered)
+            elif cfg["format"] == "opencode":
+                _register_opencode(cfg_path, server_entry, tool_name, registered)
         except Exception as e:
             print(f"  Warning: could not register with {tool_name}: {e}")
 
@@ -485,6 +492,27 @@ def _register_toml(
         f.write(f"\n{section}\n")
         for e in entries:
             f.write(f"{e}\n")
+    registered.append(f"{tool_name} ({cfg_path})")
+
+
+def _register_opencode(
+    cfg_path: Path, server_entry: dict, tool_name: str, registered: list
+) -> None:
+    import json as _json
+
+    cfg_path.parent.mkdir(parents=True, exist_ok=True)
+    if cfg_path.exists():
+        with open(cfg_path) as f:
+            data = _json.load(f)
+    else:
+        data = {}
+    mcp = data.setdefault("mcp", {})
+    mcp["cogos"] = {
+        "type": "local",
+        "command": [server_entry["command"]] + server_entry["args"],
+    }
+    with open(cfg_path, "w") as f:
+        _json.dump(data, f, indent=2)
     registered.append(f"{tool_name} ({cfg_path})")
 
 
