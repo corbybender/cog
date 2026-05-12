@@ -35,8 +35,8 @@ class KernelConfig:
     log_level: str = "INFO"
     sandbox_enabled: bool = False
     dry_run: bool = False
-    provider: str = "openai"
-    model: str = "gpt-4o"
+    provider: str | None = None
+    model: str | None = None
     max_agent_iterations: int = 20
     memory_backend: str = "mem0"
     mem0_config: dict[str, Any] | None = None
@@ -134,6 +134,22 @@ class Kernel:
     def _init_provider(self) -> None:
         if self._provider is not None:
             return
+        if not self._config.provider:
+            raise ValueError(
+                "No LLM provider configured. Set 'provider' in cog.yaml, "
+                "use --provider on the CLI, or set COG_PROVIDER env var."
+            )
+        if not self._config.model:
+            raise ValueError(
+                "No LLM model configured. Set 'model' in cog.yaml, "
+                "use --model on the CLI, or set COG_MODEL env var."
+            )
+        if not self._config.api_key:
+            raise ValueError(
+                "No API key configured. Set 'api_key' in cog.yaml, "
+                "set COG_API_KEY / OPENAI_API_KEY / ANTHROPIC_API_KEY env var, "
+                "or pass api_key= to the constructor."
+            )
         if self._config.provider == "anthropic":
             from cog.providers.anthropic_provider import AnthropicProvider
 

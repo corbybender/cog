@@ -158,8 +158,10 @@ node_modules/
 
 # Configuration files with API keys
 cog.yaml
-*.yaml
+**/cog.yaml
+cog.local.yaml
 !cog.yaml.example
+!**/cog.yaml.example
 
 # CI/CD
 .github/workflows/*.log

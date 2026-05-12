@@ -5,16 +5,17 @@ __version__ = "0.1.0"
 from cog.kernel import Kernel, KernelConfig
 
 class CogOS:
-    def __init__(self, llm: str = "gpt-4o", api_key: str | None = None, base_url: str | None = None):
+    def __init__(self, llm: str, api_key: str, base_url: str | None = None):
+        if not llm:
+            raise ValueError("llm (model name) is required")
+        if not api_key:
+            raise ValueError("api_key is required")
         provider = "openai"
-        model = llm
         if "claude" in llm.lower():
             provider = "anthropic"
-        elif "glm" in llm.lower():
-            provider = "openai"
         self._config = KernelConfig(
             provider=provider,
-            model=model,
+            model=llm,
             api_key=api_key,
             base_url=base_url,
             memory_backend="sqlite",

@@ -1,72 +1,9 @@
-# CogOS Configuration File
-# Copy this file to cog.yaml and customize for your setup
-
-# LLM Provider Configuration
 provider: openai
-model: gpt-4
-base_url: https://api.openai.com/v1
+model: glm-5.1
+base_url: https://api.z.ai/api/coding/paas/v4
 api_key: YOUR_API_KEY_HERE
-
-# Alternative providers:
-# provider: anthropic
-# model: claude-3.5-sonnet
-# base_url: https://api.anthropic.com
-# api_key: YOUR_ANTHROPIC_API_KEY
-
-# Memory Backend Configuration
-# Options: sqlite, mem0, json
 memory_backend: sqlite
-memory_path: cog_memory.db
-
-# For Mem0 backend (requires MEM0_API_KEY):
-# memory_backend: mem0
-# mem0_api_key: YOUR_MEM0_API_KEY
-
-# Module Configuration
 modules_path: modules
-auto_load_modules: true
-
-# Logging Configuration
+memory_path: cog_memory.db
 log_level: INFO
-# Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
-
-# Agent Configuration
 max_agent_iterations: 20
-agent_timeout: 300
-enable_parallel_agents: true
-
-# Cache Configuration
-cache_enabled: true
-cache_ttl: 3600
-cache_max_size: 1000
-
-# Safety Configuration
-safety_level: STANDARD
-# Options: SAFE, STANDARD, ADVANCED, EXPERT, CRITICAL
-
-sandbox_enabled: true
-approval_required: true
-
-# Research Configuration
-research_enabled: true
-research_sources:
-  - codebase
-  - web
-  - documentation
-
-# Performance Optimization
-enable_caching: true
-enable_streaming: false
-max_concurrent_requests: 5
-
-# Output Configuration
-output_format: markdown
-include_metadata: true
-save_intermediate_results: false
-
-# Advanced Settings
-# temperature: 0.7
-# max_tokens: 4096
-# top_p: 0.9
-# frequency_penalty: 0.0
-# presence_penalty: 0.0

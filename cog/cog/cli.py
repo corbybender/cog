@@ -342,7 +342,7 @@ def cmd_init(args: argparse.Namespace) -> None:
     content = generate_default_config()
     target.write_text(content)
     print(f"Created {target}")
-    print("Edit it to configure your provider, model, and memory settings.")
+    print("Edit it to set your api_key, provider, and model before running any commands.")
 
 
 def main(argv: list[str] | None = None) -> None:
