@@ -224,6 +224,7 @@
                         <li><a href="#env">Environment variables</a></li>
                         <li><a href="#config-file">Config file</a></li>
                         <li><a href="#cli">CLI usage</a></li>
+                        <li><a href="#creating-modules">Creating modules</a></li>
                         <li><a href="#providers">Supported providers</a></li>
                         <li><a href="#integration">Integrating with AI tools</a></li>
                     </ul>
@@ -498,6 +499,100 @@ $ cog chat
 $ cog status</code></div>
 
                     <p>Both <code>cog</code> and <code>cogos</code> commands work identically.</p>
+
+                    <h2 id="creating-modules">Creating Custom Modules</h2>
+
+                    <p>Use <code>cog create</code> to scaffold a new module with the correct structure:</p>
+
+                    <div class="code-block"><code><span class="comment"># Scaffold a new module</span>
+$ cog create <span class="string">infra-pulumi</span> --description <span class="string">"Pulumi infrastructure as code"</span>
+<span class="string">Created modules/cog-infra-pulumi/</span>
+<span class="string">  modules/cog-infra-pulumi/manifest.json</span>
+<span class="string">  modules/cog-infra-pulumi/module.py</span>
+
+<span class="comment"># Or use the full cog- prefix</span>
+$ cog create <span class="string">cog-lang-rust</span> --description <span class="string">"Rust language module"</span></code></div>
+
+                    <p>This generates two files:</p>
+
+                    <h3>manifest.json &mdash; module metadata</h3>
+
+                    <div class="code-block"><code>{
+  <span class="param">"name"</span>: <span class="string">"cog-infra-pulumi"</span>,
+  <span class="param">"version"</span>: <span class="string">"0.1.0"</span>,
+  <span class="param">"description"</span>: <span class="string">"Pulumi infrastructure as code"</span>,
+  <span class="param">"capabilities"</span>: [<span class="string">"pulumi_operations"</span>],
+  <span class="param">"requires"</span>: [],
+  <span class="param">"permissions"</span>: [<span class="string">"shell.execute"</span>],
+  <span class="param">"entrypoint"</span>: <span class="string">"module.py"</span>
+}</code></div>
+
+                    <h3>module.py &mdash; your tools, verifiers, and domain knowledge</h3>
+
+                    <p>The scaffolded <code>module.py</code> includes a working <code>Tool</code>, <code>Verifier</code>, and <code>CogModule</code> class with TODO comments. Each module can provide:</p>
+
+                    <table class="provider-table">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>What it does</th>
+                                <th>Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Tools</strong></td>
+                                <td>Actions CogOS can take (run commands, call APIs, etc.)</td>
+                                <td><code>register_tools()</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Verifiers</strong></td>
+                                <td>Health checks (is the tool installed? are creds valid?)</td>
+                                <td><code>register_verifiers()</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Prompt extensions</strong></td>
+                                <td>Domain expertise injected into the LLM context</td>
+                                <td><code>get_prompt_extensions()</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Capabilities</strong></td>
+                                <td>Tags for task routing (e.g. <code>s3_operations</code>)</td>
+                                <td><code>get_capabilities()</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lifecycle hooks</strong></td>
+                                <td>Setup/teardown logic (<code>on_load</code>, <code>pre_execute</code>, etc.)</td>
+                                <td>Override on <code>CogModule</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Module naming convention</h3>
+
+                    <p>Module names follow the pattern <code>cog-{category}-{topic}</code>:</p>
+
+                    <div class="code-block"><code><span class="comment"># Category examples</span>
+cog-cloud-aws        <span class="comment"># cloud providers</span>
+cog-lang-rust        <span class="comment"># programming languages</span>
+cog-infra-docker     <span class="comment"># infrastructure / DevOps</span>
+cog-db-postgres      <span class="comment"># databases</span>
+cog-framework-nextjs <span class="comment"># web frameworks</span>
+cog-testing-playwright <span class="comment"># testing tools</span></code></div>
+
+                    <h3>Sharing modules</h3>
+
+                    <p>Modules are just directories with <code>manifest.json</code> + <code>module.py</code>. To share:</p>
+
+                    <ol>
+                        <li><strong>Git repo</strong> &mdash; push your module directory, users clone into their <code>modules/</code></li>
+                        <li><strong>Pip package</strong> &mdash; wrap the module in a Python package with a <code>modules/</code> entry point</li>
+                        <li><strong>Registry</strong> &mdash; publish to a CogOS module registry (coming soon)</li>
+                    </ol>
+
+                    <div class="callout">
+                        <p><strong>Tip:</strong> The <code>requires</code> field in <code>manifest.json</code> lets you declare dependencies on other modules (e.g. <code>"requires": ["tool-core"]</code>). CogOS resolves activation order automatically.</p>
+                    </div>
 
                     <h2 id="providers">Supported Providers</h2>
 
