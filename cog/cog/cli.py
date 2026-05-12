@@ -488,6 +488,123 @@ def _register_toml(
     registered.append(f"{tool_name} ({cfg_path})")
 
 
+def cmd_create(args: argparse.Namespace) -> None:
+    import json
+    from pathlib import Path
+
+    raw_name = args.name.strip().lower()
+    if not raw_name.startswith("cog-"):
+        raw_name = f"cog-{raw_name}"
+    parts = raw_name.split("-")
+    if len(parts) < 2:
+        print("Module name must have a category, e.g. 'cog-cloud-aws' or 'cloud-aws'")
+        return
+
+    module_name = raw_name
+    class_name = "".join(p.capitalize() for p in parts)
+    tool_class = f"{class_name}Tool"
+    verifier_class = f"{class_name}Verifier"
+    category = parts[1]
+    topic = "-".join(parts[2:]) if len(parts) > 2 else parts[1]
+    description = args.description or f"{topic or category} module"
+
+    output_dir = Path(args.output) / module_name
+    if output_dir.exists() and not args.force:
+        print(f"{output_dir} already exists. Use --force to overwrite.")
+        return
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    manifest = {
+        "name": module_name,
+        "version": "0.1.0",
+        "description": description,
+        "capabilities": [f"{topic}_operations"] if topic else [f"{category}_operations"],
+        "requires": [],
+        "permissions": ["shell.execute"],
+        "entrypoint": "module.py",
+    }
+    (output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+
+    module_py = f'''from __future__ import annotations
+
+from cog.cog_module import CogModule
+from cog.tools.base import Tool, ToolResult
+from cog.verification.base import Verifier, VerificationResult, VerificationStatus
+
+
+class {tool_class}(Tool):
+    name = "{module_name}.{topic}.run"
+    description = "Run a {topic} operation"
+    required_permissions = ["shell.execute"]
+
+    def execute(self, command: str = "", **kwargs) -> ToolResult:
+        # TODO: implement your tool logic here
+        # Use ShellTool for CLI commands, or write custom logic
+        from cog.tools.shell import ShellTool
+        shell = ShellTool()
+        if not command:
+            return ToolResult(success=False, output="", error="No command provided")
+        return shell.execute(command=command, timeout=60)
+
+
+class {verifier_class}(Verifier):
+    name = "{module_name}.{topic}.check"
+    description = "Verify {topic} is available"
+
+    def verify(self, target, **kwargs) -> VerificationResult:
+        # TODO: implement a health check for your module
+        return VerificationResult(
+            verifier=self.name,
+            status=VerificationStatus.PASSED,
+            message="{topic} is available",
+        )
+
+
+class {class_name}(CogModule):
+    name = "{module_name}"
+    version = "0.1.0"
+    description = "{description}"
+
+    def register_tools(self) -> list[Tool]:
+        return [
+            {tool_class}(),
+        ]
+
+    def register_verifiers(self) -> list[Verifier]:
+        return [
+            {verifier_class}(),
+        ]
+
+    def get_prompt_extensions(self) -> list[str]:
+        return [
+            "## {topic.capitalize()} Expertise",
+            "You understand {topic} including:",
+            "- Add your domain knowledge here",
+            "- Best practices and common patterns",
+            "- Security considerations",
+        ]
+
+    def get_capabilities(self) -> list[str]:
+        return {manifest["capabilities"]}
+
+
+module = {class_name}()
+'''
+
+    (output_dir / "module.py").write_text(module_py)
+
+    print(f"Created {output_dir}/")
+    print(f"  {output_dir / 'manifest.json'}")
+    print(f"  {output_dir / 'module.py'}")
+    print()
+    print("Next steps:")
+    print(f"  1. Edit {output_dir / 'module.py'} — add your tools and domain knowledge")
+    print(f"  2. Edit {output_dir / 'manifest.json'} — add capabilities and permissions")
+    print(f"  3. Run 'cog modules' to verify CogOS discovers your module")
+    print(f"  4. Share: publish to a git repo or package as a pip-installable module")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         prog="cog",
@@ -566,6 +683,22 @@ def main(argv: list[str] | None = None) -> None:
         "register", help="Register CogOS as an MCP server with your AI tools"
     )
 
+    create_parser = subparsers.add_parser(
+        "create", help="Scaffold a new CogOS module"
+    )
+    create_parser.add_argument(
+        "name", help="Module name, e.g. 'cog-cloud-aws' or 'cloud-aws'"
+    )
+    create_parser.add_argument(
+        "--description", "-d", default=None, help="Module description"
+    )
+    create_parser.add_argument(
+        "--output", default="modules", help="Parent directory (default: modules/)"
+    )
+    create_parser.add_argument(
+        "--force", action="store_true", help="Overwrite existing module directory"
+    )
+
     args = parser.parse_args(argv)
 
     commands = {
@@ -581,6 +714,7 @@ def main(argv: list[str] | None = None) -> None:
         "status": cmd_status,
         "mcp": cmd_mcp,
         "register": cmd_register,
+        "create": cmd_create,
     }
 
     handler = commands.get(args.command)
