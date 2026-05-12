@@ -27,45 +27,36 @@ CogOS is a **modular cognitive runtime** that enhances any LLM with:
 
 ## Quick Start
 
-### Install and run
+### Install
 
 ```bash
 git clone https://github.com/corbybender/cog.git
 cd cog
 pip install -e .
+cog init
 ```
 
-That's it. CogOS uses whatever AI provider your environment already has configured. No separate API keys, no extra accounts.
+That's it. `cog init` registers CogOS as an MCP server with your AI tools (Claude Code, Codex CLI, Gemini CLI). They discover it automatically — no config files to edit, no instructions to paste.
 
-```bash
-cog run "Analyze this codebase for security issues"
-```
+### How it works
 
-Or from Python:
+After `cog init`, your AI tool sees CogOS tools automatically:
 
-```python
-from cog import CogOS
+| MCP Tool | What it does |
+|----------|-------------|
+| `cog_run` | Run a cognitive task with multi-agent orchestration |
+| `cog_chat` | Interactive conversation with CogOS |
+| `cog_status` | Show active modules, tools, provider info |
+| `cog_modules` | List available domain modules |
 
-cog = CogOS.from_env()  # picks up your existing OPENAI_API_KEY, ANTHROPIC_API_KEY, etc.
-result = cog.run("Build a REST API with Node.js and PostgreSQL")
-print(result["output"])
-```
-
-Both `cog` and `cogos` CLI commands work identically.
-
-### Works with your AI
-
-Already using Claude, GPT, Gemini, DeepSeek, Codex, or a local model? CogOS uses the same provider — no duplicate API keys, no second config:
-
-- If `OPENAI_API_KEY` is set → uses OpenAI automatically
-- If `ANTHROPIC_API_KEY` is set → uses Anthropic automatically
-- If you have a `cog.yaml` config → uses that
-- For tool builders: pass a provider object directly with `CogOS(provider=my_provider)`
+Your AI can now call these directly. CogOS uses whatever LLM provider your environment already has (OpenAI, Anthropic, DeepSeek, etc.) — no duplicate API keys.
 
 ### CLI commands
 
 ```bash
-cog init                        # create cog.yaml config file
+cog init                        # register CogOS as MCP server
+cog register                    # re-register with AI tools
+cog mcp                         # run the MCP server directly
 cog run "your task here"        # run a cognitive task
 cog chat                        # interactive chat
 cog status                      # show modules, tools, provider info

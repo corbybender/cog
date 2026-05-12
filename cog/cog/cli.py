@@ -342,7 +342,106 @@ def cmd_init(args: argparse.Namespace) -> None:
     content = generate_default_config()
     target.write_text(content)
     print(f"Created {target}")
-    print("Edit it to set your api_key, provider, and model before running any commands.")
+    _register_all()
+    print()
+    print("CogOS is ready. Your AI tool will discover it automatically via MCP.")
+
+
+def cmd_register(args: argparse.Namespace) -> None:
+    _register_all()
+
+
+def cmd_mcp(args: argparse.Namespace) -> None:
+    from cog.mcp_server import main as mcp_main
+
+    mcp_main()
+
+
+_TOOL_CONFIGS = {
+    "claude": {
+        "file": "~/.claude.json",
+        "key": "mcpServers",
+        "format": "json",
+    },
+    "codex": {
+        "file": "~/.codex/config.toml",
+        "key": "mcp_servers",
+        "format": "toml",
+    },
+    "gemini": {
+        "file": "~/.gemini/settings.json",
+        "key": "mcpServers",
+        "format": "json",
+    },
+}
+
+
+def _register_all() -> None:
+    import json
+    import shutil
+    import sys
+    from pathlib import Path
+
+    python_path = shutil.which("python") or sys.executable
+    server_entry = {
+        "command": python_path,
+        "args": ["-m", "cog.mcp_server"],
+    }
+
+    registered = []
+
+    for tool_name, cfg in _TOOL_CONFIGS.items():
+        cfg_path = Path(cfg["file"]).expanduser()
+        if not cfg_path.exists():
+            continue
+        try:
+            if cfg["format"] == "json":
+                with open(cfg_path) as f:
+                    data = json.load(f)
+                servers = data.setdefault(cfg["key"], {})
+                servers["cogos"] = server_entry
+                with open(cfg_path, "w") as f:
+                    json.dump(data, f, indent=2)
+                registered.append(f"{tool_name} ({cfg_path})")
+            elif cfg["format"] == "toml":
+                _register_toml(cfg_path, server_entry, tool_name, registered)
+        except Exception as e:
+            print(f"  Warning: could not register with {tool_name}: {e}")
+
+    if registered:
+        print("Registered CogOS MCP server with:")
+        for r in registered:
+            print(f"  - {r}")
+    else:
+        print("No AI tool configs found. To register manually, add to your tool's MCP config:")
+        print(f"  {json.dumps(server_entry, indent=4)}")
+
+
+def _register_toml(
+    cfg_path: Path, server_entry: dict, tool_name: str, registered: list
+) -> None:
+    cfg_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        import tomllib
+    except ImportError:
+        import tomli as tomllib
+
+    with open(cfg_path, "rb") as f:
+        data = tomllib.load(f)
+
+    lines = cfg_path.read_text().splitlines() if cfg_path.exists() else []
+    section = "[mcp_servers.cogos]"
+    entries = [
+        f'command = "{server_entry["command"]}"',
+        f'args = {json.dumps(server_entry["args"])}',
+    ]
+    if any(section in l for l in lines):
+        return
+    with open(cfg_path, "a") as f:
+        f.write(f"\n{section}\n")
+        for e in entries:
+            f.write(f"{e}\n")
+    registered.append(f"{tool_name} ({cfg_path})")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -415,6 +514,14 @@ def main(argv: list[str] | None = None) -> None:
     verify_parser.add_argument("verifier", help="Verifier name")
     verify_parser.add_argument("target", help="Target to verify")
 
+    mcp_parser = subparsers.add_parser(
+        "mcp", help="Run the MCP server (for AI tool integration)"
+    )
+
+    register_parser = subparsers.add_parser(
+        "register", help="Register CogOS as an MCP server with your AI tools"
+    )
+
     args = parser.parse_args(argv)
 
     commands = {
@@ -428,6 +535,8 @@ def main(argv: list[str] | None = None) -> None:
         "publish": cmd_publish,
         "verify": cmd_verify,
         "status": cmd_status,
+        "mcp": cmd_mcp,
+        "register": cmd_register,
     }
 
     handler = commands.get(args.command)
