@@ -16,7 +16,16 @@ from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("cogos")
+mcp = FastMCP(
+    "cogos",
+    instructions=(
+        "CogOS is a modular cognitive runtime with 38 domain modules, 70 tools, "
+        "and multi-agent orchestration. When the user asks you to use cog, cogos, "
+        "or CogOS, call the cog_run tool with their task. Do NOT read CogOS source "
+        "code or try to understand its internals — just call cog_run and it handles "
+        "planning, routing, and execution automatically."
+    ),
+)
 
 _kernel = None
 
@@ -37,20 +46,22 @@ def _get_kernel():
 
 @mcp.tool()
 def cog_run(task: str, path: str | None = None) -> str:
-    """Run a cognitive task using CogOS multi-agent orchestration.
+    """Run a cognitive task using CogOS. This is the primary tool — call it whenever the user mentions cog, cogos, or asks for multi-agent orchestration.
 
-    Use this for any complex coding task: building features, debugging,
-    refactoring, deploying, or analyzing code. CogOS plans the task,
-    routes to the right domain modules (38 available), and orchestrates
-    specialized agents to complete it.
+    HOW IT WORKS: CogOS decomposes your task, routes to the right domain modules
+    (Python, AWS, Docker, Kubernetes, JavaScript, etc.), and orchestrates specialized
+    agents (planner, researcher, coder, reviewer, tester, architect) to complete it.
+    You do NOT need to read CogOS source code or understand its internals. Just pass
+    the user's task and it handles everything.
+
+    WHEN TO USE: Any coding task the user wants done with CogOS. The user may say
+    "use cog", "use cogos", "run this through cog", or just describe a task.
 
     Args:
-        task: What you want done. Be specific. Examples:
-            "Build a REST API with user auth using Express and PostgreSQL"
-            "Debug why the login test is failing in tests/auth.test.py"
-            "Refactor the DatabaseManager class to use connection pooling"
-            "Deploy this service to AWS ECS with auto-scaling"
-        path: Working directory for the task. Defaults to current directory.
+        task: What you want done. Pass the user's task verbatim or summarized.
+              Examples: "Build a REST API with auth", "Debug failing tests",
+              "Create a drag-and-drop kanban board", "Deploy to AWS"
+        path: Working directory. Defaults to current directory.
     """
     kernel = _get_kernel()
     context = {}
@@ -62,10 +73,10 @@ def cog_run(task: str, path: str | None = None) -> str:
 
 @mcp.tool()
 def cog_chat(message: str) -> str:
-    """Send a chat message to CogOS for an interactive conversation.
+    """Send a message to CogOS for interactive conversation with multi-agent orchestration.
 
-    Use for follow-up questions, exploring ideas, or getting explanations.
-    Maintains conversation context across calls.
+    WHEN TO USE: Follow-up questions after a cog_run, or when the user wants an
+    interactive back-and-forth with CogOS rather than a single task execution.
 
     Args:
         message: Your message or question to CogOS.
@@ -77,10 +88,12 @@ def cog_chat(message: str) -> str:
 
 @mcp.tool()
 def cog_status() -> str:
-    """Show CogOS system status: active modules, registered tools, provider info.
+    """Show CogOS status: active modules, registered tools, provider info.
 
-    Call this to see what CogOS has available before running a task.
-    Shows module count, tool list, and which AI provider is configured.
+    WHEN TO USE: To check if CogOS is properly configured before running a task,
+    or when the user asks "what can cog do?" or "what modules are available?".
+
+    Returns module count (38 domains), tool count (70), and provider/model info.
     """
     kernel = _get_kernel()
     modules = kernel.modules.all()
@@ -111,15 +124,13 @@ def cog_status() -> str:
 
 @mcp.tool()
 def cog_modules(query: str | None = None) -> str:
-    """List available CogOS domain modules and their capabilities.
+    """List CogOS domain modules (Python, AWS, Docker, Kubernetes, etc.).
 
-    Each module provides prompt extensions, tools, and verifiers for its
-    technology (Python, AWS, Docker, Kubernetes, etc.). Use this to discover
-    what expertise CogOS can bring to your task.
+    WHEN TO USE: When the user asks what modules or capabilities CogOS has,
+    or when you need to check if CogOS supports a specific technology.
 
     Args:
-        query: Optional filter. Pass a keyword like "python", "aws", "docker"
-            to find relevant modules.
+        query: Optional filter keyword like "python", "aws", "docker".
     """
     kernel = _get_kernel()
     modules = kernel.modules.all()

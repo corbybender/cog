@@ -342,9 +342,53 @@ def cmd_init(args: argparse.Namespace) -> None:
     content = generate_default_config()
     target.write_text(content)
     print(f"Created {target}")
+
     _register_all()
+    _write_agents_md(Path("AGENTS.md"))
+
     print()
     print("CogOS is ready. Your AI tool will discover it automatically via MCP.")
+
+
+_AGENTS_BLOCK_START = "<!-- cogos:start -->"
+_AGENTS_BLOCK_END = "<!-- cogos:end -->"
+
+_COG_AGENTS_BLOCK = f"""{_AGENTS_BLOCK_START}
+# CogOS — Cognitive Operating System
+
+CogOS is a modular cognitive runtime with 38 domain modules, 70 tools, and
+multi-agent orchestration. It is registered as an MCP server in this project.
+
+## How to Use
+
+When the user mentions **cog**, **cogos**, or **CogOS**, call the `cog_run` MCP tool
+with their task. Do NOT read CogOS source code — just call `cog_run` and it handles
+planning, routing, and execution automatically.
+
+## Available MCP Tools
+
+| Tool | Purpose |
+|------|---------|
+| `cog_run` | Run a cognitive task (primary tool) |
+| `cog_chat` | Interactive conversation with CogOS |
+| `cog_status` | Show active modules, tools, provider info |
+| `cog_modules` | List/filter domain modules |
+
+{_AGENTS_BLOCK_END}
+"""
+
+
+def _write_agents_md(agents_path: Path) -> None:
+    if agents_path.exists():
+        existing = agents_path.read_text()
+        if _AGENTS_BLOCK_START in existing:
+            print(f"AGENTS.md already has CogOS section (skipped)")
+            return
+        agents_path.write_text(_COG_AGENTS_BLOCK + "\n" + existing)
+        print(f"Prepended CogOS info to {agents_path}")
+    else:
+        agents_path.write_text(_COG_AGENTS_BLOCK + "\n")
+        print(f"Created {agents_path}")
 
 
 def cmd_register(args: argparse.Namespace) -> None:
