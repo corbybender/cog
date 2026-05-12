@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-green.svg)](https://www.python.org/downloads/)
-[![Modules](https://img.shields.io/badge/Modules-40-purple.svg)](https://github.com/corbybender/cog#modules)
+[![Modules](https://img.shields.io/badge/Modules-38-purple.svg)](https://github.com/corbybender/cog#modules)
 [![Free](https://img.shields.io/badge/Price-Free-success.svg)](https://github.com/corbybender/cog)
 
 **A modular cognitive runtime with expert modules, web UI, and multi-agent collaboration. Free, open source, runs locally.**
@@ -43,54 +43,62 @@ source venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-### Option 1: Python API
+### Configure Your AI Provider
+
+CogOS requires an LLM provider — it doesn't ship with one. Pass yours in directly:
+
+**Option A: Pass-through mode (recommended)** — hand your existing provider to CogOS:
+
+```python
+from cog import CogOS
+from cog.providers.openai_provider import OpenAIProvider
+
+provider = OpenAIProvider(model="gpt-4o", api_key="sk-...")
+cog = CogOS(provider=provider)
+
+result = cog.run("Build a REST API with Node.js and PostgreSQL")
+print(result["output"])
+```
+
+Works with any provider: OpenAI, Anthropic, DeepSeek, Zhipu/GLM, OpenRouter, or any OpenAI-compatible endpoint.
+
+**Option B: String-based** — provide model name and API key:
 
 ```python
 from cog import CogOS
 
-cogos = CogOS(llm="gpt-4o")
-
-result = cogos.run("Build a REST API with Node.js and PostgreSQL")
-print(result["output"])
+cog = CogOS(llm="gpt-4o", api_key="sk-...", base_url=None)
 ```
 
-### Option 2: Command Line
-
-```bash
-# Run a task
-cog run "Create a React component with TypeScript"
-
-# Interactive chat
-cog chat
-
-# Show status
-cog status
-
-# Initialize a project
-cog init my-project
-```
-
-Both `cog` and `cogos` commands work identically.
-
-### Option 3: Use the Kernel Directly
+**Option C: From environment / config file** — auto-detect from env vars or `cog.yaml`:
 
 ```python
-from cog.kernel import Kernel, KernelConfig
+from cog import CogOS
 
-config = KernelConfig(
-    provider="openai",
-    model="gpt-4o",
-    modules_path="modules",
-    memory_backend="sqlite",
-)
-kernel = Kernel(config)
-kernel.start()
-
-result = kernel.run("Analyze this codebase")
-print(result["output"])
-
-kernel.stop()
+cog = CogOS.from_env()  # reads COG_*, OPENAI_*, ANTHROPIC_* env vars + cog.yaml
 ```
+
+**Option D: CLI** — create a `cog.yaml` config file:
+
+```bash
+cog init                        # creates cog.yaml with defaults
+# Edit cog.yaml to set your provider, model, and api_key
+cog run "Create a React component with TypeScript"
+```
+
+### Using CogOS from Another AI Tool
+
+CogOS is designed as a library that any AI tool (Claude Code, Codex CLI, Gemini CLI, etc.) can call:
+
+```python
+# Your AI tool already has a provider — pass it through
+from cog import CogOS
+
+cog = CogOS(provider=my_existing_provider)
+result = cog.run("Analyze this codebase for security issues")
+```
+
+No API keys duplicated, no second config. Your host tool's provider is CogOS's provider.
 
 ---
 
@@ -119,7 +127,7 @@ See [web-ui/README.md](web-ui/README.md) for details.
 
 ## Modules
 
-40 domain-specific modules with prompt extensions, tools, and verifiers:
+38 domain-specific modules with prompt extensions, tools, and verifiers:
 
 ### Programming Languages
 - **JavaScript** - ES6+, Node.js, TypeScript
