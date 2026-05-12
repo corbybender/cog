@@ -27,27 +27,56 @@ CogOS is a **modular cognitive runtime** that enhances any LLM with:
 
 ## Quick Start
 
-### Installation
-
-```bash
-pip install -e .
-```
-
-Or for development:
+### Install and run
 
 ```bash
 git clone https://github.com/corbybender/cog.git
 cd cog
-python -m venv venv
-source venv/bin/activate
-pip install -e ".[dev]"
+pip install -e .
 ```
 
-### Configure Your AI Provider
+That's it. CogOS uses whatever AI provider your environment already has configured. No separate API keys, no extra accounts.
 
-CogOS requires an LLM provider — it doesn't ship with one. Pass yours in directly:
+```bash
+cog run "Analyze this codebase for security issues"
+```
 
-**Option A: Pass-through mode (recommended)** — hand your existing provider to CogOS:
+Or from Python:
+
+```python
+from cog import CogOS
+
+cog = CogOS.from_env()  # picks up your existing OPENAI_API_KEY, ANTHROPIC_API_KEY, etc.
+result = cog.run("Build a REST API with Node.js and PostgreSQL")
+print(result["output"])
+```
+
+Both `cog` and `cogos` CLI commands work identically.
+
+### Works with your AI
+
+Already using Claude, GPT, Gemini, DeepSeek, Codex, or a local model? CogOS uses the same provider — no duplicate API keys, no second config:
+
+- If `OPENAI_API_KEY` is set → uses OpenAI automatically
+- If `ANTHROPIC_API_KEY` is set → uses Anthropic automatically
+- If you have a `cog.yaml` config → uses that
+- For tool builders: pass a provider object directly with `CogOS(provider=my_provider)`
+
+### CLI commands
+
+```bash
+cog init                        # create cog.yaml config file
+cog run "your task here"        # run a cognitive task
+cog chat                        # interactive chat
+cog status                      # show modules, tools, provider info
+```
+
+### Advanced: Provider Configuration
+
+<details>
+<summary>Click to expand all provider options</summary>
+
+**Pass-through** — for tool builders embedding CogOS:
 
 ```python
 from cog import CogOS
@@ -55,50 +84,43 @@ from cog.providers.openai_provider import OpenAIProvider
 
 provider = OpenAIProvider(model="gpt-4o", api_key="sk-...")
 cog = CogOS(provider=provider)
-
-result = cog.run("Build a REST API with Node.js and PostgreSQL")
-print(result["output"])
 ```
 
-Works with any provider: OpenAI, Anthropic, DeepSeek, Zhipu/GLM, OpenRouter, or any OpenAI-compatible endpoint.
-
-**Option B: String-based** — provide model name and API key:
+**String-based** — for quick scripts:
 
 ```python
-from cog import CogOS
-
-cog = CogOS(llm="gpt-4o", api_key="sk-...", base_url=None)
+cog = CogOS(llm="gpt-4o", api_key="sk-...")
+cog = CogOS(llm="claude-sonnet-4-20250514", api_key="sk-ant-...")
+cog = CogOS(llm="deepseek-chat", api_key="...", base_url="https://api.deepseek.com/v1")
 ```
 
-**Option C: From environment / config file** — auto-detect from env vars or `cog.yaml`:
-
-```python
-from cog import CogOS
-
-cog = CogOS.from_env()  # reads COG_*, OPENAI_*, ANTHROPIC_* env vars + cog.yaml
-```
-
-**Option D: CLI** — create a `cog.yaml` config file:
+**Config file** — for project-level settings:
 
 ```bash
-cog init                        # creates cog.yaml with defaults
-# Edit cog.yaml to set your provider, model, and api_key
-cog run "Create a React component with TypeScript"
+cog init   # creates cog.yaml
 ```
 
-### Using CogOS from Another AI Tool
-
-CogOS is designed as a library that any AI tool (Claude Code, Codex CLI, Gemini CLI, etc.) can call:
-
-```python
-# Your AI tool already has a provider — pass it through
-from cog import CogOS
-
-cog = CogOS(provider=my_existing_provider)
-result = cog.run("Analyze this codebase for security issues")
+```yaml
+# cog.yaml (gitignored by default)
+provider: openai
+model: gpt-4o
+api_key: sk-...
+base_url: null          # optional, for custom endpoints
 ```
 
-No API keys duplicated, no second config. Your host tool's provider is CogOS's provider.
+**Environment variables** — full list:
+
+| Variable | Purpose |
+|----------|---------|
+| `COG_PROVIDER` | Override provider (openai, anthropic) |
+| `COG_MODEL` | Override model name |
+| `COG_API_KEY` | API key (any provider) |
+| `COG_BASE_URL` | Custom endpoint URL |
+| `OPENAI_API_KEY` | Auto-detected, sets provider=openai |
+| `ANTHROPIC_API_KEY` | Auto-detected, sets provider=anthropic |
+| `OPENAI_BASE_URL` | Custom OpenAI endpoint |
+
+</details>
 
 ---
 
