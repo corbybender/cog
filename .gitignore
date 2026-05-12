@@ -180,8 +180,36 @@ docs/_templates/
 # CogOS runtime
 .cogos/
 
-# Website (separate repository)
+# Website (deployed separately to Vercel)
 cogos-site/
+
+# Web UI (optional, not needed for core install)
+web-ui/
+
+# Node modules
+node_modules/
+package.json
+package-lock.json
+
+# Development / planning docs (not needed by users)
+docs/
+CLAUDE.md
+CLI_AI_COMMANDS.md
+CONTRIBUTING.md
+DOCUMENTATION_COMPLETE.md
+FEATURES_IMPLEMENTED.md
+FINAL_COMPLETE.md
+KILLER_FEATURES.md
+QUICKSTART.md
+V1.1_FEATURES.md
+WEBSITE_UPDATE_GUIDE.md
+install_cogos.py
+modules/
+
+# Claude / GitNexus skill configs
+.claude/
+.gitnexus/
+.gitnexusignore
 
 # Generated files
 generated/
