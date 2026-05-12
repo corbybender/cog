@@ -24,6 +24,7 @@
             </a>
             <div class="nav-links">
                 <a href="#features" class="nav-hide">Features</a>
+                <a href="docs.html" class="nav-hide">Docs</a>
                 <a href="examples.html" class="nav-hide">Examples</a>
                 <a href="#modules" class="nav-hide">Modules</a>
                 <a href="#install">Install</a>
@@ -187,8 +188,8 @@
                         <div class="feature-icon">
                             <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                         </div>
-                        <h3>Auto-Integration</h3>
-                        <p>Install into any project with one command. AI agents use your project's CogOS configuration transparently.</p>
+                        <h3>Works With Any AI</h3>
+                        <p>Pass-through provider mode: hand your existing LLM provider (OpenAI, Anthropic, DeepSeek, etc.) directly to CogOS. No duplicated API keys.</p>
                     </div>
 
                     <div class="feature-card">
@@ -233,21 +234,21 @@
                                 <div class="how-step-num">01</div>
                                 <div class="how-step-content">
                                     <h4>Clone and install</h4>
-                                    <p>Clone the repo and install in editable mode. All 40 modules and tools are included. <span class="inline-cmd">git clone .../cog.git && cd cog && pip install -e .</span></p>
+                                    <p>Clone the repo and install in editable mode. All 38 modules and tools are included. <span class="inline-cmd">git clone .../cog.git && cd cog && pip install -e .</span></p>
                                 </div>
                             </div>
                             <div class="how-step">
                                 <div class="how-step-num">02</div>
                                 <div class="how-step-content">
-                                    <h4>Run a task</h4>
-                                    <p>Use the CLI or Python API to run tasks. CogOS loads modules and routes to the right tools. <span class="inline-cmd">cog run "your task here"</span></p>
+                                    <h4>Configure your AI provider</h4>
+                                    <p>Pass your existing provider in directly, or create a cog.yaml config. CogOS works with any OpenAI-compatible API. <span class="inline-cmd">cog init</span></p>
                                 </div>
                             </div>
                             <div class="how-step">
                                 <div class="how-step-num">03</div>
                                 <div class="how-step-content">
-                                    <h4>Launch the Web UI (optional)</h4>
-                                    <p>A local dashboard for task management, analytics, and module browsing. <span class="inline-cmd">cd web-ui && ./start.sh</span></p>
+                                    <h4>Run a task</h4>
+                                    <p>Use the CLI or Python API. CogOS loads modules, routes to the right tools, and orchestrates agents. <span class="inline-cmd">cog run "your task here"</span></p>
                                 </div>
                             </div>
                         </div>

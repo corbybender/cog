@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples — CogOS</title>
+    <meta name="description" content="See CogOS in action. Real walkthroughs of building APIs, debugging services, deploying to the cloud, and scaffolding full-stack apps.">
+    <meta name="theme-color" content="#09090b">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ─── EXAMPLES PAGE ─────────────────────────────── */
+
+        .ex-hero {
+            padding: 5rem 0 3rem;
+            text-align: center;
+        }
+        .ex-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+        .ex-hero p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Example nav tabs */
+        .ex-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .ex-tab {
+            font-family: var(--font-sans);
+            font-size: 0.825rem;
+            font-weight: 600;
+            padding: 0.55rem 1.1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ex-tab:hover { border-color: var(--border-accent); color: var(--text); }
+        .ex-tab.active { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+
+        /* Example section */
+        .ex-section {
+            display: none;
+            padding-bottom: 5rem;
+        }
+        .ex-section.active { display: block; }
+
+        .ex-header {
+            margin-bottom: 2.5rem;
+        }
+        .ex-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .ex-header p {
+            color: var(--text-muted);
+            font-size: 0.925rem;
+            line-height: 1.65;
+            max-width: 680px;
+        }
+
+        /* Scenario badge row */
+        .ex-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .ex-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg-elevated);
+            color: var(--text-muted);
+        }
+        .ex-badge.agent { color: var(--primary); border-color: rgba(99,102,241,0.3); }
+        .ex-badge.module { color: var(--accent); border-color: rgba(56,189,248,0.3); }
+        .ex-badge.tool { color: var(--success); border-color: rgba(74,222,128,0.3); }
+
+        /* Flow diagram */
+        .ex-flow {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin: 2rem 0;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        .ex-flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 110px;
+            flex-shrink: 0;
+        }
+        .ex-flow-node {
+            width: 100px;
+            height: 56px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-accent);
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text);
+            text-align: center;
+            line-height: 1.3;
+            padding: 0.25rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .ex-flow-node.highlight {
+            border-color: var(--primary);
+            background: rgba(99,102,241,0.08);
+            color: var(--primary);
+        }
+        .ex-flow-node.done {
+            border-color: var(--success);
+            background: rgba(74,222,128,0.06);
+            color: var(--success);
+        }
+        .ex-flow-label {
+            font-size: 0.65rem;
+            color: var(--text-subtle);
+            margin-top: 0.4rem;
+            font-family: var(--font-mono);
+        }
+        .ex-flow-arrow {
+            flex-shrink: 0;
+            width: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-subtle);
+        }
+        .ex-flow-arrow svg { width: 16px; height: 16px; stroke: var(--text-subtle); fill: none; stroke-width: 1.5; }
+
+        /* Annotation callout */
+        .ex-annotation {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: rgba(99,102,241,0.04);
+            border-left: 3px solid var(--primary);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 1.5rem 0;
+        }
+        .ex-annotation .ann-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #fff;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .ex-annotation p {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+        .ex-annotation strong { color: var(--text); }
+
+        /* Terminal block for examples */
+        .ex-term {
+            background: var(--bg-card);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+        }
+        .ex-term .terminal-header { background: var(--bg-elevated); }
+        .ex-term .terminal-body { padding: 1.25rem 1.5rem; }
+
+        /* Agent activity chart */
+        .ex-chart {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 0 1rem;
+            margin: 2rem 0;
+            font-size: 0.8rem;
+        }
+        .ex-chart-row {
+            display: contents;
+        }
+        .ex-chart-label {
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            padding: 0.35rem 0;
+            white-space: nowrap;
+            text-align: right;
+        }
+        .ex-chart-bar-wrap {
+            padding: 0.35rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .ex-chart-bar {
+            height: 18px;
+            border-radius: 3px;
+            min-width: 2px;
+            transition: width 0.6s ease;
+        }
+        .ex-chart-bar.planner { background: var(--primary-dark); }
+        .ex-chart-bar.researcher { background: var(--accent-dark); }
+        .ex-chart-bar.coder { background: var(--success); }
+        .ex-chart-bar.tester { background: var(--warning); }
+        .ex-chart-bar.reviewer { background: #a78bfa; }
+        .ex-chart-bar.architect { background: #f472b6; }
+        .ex-chart-pct {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-subtle);
+            min-width: 32px;
+        }
+
+        /* Result metrics row */
+        .ex-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .ex-metric {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            text-align: center;
+        }
+        .ex-metric-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .ex-metric-label {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+            margin-top: 0.15rem;
+        }
+
+        /* Step timeline */
+        .ex-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 2rem 0;
+            position: relative;
+        }
+        .ex-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 28px;
+            bottom: 10px;
+            width: 1px;
+            background: var(--border-accent);
+        }
+        .ex-step {
+            display: flex;
+            gap: 1.25rem;
+            padding-bottom: 2rem;
+            position: relative;
+        }
+        .ex-step:last-child { padding-bottom: 0; }
+        .ex-step-dot {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 2px solid var(--border-accent);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-subtle);
+            z-index: 1;
+        }
+        .ex-step.active .ex-step-dot { border-color: var(--primary); color: var(--primary); background: rgba(99,102,241,0.08); }
+        .ex-step.done .ex-step-dot { border-color: var(--success); color: var(--success); background: rgba(74,222,128,0.06); }
+        .ex-step-body h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .ex-step-body p {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .ex-flow { flex-direction: column; align-items: stretch; }
+            .ex-flow-step { flex-direction: row; min-width: unset; gap: 0.75rem; }
+            .ex-flow-arrow { transform: rotate(90deg); width: unset; height: 24px; margin: 0 auto; }
+            .ex-chart { grid-template-columns: 110px 1fr; }
+            .ex-tabs { gap: 0.35rem; }
+            .ex-tab { font-size: 0.75rem; padding: 0.45rem 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── NAV ─────────────────────────────────────── -->
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2.5a7.5 7.5 0 1 1 0 15 7.5 7.5 0 0 1 0-15zm0 2.5a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0 2.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>
+                </div>
+                <span class="logo-text">CogOS</span>
+                <span class="logo-version">v0.1</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#features" class="nav-hide">Features</a>
+                <a href="docs.html" class="nav-hide">Docs</a>
+                <a href="examples.html" class="nav-hide" style="color:var(--primary)">Examples</a>
+                <a href="index.html#modules" class="nav-hide">Modules</a>
+                <a href="index.html#install">Install</a>
+                <a href="https://github.com/corbybender/cog" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- ─── HERO ─────────────────────────────────── -->
+            <section class="ex-hero">
+                <span class="section-eyebrow">Examples</span>
+                <h1>Watch CogOS work.<br><span style="background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Over the shoulder.</span></h1>
+                <p>Real walkthroughs showing every step, every agent, and every decision CogOS makes. Pick a scenario and follow along.</p>
+            </section>
+
+            <!-- ─── TABS ──────────────────────────────────── -->
+            <div class="ex-tabs">
+                <button class="ex-tab active" data-ex="api">REST API</button>
+                <button class="ex-tab" data-ex="debug">Debug a Service</button>
+                <button class="ex-tab" data-ex="deploy">Deploy to AWS</button>
+                <button class="ex-tab" data-ex="fullstack">Full-Stack App</button>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- EXAMPLE 1: Build a REST API                     -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <section class="ex-section active" id="ex-api">
+
+                <div class="ex-header">
+                    <h2>Build a production-ready REST API in 90 seconds</h2>
+                    <p>You need a FastAPI backend with PostgreSQL, auth, tests, and docs. CogOS decomposes this into parallel agent tasks, produces working code, and validates the result before you see it.</p>
+                    <div class="ex-badges">
+                        <span class="ex-badge agent">Planner</span>
+                        <span class="ex-badge agent">Architect</span>
+                        <span class="ex-badge agent">Coder</span>
+                        <span class="ex-badge agent">Tester</span>
+                        <span class="ex-badge module">cog-code-python</span>
+                        <span class="ex-badge module">cog-db-postgres</span>
+                        <span class="ex-badge module">cog-api-rest</span>
+                        <span class="ex-badge tool">python.lint</span>
+                        <span class="ex-badge tool">python.test</span>
+                    </div>
+                </div>
+
+                <!-- Agent orchestration flow -->
+                <div class="ex-flow">
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">Planner</div><div class="ex-flow-label">decompose</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">Architect</div><div class="ex-flow-label">design</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">Researcher</div><div class="ex-flow-label">gather context</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">Coder</div><div class="ex-flow-label">implement</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">Tester</div><div class="ex-flow-label">verify</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node done">Reviewer</div><div class="ex-flow-label">approve</div></div>
+                </div>
+
+                <div class="ex-annotation">
+                    <div class="ann-icon">1</div>
+                    <p><strong>The Planner breaks the task into 5 subtasks</strong> — project scaffold, database models, auth logic, API routes, and test suite. Each subtask is routed to the agent best suited for it. The Python and PostgreSQL modules inject domain-specific prompt extensions so every agent writes idiomatic code.</p>
+                </div>
+
+                <!-- Terminal: the invocation -->
+                <div class="ex-term">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div></div>
+                        <span class="terminal-title">bash — cog run</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="t-prompt">$</span> <span class="t-cmd">cog run "Build a FastAPI REST API with PostgreSQL, JWT auth, and tests"</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[planner]</span> <span class="t-output">Decomposing task into subtasks...</span></div>
+                        <div><span class="t-key">[planner]</span> <span class="t-success">&#10003;</span> <span class="t-output">5 subtasks identified (complexity: medium)</span></div>
+                        <div><span class="t-key">[modules]</span> <span class="t-output">Activated: code-core, cog-code-python, cog-db-postgres, cog-api-rest</span></div>
+                        <div><span class="t-key">[cache]</span> <span class="t-output">No cache hit &mdash; new task pattern</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[architect]</span> <span class="t-output">Designing: layered architecture (routes &#8594; services &#8594; models)</span></div>
+                        <div><span class="t-key">[architect]</span> <span class="t-success">&#10003;</span> <span class="t-output">Schema: users, items, auth_sessions</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[researcher]</span> <span class="t-output">Gathering FastAPI 0.115 + SQLAlchemy 2.0 best practices...</span></div>
+                        <div><span class="t-key">[researcher]</span> <span class="t-success">&#10003;</span> <span class="t-output">18 patterns found</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 1/5: Generating project scaffold...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: app/ main.py config.py requirements.txt</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 2/5: Generating database models...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: app/models.py (User, Item, AuthSession)</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 3/5: Generating auth service...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: app/auth.py (JWT + bcrypt)</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 4/5: Generating API routes...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: app/routes/ (users.py, items.py, auth.py)</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 5/5: Generating Alembic migrations...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: alembic/ alembic.ini</span></div>
+                    </div>
+                </div>
+
+                <div class="ex-annotation">
+                    <div class="ann-icon">2</div>
+                    <p><strong>The Coder writes real, importable Python</strong> — not pseudocode. Each file follows FastAPI conventions the Researcher agent found. The <span class="inline-cmd">cog-code-python</span> module ensures async patterns, type hints, and Pydantic models are used correctly.</p>
+                </div>
+
+                <!-- Agent work chart -->
+                <div style="margin:2rem 0 1rem;">
+                    <span class="section-eyebrow">Agent Activity</span>
+                </div>
+                <div class="ex-chart">
+                    <div class="ex-chart-row"><span class="ex-chart-label">planner</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar planner" style="width:15%"></div><span class="ex-chart-pct">8s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">architect</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar architect" style="width:28%"></div><span class="ex-chart-pct">14s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">researcher</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar researcher" style="width:42%"></div><span class="ex-chart-pct">22s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">coder</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar coder" style="width:85%"></div><span class="ex-chart-pct">42s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">tester</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar tester" style="width:52%"></div><span class="ex-chart-pct">26s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">reviewer</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar reviewer" style="width:20%"></div><span class="ex-chart-pct">10s</span></div></div>
+                </div>
+
+                <!-- Validation terminal -->
+                <div class="ex-term">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div></div>
+                        <span class="terminal-title">bash — validation & results</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="t-key">[tester]</span> <span class="t-output">Generating test suite...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: tests/ test_auth.py test_routes.py test_models.py</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[tool]</span> <span class="t-cmd">python.test</span> <span class="t-output">&mdash; running pytest...</span></div>
+                        <div><span class="t-output">================== test session starts ==================</span></div>
+                        <div><span class="t-output">collected 24 items</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-output">tests/test_auth.py .......</span> <span class="t-success">[ 29%]</span></div>
+                        <div><span class="t-output">tests/test_routes.py .............</span> <span class="t-success">[ 83%]</span></div>
+                        <div><span class="t-output">tests/test_models.py ....</span> <span class="t-success">[100%]</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-success">24 passed in 1.82s</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[tool]</span> <span class="t-cmd">python.lint</span> <span class="t-output">&mdash; running ruff check...</span></div>
+                        <div><span class="t-success">0 errors, 0 warnings</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[reviewer]</span> <span class="t-success">&#10003;</span> <span class="t-output">Code quality: excellent. All checks passed.</span></div>
+                        <div><span class="t-key">[cache]</span> <span class="t-output">Pattern stored for future reuse</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-success">Result: SUCCESS</span></div>
+                        <div><span class="t-output">Tokens: 12,847 | Iterations: 6 | Files: 9 | Tests: 24/24</span></div>
+                    </div>
+                </div>
+
+                <div class="ex-metrics">
+                    <div class="ex-metric"><div class="ex-metric-val">9</div><div class="ex-metric-label">Files generated</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">24/24</div><div class="ex-metric-label">Tests passing</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">~90s</div><div class="ex-metric-label">Wall time</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">12.8k</div><div class="ex-metric-label">Tokens used</div></div>
+                </div>
+
+            </section>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- EXAMPLE 2: Debug a failing service              -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <section class="ex-section" id="ex-debug">
+
+                <div class="ex-header">
+                    <h2>Debug a failing production service end-to-end</h2>
+                    <p>A Python worker is crashing with a cryptic database error at 3 AM. CogOS traces the error path, identifies the root cause, writes the fix, and generates a regression test &mdash; all before your coffee is ready.</p>
+                    <div class="ex-badges">
+                        <span class="ex-badge agent">Researcher</span>
+                        <span class="ex-badge agent">Coder</span>
+                        <span class="ex-badge agent">Tester</span>
+                        <span class="ex-badge agent">Reviewer</span>
+                        <span class="ex-badge module">cog-code-python</span>
+                        <span class="ex-badge module">cog-db-postgres</span>
+                        <span class="ex-badge tool">filesystem.read</span>
+                        <span class="ex-badge tool">shell.execute</span>
+                    </div>
+                </div>
+
+                <!-- Step-by-step timeline -->
+                <div class="ex-timeline">
+
+                    <div class="ex-step done">
+                        <div class="ex-step-dot">&#10003;</div>
+                        <div class="ex-step-body">
+                            <h4>Step 1: Read the error traceback</h4>
+                            <p>CogOS reads the failing file and the traceback. The Researcher agent identifies the stack: <code>worker.py</code> &#8594; <code>db_client.py</code> &#8594; <code>psycopg2.OperationalError: connection pool exhausted</code>.</p>
+                        </div>
+                    </div>
+
+                    <div class="ex-step done">
+                        <div class="ex-step-dot">&#10003;</div>
+                        <div class="ex-step-body">
+                            <h4>Step 2: Trace the connection pool logic</h4>
+                            <p>The <span class="inline-cmd">cog-db-postgres</span> module tells CogOS that psycopg2 pool exhaustion usually means connections aren't being returned. CogOS uses <code>filesystem.read</code> to inspect <code>db_client.py</code> and finds a missing <code>finally</code> block.</p>
+                        </div>
+                    </div>
+
+                    <div class="ex-step done">
+                        <div class="ex-step-dot">&#10003;</div>
+                        <div class="ex-step-body">
+                            <h4>Step 3: Identify the root cause</h4>
+                            <p>The reviewer confirms: <code>get_connection()</code> checks out a pool connection but early returns on error without returning it. Over time this drains the pool.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- The error terminal -->
+                <div class="ex-term">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div></div>
+                        <span class="terminal-title">bash — original error</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="t-prompt">$</span> <span class="t-cmd">cog run "Fix this error: OperationalError: connection pool exhausted"</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[tool]</span> <span class="t-cmd">filesystem.read</span> <span class="t-output">db_client.py</span></div>
+                        <div><span class="t-key">[researcher]</span> <span class="t-output">Analyzing connection pool pattern...</span></div>
+                        <div><span class="t-key">[researcher]</span> <span class="t-success">&#10003;</span> <span class="t-output">Root cause: missing connection return on error path (line 47)</span></div>
+                        <div>&nbsp;</div>
+                        <div style="color:#ef4444; font-family:var(--font-mono); font-size:0.78rem; background:rgba(239,68,68,0.06); padding:0.75rem 1rem; border-radius:4px; border-left:3px solid #ef4444;">
+                            <div>psycopg2.OperationalError: connection pool exhausted</div>
+                            <div>&nbsp;</div>
+                            <div>File "worker.py", line 23, in process_job</div>
+                            <div>&nbsp;&nbsp;conn = db.get_connection()</div>
+                            <div>File "db_client.py", line 47, in get_connection</div>
+                            <div>&nbsp;&nbsp;return self.pool.getconn()</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ex-annotation">
+                    <div class="ann-icon">!</div>
+                    <p><strong>The bug is subtle.</strong> The <code>get_connection()</code> function has a <code>try/except</code> that catches auth errors and returns <code>None</code> &mdash; but the connection was already checked out from the pool before the auth check. Returning <code>None</code> leaks the connection. CogOS found this because the <span class="inline-cmd">cog-db-postgres</span> module flagged pool-exhaustion as a known pattern.</p>
+                </div>
+
+                <!-- The fix terminal -->
+                <div class="ex-term">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div></div>
+                        <span class="terminal-title">bash — fix applied</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Generating fix...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Patched: db_client.py (added finally block with pool.returnconn)</span></div>
+                        <div>&nbsp;</div>
+                        <div style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.78rem; background:rgba(74,222,128,0.04); padding:0.75rem 1rem; border-radius:4px; border-left:3px solid var(--success);">
+                            <div><span style="color:var(--text-subtle)">- def get_connection(self):</span></div>
+                            <div><span style="color:var(--text-subtle)">- &nbsp;&nbsp;&nbsp;&nbsp;conn = self.pool.getconn()</span></div>
+                            <div><span style="color:var(--text-subtle)">- &nbsp;&nbsp;&nbsp;&nbsp;if not self._validate(conn):</span></div>
+                            <div><span style="color:var(--text-subtle)">- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return None &nbsp;# BUG: leaks conn</span></div>
+                            <div>&nbsp;</div>
+                            <div><span style="color:var(--success)">+ def get_connection(self):</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;conn = self.pool.getconn()</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;try:</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if not self._validate(conn):</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.pool.returnconn(conn)</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return None</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return conn</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;except Exception:</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.pool.returnconn(conn)</span></div>
+                            <div><span style="color:var(--success)">+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise</span></div>
+                        </div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[tester]</span> <span class="t-output">Generating regression test...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: tests/test_db_pool.py (6 tests for connection lifecycle)</span></div>
+                        <div><span class="t-key">[tool]</span> <span class="t-cmd">python.test</span></div>
+                        <div><span class="t-success">6 passed in 0.34s</span></div>
+                    </div>
+                </div>
+
+                <div class="ex-metrics">
+                    <div class="ex-metric"><div class="ex-metric-val">1</div><div class="ex-metric-label">Bug fixed</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">6</div><div class="ex-metric-label">Regression tests</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">~45s</div><div class="ex-metric-label">Wall time</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">0</div><div class="ex-metric-label">Lint warnings</div></div>
+                </div>
+
+            </section>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- EXAMPLE 3: Deploy to AWS                        -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <section class="ex-section" id="ex-deploy">
+
+                <div class="ex-header">
+                    <h2>Containerize and deploy to AWS ECS</h2>
+                    <p>You have a working app and need it on AWS with Docker, an ECS task definition, a load balancer, and a CI/CD pipeline. CogOS uses its cloud and container modules to generate everything you need.</p>
+                    <div class="ex-badges">
+                        <span class="ex-badge agent">Planner</span>
+                        <span class="ex-badge agent">Architect</span>
+                        <span class="ex-badge agent">Coder</span>
+                        <span class="ex-badge module">cog-cloud-aws</span>
+                        <span class="ex-badge module">cog-infra-docker</span>
+                        <span class="ex-badge module">cog-infra-kubernetes</span>
+                        <span class="ex-badge tool">aws.ec2.list</span>
+                    </div>
+                </div>
+
+                <!-- Architecture flow -->
+                <div class="ex-flow">
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">Dockerfile</div><div class="ex-flow-label">containerize</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">ECR Push</div><div class="ex-flow-label">image registry</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">ECS Task</div><div class="ex-flow-label">task def</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node highlight">ALB</div><div class="ex-flow-label">load balance</div></div>
+                    <div class="ex-flow-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="ex-flow-step"><div class="ex-flow-node done">Live</div><div class="ex-flow-label">verified</div></div>
+                </div>
+
+                <div class="ex-annotation">
+                    <div class="ann-icon">1</div>
+                    <p><strong>The Planner maps the full deployment pipeline.</strong> The <span class="inline-cmd">cog-cloud-aws</span> module knows ECS, ECR, ALB, and IAM conventions. The <span class="inline-cmd">cog-infra-docker</span> module ensures multi-stage builds and proper layer caching. Together they produce production-grade configs, not toy examples.</p>
+                </div>
+
+                <div class="ex-term">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div></div>
+                        <span class="terminal-title">bash — deployment generation</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="t-prompt">$</span> <span class="t-cmd">cog run "Deploy this FastAPI app to AWS ECS with Docker and an ALB"</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[modules]</span> <span class="t-output">Activated: cog-cloud-aws, cog-infra-docker</span></div>
+                        <div><span class="t-key">[planner]</span> <span class="t-output">6 subtasks: Dockerfile, ECR repo, ECS task, ALB target, IAM roles, health check</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 1/6: Generating multi-stage Dockerfile...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: Dockerfile (3 stages, 128MB final image)</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 2/6: Generating ECR push script...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: scripts/push-ecr.sh</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 3/6: Generating ECS task definition...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: ecs/task-definition.json (1 vCPU, 512MB, 1 replica)</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 4/6: Generating ALB + target group config...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: terraform/alb.tf, terraform/main.tf</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 5/6: Generating IAM task role...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Created: terraform/iam.tf (least-privilege policy)</span></div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Step 6/6: Generating health check endpoint...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">Patched: app/main.py (added GET /health)</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[tool]</span> <span class="t-cmd">aws.ec2.list</span> <span class="t-output">&mdash; verifying region us-east-1...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">AWS credentials valid. Region: us-east-1</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[reviewer]</span> <span class="t-success">&#10003;</span> <span class="t-output">All configs follow AWS well-architected practices</span></div>
+                        <div><span class="t-success">Result: SUCCESS &mdash; 8 files generated</span></div>
+                    </div>
+                </div>
+
+                <div class="ex-annotation">
+                    <div class="ann-icon">2</div>
+                    <p><strong>Why Terraform? The Architect agent chose it</strong> over raw AWS CLI scripts because the <span class="inline-cmd">cog-cloud-aws</span> module's prompt extensions recommend IaC for any deployment with more than 2 resources. The IAM role is scoped to exactly the permissions the ECS task needs &mdash; no wildcard actions.</p>
+                </div>
+
+                <div class="ex-metrics">
+                    <div class="ex-metric"><div class="ex-metric-val">8</div><div class="ex-metric-label">Files generated</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">128MB</div><div class="ex-metric-label">Docker image</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">~70s</div><div class="ex-metric-label">Wall time</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">6</div><div class="ex-metric-label">Subtasks</div></div>
+                </div>
+
+            </section>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- EXAMPLE 4: Full-stack app scaffold               -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <section class="ex-section" id="ex-fullstack">
+
+                <div class="ex-header">
+                    <h2>Scaffold a full-stack app with tests, CI, and docs</h2>
+                    <p>Start from nothing &mdash; a blank directory &mdash; and end up with a React frontend, FastAPI backend, PostgreSQL database, test suites, a GitHub Actions CI pipeline, and documentation. CogOS coordinates all 10 agents across the full stack.</p>
+                    <div class="ex-badges">
+                        <span class="ex-badge agent">Planner</span>
+                        <span class="ex-badge agent">Architect</span>
+                        <span class="ex-badge agent">Researcher</span>
+                        <span class="ex-badge agent">Coder</span>
+                        <span class="ex-badge agent">Tester</span>
+                        <span class="ex-badge agent">Documenter</span>
+                        <span class="ex-badge agent">Reviewer</span>
+                        <span class="ex-badge agent">Optimizer</span>
+                        <span class="ex-badge module">cog-code-python</span>
+                        <span class="ex-badge module">cog-lang-javascript</span>
+                        <span class="ex-badge module">cog-db-postgres</span>
+                        <span class="ex-badge module">cog-web-css</span>
+                        <span class="ex-badge module">cog-git</span>
+                    </div>
+                </div>
+
+                <!-- Agent activity chart for full-stack -->
+                <div style="margin:0 0 1rem;">
+                    <span class="section-eyebrow">Agent Activity</span>
+                </div>
+                <div class="ex-chart">
+                    <div class="ex-chart-row"><span class="ex-chart-label">planner</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar planner" style="width:12%"></div><span class="ex-chart-pct">10s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">architect</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar architect" style="width:35%"></div><span class="ex-chart-pct">28s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">researcher</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar researcher" style="width:50%"></div><span class="ex-chart-pct">40s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">coder</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar coder" style="width:100%"></div><span class="ex-chart-pct">78s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">tester</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar tester" style="width:55%"></div><span class="ex-chart-pct">44s</span></div></div>
+                    <div class="ex-chart-row"><span class="ex-chart-label">reviewer</span><div class="ex-chart-bar-wrap"><div class="ex-chart-bar reviewer" style="width:25%"></div><span class="ex-chart-pct">20s</span></div></div>
+                </div>
+
+                <div class="ex-annotation">
+                    <div class="ann-icon">1</div>
+                    <p><strong>All 10 agents contribute.</strong> The Planner decomposes into 8 subtasks. The Architect designs the folder structure and API contract. The Researcher gathers React 18 + FastAPI patterns. The Coder generates 22 files across frontend and backend. The Tester writes 38 tests. The Documenter writes a README. The Reviewer checks everything.</p>
+                </div>
+
+                <div class="ex-term">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div></div>
+                        <span class="terminal-title">bash — full-stack scaffold</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div><span class="t-prompt">$</span> <span class="t-cmd">cog run "Build a task tracker app: React frontend, FastAPI backend, Postgres DB, tests, CI, docs"</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[planner]</span> <span class="t-success">&#10003;</span> <span class="t-output">8 subtasks: scaffold, DB models, API, frontend, auth, tests, CI, docs</span></div>
+                        <div><span class="t-key">[architect]</span> <span class="t-success">&#10003;</span> <span class="t-output">Monorepo layout: frontend/ backend/ shared/ .github/</span></div>
+                        <div>&nbsp;</div>
+                        <div><span style="color:var(--accent);">&#9556;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9574;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9565;</span></div>
+                        <div><span style="color:var(--accent);">&#9553;</span> <span class="t-output">backend/</span> <span style="color:var(--text-subtle)">........................</span> <span style="color:var(--accent);">&#9553;</span> <span class="t-output">frontend/</span> <span style="color:var(--text-subtle)">....................</span> <span style="color:var(--accent);">&#9553;</span></div>
+                        <div><span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9500;&#9472;&#9472; app/</span> <span style="color:var(--text-subtle)">........................</span> <span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9500;&#9472;&#9472; src/</span> <span style="color:var(--text-subtle)">....................</span> <span style="color:var(--accent);">&#9553;</span></div>
+                        <div><span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9474; &nbsp;&#9500;&#9472;&#9472; main.py</span> <span style="color:var(--text-subtle)">.................</span> <span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9474; &nbsp;&#9500;&#9472;&#9472; App.tsx</span> <span style="color:var(--text-subtle)">.................</span> <span style="color:var(--accent);">&#9553;</span></div>
+                        <div><span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9474; &nbsp;&#9500;&#9472;&#9472; models.py</span> <span style="color:var(--text-subtle)">...............</span> <span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9474; &nbsp;&#9500;&#9472;&#9472; components/</span> <span style="color:var(--text-subtle)">...........</span> <span style="color:var(--accent);">&#9553;</span></div>
+                        <div><span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9474; &nbsp;&#9500;&#9472;&#9472; routes/</span> <span style="color:var(--text-subtle)">.................</span> <span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9474; &nbsp;&#9500;&#9472;&#9472; hooks/</span> <span style="color:var(--text-subtle)">.................</span> <span style="color:var(--accent);">&#9553;</span></div>
+                        <div><span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9500;&#9472;&#9472; tests/</span> <span style="color:var(--text-subtle)">....................</span> <span style="color:var(--accent);">&#9553;</span> <span class="t-output">&#9500;&#9472;&#9472; tests/</span> <span style="color:var(--text-subtle)">....................</span> <span style="color:var(--accent);">&#9553;</span></div>
+                        <div><span style="color:var(--accent);">&#9562;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9574;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9565;</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[coder]</span> <span class="t-success">&#10003;</span> <span class="t-output">22 files generated across frontend + backend</span></div>
+                        <div><span class="t-key">[tester]</span> <span class="t-output">Running backend tests...</span></div>
+                        <div><span class="t-success">24 passed</span></div>
+                        <div><span class="t-key">[tester]</span> <span class="t-output">Running frontend tests (vitest)...</span></div>
+                        <div><span class="t-success">14 passed</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[coder]</span> <span class="t-output">Generating .github/workflows/ci.yml...</span></div>
+                        <div><span class="t-success">&#10003;</span> <span class="t-output">CI: lint &#8594; test &#8594; build &#8594; deploy (4 jobs)</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-key">[documenter]</span> <span class="t-success">&#10003;</span> <span class="t-output">README.md generated (setup, usage, API docs, deploy instructions)</span></div>
+                        <div><span class="t-key">[optimizer]</span> <span class="t-success">&#10003;</span> <span class="t-output">Dockerfile: multi-stage, 94MB final image (36% smaller)</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="t-success">Result: SUCCESS</span></div>
+                        <div><span class="t-output">Tokens: 28,412 | Iterations: 8 | Files: 22 | Tests: 38/38</span></div>
+                    </div>
+                </div>
+
+                <div class="ex-metrics">
+                    <div class="ex-metric"><div class="ex-metric-val">22</div><div class="ex-metric-label">Files generated</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">38/38</div><div class="ex-metric-label">Tests passing</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">~3min</div><div class="ex-metric-label">Wall time</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">28.4k</div><div class="ex-metric-label">Tokens used</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">94MB</div><div class="ex-metric-label">Docker image</div></div>
+                    <div class="ex-metric"><div class="ex-metric-val">8</div><div class="ex-metric-label">Agents active</div></div>
+                </div>
+
+            </section>
+
+            <!-- ─── CTA ────────────────────────────────────── -->
+            <section style="padding:4rem 0;text-align:center;border-top:1px solid var(--border);margin-top:2rem;">
+                <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:0.75rem;">Try these yourself</h2>
+                <p style="color:var(--text-muted);font-size:0.925rem;margin-bottom:1.5rem;">Install CogOS and run any of these examples on your own machine. Free, local, open source.</p>
+                <div class="hero-actions">
+                    <a href="index.html#install" class="btn btn-primary btn-lg">Get Started Free</a>
+                    <a href="demo.html" class="btn btn-secondary btn-lg">Try the Demo</a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ─── FOOTER ─────────────────────────────────────── -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="logo-mark" style="width:24px;height:24px;">
+                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#fff;"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2.5a7.5 7.5 0 1 1 0 15 7.5 7.5 0 0 1 0-15zm0 2.5a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0 2.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>
+                    </div>
+                    <span class="footer-copy">&copy; 2025-2026 CogOS &mdash; MIT License</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/corbybender/cog" target="_blank" rel="noopener">GitHub</a>
+                    <a href="index.html">Home</a>
+                    <a href="examples.html">Examples</a>
+                    <a href="demo.html">Demo</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.ex-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.ex-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.ex-section').forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('ex-' + tab.dataset.ex).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>
