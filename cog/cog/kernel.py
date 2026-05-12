@@ -506,6 +506,19 @@ Rules:
     def provider(self) -> LLMProvider | None:
         return self._provider
 
+    def set_provider(self, provider: LLMProvider) -> None:
+        """Set a pre-built LLM provider (pass-through mode).
+
+        Use this when the host tool (Claude Code, Codex CLI, etc.)
+        has already constructed its own provider and wants to hand it
+        to CogOS directly, bypassing any config-based initialization.
+        """
+        self._provider = provider
+        self._logger.info(
+            "kernel",
+            f"Provider set externally: {provider.get_model_name()}",
+        )
+
     @property
     def agent(self) -> Agent | None:
         return self._agent
