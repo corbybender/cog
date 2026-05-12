@@ -207,8 +207,8 @@
 
             <section class="docs-hero">
                 <span class="section-eyebrow">Documentation</span>
-                <h1>Docs &mdash; it just works<br><span style="background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">with your AI.</span></h1>
-                <p>Install CogOS and run. It automatically uses whatever AI provider your environment already has &mdash; no extra setup, no duplicate API keys. This page covers the details if you need them.</p>
+                <h1>Install once.<br><span style="background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Every AI tool gets CogOS.</span></h1>
+                <p>Run <code>cog init</code> and CogOS registers itself as an MCP server. Claude Code, Codex, Gemini, and any MCP-compatible tool discovers it automatically. No config files to edit, no instructions to paste.</p>
             </section>
 
             <div class="docs-layout">
@@ -216,6 +216,7 @@
                 <aside class="docs-sidebar">
                     <h4>On this page</h4>
                     <ul>
+                        <li><a href="#mcp">MCP integration</a></li>
                         <li><a href="#overview">How it works</a></li>
                         <li><a href="#passthrough">Pass-through mode</a></li>
                         <li><a href="#string">String-based init</a></li>
@@ -228,6 +229,91 @@
                 </aside>
 
                 <div class="docs-content">
+
+                    <h2 id="mcp">MCP Integration &mdash; Automatic Setup</h2>
+
+                    <p>CogOS registers itself as an <strong>MCP (Model Context Protocol) server</strong>. This means your AI tool discovers CogOS automatically &mdash; no config files to edit, no instructions to paste, no existing files overwritten.</p>
+
+                    <div class="code-block"><code><span class="comment"># Install and register &mdash; one command</span>
+$ pip install -e .
+$ cog init
+<span class="string">Registered CogOS MCP server with:</span>
+<span class="string">  - claude (~/.claude.json)</span>
+<span class="string">  - codex (~/.codex/config.toml)</span>
+<span class="string">  - gemini (~/.gemini/settings.json)</span>
+<span class="string">CogOS is ready. Your AI tool will discover it automatically via MCP.</span></code></div>
+
+                    <p>After registration, your AI tool sees these CogOS tools:</p>
+
+                    <table class="provider-table">
+                        <thead>
+                            <tr>
+                                <th>MCP Tool</th>
+                                <th>What it does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>cog_run</code></td>
+                                <td>Run a cognitive task with multi-agent orchestration</td>
+                            </tr>
+                            <tr>
+                                <td><code>cog_chat</code></td>
+                                <td>Interactive conversation with CogOS</td>
+                            </tr>
+                            <tr>
+                                <td><code>cog_status</code></td>
+                                <td>Show active modules, tools, and provider info</td>
+                            </tr>
+                            <tr>
+                                <td><code>cog_modules</code></td>
+                                <td>List available domain modules and capabilities</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Supported AI tools</h3>
+
+                    <table class="provider-table">
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>How it discovers CogOS</th>
+                                <th>Config location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Claude Code</td>
+                                <td>Auto &mdash; reads <code>~/.claude.json</code> MCP servers</td>
+                                <td><code>~/.claude.json</code></td>
+                            </tr>
+                            <tr>
+                                <td>OpenAI Codex CLI</td>
+                                <td>Auto &mdash; reads <code>~/.codex/config.toml</code></td>
+                                <td><code>~/.codex/config.toml</code></td>
+                            </tr>
+                            <tr>
+                                <td>Gemini CLI</td>
+                                <td>Auto &mdash; reads <code>~/.gemini/settings.json</code></td>
+                                <td><code>~/.gemini/settings.json</code></td>
+                            </tr>
+                            <tr>
+                                <td>Cursor</td>
+                                <td>Add manually in Settings &gt; MCP</td>
+                                <td>Settings UI</td>
+                            </tr>
+                            <tr>
+                                <td>Any MCP client</td>
+                                <td><code>python -m cog.mcp_server</code></td>
+                                <td>stdio transport</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="callout">
+                        <p><strong>Manual registration:</strong> Run <code>cog register</code> at any time to (re)register with all detected AI tools. Or add manually: command is <code>python -m cog.mcp_server</code> via stdio transport.</p>
+                    </div>
 
                     <h2 id="overview">How Provider Configuration Works</h2>
 
