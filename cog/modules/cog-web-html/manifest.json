@@ -1,0 +1,9 @@
+{
+  "name": "cog-web-html",
+  "version": "1.0.0",
+  "description": "HTML expertise including semantic markup, accessibility, forms, meta tags, SEO, and modern HTML5 features",
+  "capabilities": ["html_validate", "html_semantic", "html_forms", "html_accessibility", "html_seo", "html5_apis"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read"],
+  "entrypoint": "module.py"
+}

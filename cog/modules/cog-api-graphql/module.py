@@ -37,7 +37,7 @@ class GraphQLIntrospectionTool(Tool):
         from cog.tools.shell import ShellTool
         shell = ShellTool()
         result = shell.execute(
-            command=f"curl -X POST {endpoint} -H 'Content-Type: application/json' -d '{\"query\":\"{__schema{types{name}}}\"}'"
+            command=f"curl -X POST {endpoint} -H 'Content-Type: application/json' -d '{{\"query\":\"{{__schema{{types{{name}}}}}}\"}}'"
         )
         return result
 

@@ -153,7 +153,7 @@ class CogBackendNodejs(CogModule):
             "",
             "ES Modules (ESM):",
             "- import/export statements",
-            "- "type": "module" in package.json",
+            '- "type": "module" in package.json',
             "- Dynamic import()",
             "- import.meta.url",
             "- Top-level await support",

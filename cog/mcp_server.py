@@ -69,11 +69,50 @@ def _get_kernel():
     return kernel
 
 
+_STOPWORDS = frozenset(
+    "a an the to is are was were be been being have has had do does did "
+    "will would shall should can could may might must of in on at by for "
+    "with from and or but not no so if then than too very just that this "
+    "it its i me my we our you your he him his she her they them their "
+    "what which who whom how when where why all each every both few more "
+    "most other some such only own same also about up out into over after".split()
+)
+
+
+def _tokenize(text: str) -> tuple[list[str], list[str]]:
+    words = [w for w in text.lower().split() if w not in _STOPWORDS and len(w) > 1]
+    bigrams = [f"{words[i]} {words[i+1]}" for i in range(len(words) - 1)]
+    return words, bigrams
+
+
 def _find_relevant_modules(task: str, kernel) -> list[dict[str, Any]]:
-    task_lower = task.lower()
-    words = set(task_lower.split())
-    bigrams = {f"{task_lower.split()[i]} {task_lower.split()[i+1]}"
-               for i in range(len(task_lower.split()) - 1)}
+    words, bigrams = _tokenize(task)
+
+    tech_keywords = {
+        "js": "javascript", "ts": "typescript", "k8s": "kubernetes",
+        "docker": "docker", "container": "docker", "pod": "kubernetes",
+        "deploy": "deploy", "api": "api", "rest": "api",
+        "graphql": "graphql", "grpc": "grpc", "db": "database",
+        "sql": "database", "postgres": "database", "mysql": "database",
+        "mongo": "database", "redis": "database", "aws": "aws",
+        "gcp": "gcp", "azure": "azure", "react": "react",
+        "vue": "vue", "angular": "angular", "svelte": "svelte",
+        "next": "nextjs", "nuxt": "nuxtjs", "python": "python",
+        "rust": "rust", "go": "go", "java": "java", "php": "php",
+        "ruby": "ruby", "swift": "swift", "kotlin": "kotlin",
+        "css": "css", "html": "html", "git": "git",
+        "terraform": "terraform", "ansible": "ansible",
+        "helm": "kubernetes", "npm": "npm", "yarn": "yarn",
+        "linux": "linux", "mac": "macos", "windows": "windows",
+        "test": "testing", "playwright": "playwright", "selenium": "selenium",
+    }
+    expanded = set()
+    for w in words:
+        expanded.add(w)
+        mapped = tech_keywords.get(w)
+        if mapped:
+            expanded.add(mapped)
+    words = list(expanded)
 
     scored: list[tuple[float, dict[str, Any]]] = []
 
