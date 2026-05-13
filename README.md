@@ -17,7 +17,7 @@ CogOS is a **modular cognitive runtime** that enhances any LLM with:
 
 - **55 Domain Modules** - Prompt extensions, tools, and verifiers for Python, JavaScript, AWS, Docker, Kubernetes, and more
 - **Multi-Agent Orchestration** - Specialized agents that collaborate on complex tasks (planner, researcher, coder, reviewer, tester, critic, documenter, optimizer, security, architect)
-- **Built-in Tools** - Filesystem operations, shell execution, web fetching/search, plus 60+ module-contributed tools
+- **70 Built-in & Module Tools** - Filesystem operations, shell execution, web fetching/search, plus module-contributed tools for AWS, Docker, databases, languages, and more
 - **Caching** - Response and tool-result caching to reduce token usage
 - **Memory** - SQLite or Mem0-backed conversation and task memory
 - **Approval Gates** - Require user approval for destructive operations
@@ -176,7 +176,7 @@ See [web-ui/README.md](web-ui/README.md) for details.
 
 ## Modules
 
-55 domain-specific modules with 7,275+ prompt extensions, 48+ tools, and verifiers:
+55 domain-specific modules with 7,275+ prompt extensions, 70 tools, and verifiers:
 
 ### Programming Languages
 - **JavaScript** - ES6+, Node.js, async patterns

@@ -1,7 +1,7 @@
 <!-- cogos:start -->
 # CogOS — Cognitive Operating System
 
-CogOS is a modular cognitive runtime with 55 domain modules, 70+ tools, and
+CogOS is a modular cognitive runtime with 55 domain modules, 70 tools, and
 multi-agent orchestration. It is registered as an MCP server in this project.
 
 ## MANDATORY: Use CogOS for ALL Coding Tasks
