@@ -21,10 +21,8 @@ cog = "cog.cli:main"
 cogos = "cog.cli:main"
 
 [tool.setuptools.packages.find]
-where = ["cog"]
-
-[tool.setuptools.package-dir]
-"" = "cog"
+where = ["."]
+include = ["cog*"]
 
 [tool.pytest.ini_options]
 testpaths = ["cog/tests"]

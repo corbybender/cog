@@ -1,9 +1,0 @@
-{
-  "name": "cog-lang-go",
-  "version": "1.0.0",
-  "description": "Go language expertise including goroutines, channels, interfaces, error handling, modules, generics, testing, and concurrency patterns",
-  "capabilities": ["go", "goroutines", "channels", "interfaces", "error_handling", "go_modules", "generics", "testing", "benchmarks", "cross_compilation", "concurrency", "slices", "maps"],
-  "requires": ["code-core", "language-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
-  "entrypoint": "module.py"
-}

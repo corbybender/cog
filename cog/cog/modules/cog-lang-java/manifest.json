@@ -1,9 +1,0 @@
-{
-  "name": "cog-lang-java",
-  "version": "1.0.0",
-  "description": "Java language expertise including Spring Boot, streams, records, sealed classes, virtual threads, Maven/Gradle, JUnit 5, and concurrency utilities",
-  "capabilities": ["java", "spring_boot", "streams", "optional", "records", "sealed_classes", "pattern_matching", "virtual_threads", "maven", "gradle", "junit5", "jvm_tuning", "generics", "concurrency", "jpms"],
-  "requires": ["code-core", "language-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
-  "entrypoint": "module.py"
-}

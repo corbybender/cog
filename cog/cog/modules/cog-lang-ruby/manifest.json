@@ -1,9 +1,0 @@
-{
-  "name": "cog-lang-ruby",
-  "version": "1.0.0",
-  "description": "Ruby language expertise including Rails, Bundler, RSpec, metaprogramming, blocks/procs/lambdas, ActiveRecord, Sidekiq, and Zeitwerk",
-  "capabilities": ["ruby", "rails", "rspec", "metaprogramming", "blocks_procs_lambdas", "active_record", "migrations", "bundler", "sidekiq", "zeitwerk", "rack_middleware", "mixins"],
-  "requires": ["code-core", "language-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
-  "entrypoint": "module.py"
-}

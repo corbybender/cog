@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-green.svg)](https://www.python.org/downloads/)
-[![Modules](https://img.shields.io/badge/Modules-71-purple.svg)](https://github.com/corbybender/cog#modules)
+[![Modules](https://img.shields.io/badge/Modules-55-purple.svg)](https://github.com/corbybender/cog#modules)
 [![Free](https://img.shields.io/badge/Price-Free-success.svg)](https://github.com/corbybender/cog)
 
 **A modular cognitive runtime with expert modules, web UI, and multi-agent collaboration. Free, open source, runs locally.**
@@ -15,7 +15,7 @@
 
 CogOS is a **modular cognitive runtime** that enhances any LLM with:
 
-- **71 Domain Modules** - Prompt extensions, tools, and verifiers for Python, JavaScript, AWS, Docker, Kubernetes, and more
+- **55 Domain Modules** - Prompt extensions, tools, and verifiers for Python, JavaScript, AWS, Docker, Kubernetes, and more
 - **Multi-Agent Orchestration** - Specialized agents that collaborate on complex tasks (planner, researcher, coder, reviewer, tester, critic, documenter, optimizer, security, architect)
 - **Built-in Tools** - Filesystem operations, shell execution, web fetching/search, plus 60+ module-contributed tools
 - **Caching** - Response and tool-result caching to reduce token usage
@@ -176,7 +176,7 @@ See [web-ui/README.md](web-ui/README.md) for details.
 
 ## Modules
 
-71 domain-specific modules with 7,100+ prompt extensions, 48+ tools, and 5 verifiers:
+55 domain-specific modules with 7,275+ prompt extensions, 48+ tools, and verifiers:
 
 ### Programming Languages
 - **JavaScript** - ES6+, Node.js, async patterns

@@ -3,7 +3,7 @@
 Architecture: The calling AI tool (Claude Code, Cursor, opencode, etc.) IS the LLM.
 CogOS does NOT need its own separate LLM provider. Instead, CogOS:
 
-1. Discovers and loads 71 domain expert modules
+1. Discovers and loads 55 domain expert modules
 2. When the AI calls cog_run(), CogOS finds relevant modules and returns
    their expertise as context for the AI to use
 3. The AI then executes the task itself using that expertise
@@ -32,7 +32,7 @@ _PROJECT_DIR = _PACKAGE_DIR.parent
 mcp = FastMCP(
     "cogos",
     instructions=(
-        "You have access to CogOS — a library of 71 domain expert modules. "
+        "You have access to CogOS — a library of 55 domain expert modules. "
         "Call cog_run(task) for ANY coding task. It returns relevant expert knowledge "
         "from modules like Docker, Kubernetes, TypeScript, React, AWS, etc. that you "
         "should follow when completing the task. Call cog_modules(query) to browse modules."
@@ -53,8 +53,9 @@ def _get_kernel():
 
     config = build_config()
 
-    search_paths = [config.modules_path, str(_PACKAGE_DIR / "modules")]
-    config.modules_path = search_paths[0]
+    search_paths = [config.modules_path]
+    if config.modules_path != str(_PACKAGE_DIR / "modules"):
+        search_paths.append(str(_PACKAGE_DIR / "modules"))
 
     kernel = Kernel(config)
     kernel._module_loader._search_paths = [Path(p) for p in search_paths]

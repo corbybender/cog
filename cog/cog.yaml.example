@@ -1,9 +1,0 @@
-provider: openai
-model: glm-5.1
-base_url: https://api.z.ai/api/coding/paas/v4
-api_key: YOUR_API_KEY_HERE
-memory_backend: sqlite
-modules_path: modules
-memory_path: cog_memory.db
-log_level: INFO
-max_agent_iterations: 20

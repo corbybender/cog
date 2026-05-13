@@ -1,9 +1,0 @@
-{
-  "name": "cog-framework-svelte",
-  "version": "1.0.0",
-  "description": "Svelte/SvelteKit framework expertise including reactive declarations, stores, SSR, load functions, form actions, adapters, and transitions",
-  "capabilities": ["svelte", "sveltekit", "reactive_declarations", "stores", "ssr", "load_functions", "form_actions", "adapters", "transitions"],
-  "requires": ["code-core", "language-core", "web-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
-  "entrypoint": "module.py"
-}

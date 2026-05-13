@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Callable
 
 from cog.agent import Agent, AgentConfig, AgentResult, ApprovalCallback
@@ -28,9 +29,13 @@ from cog.tools.web import WebFetchTool, WebSearchTool
 from cog.verification.base import VerificationLayer
 
 
+def _default_modules_path() -> str:
+    return str(Path(__file__).parent / "modules")
+
+
 @dataclass
 class KernelConfig:
-    modules_path: str = "modules"
+    modules_path: str = field(default_factory=_default_modules_path)
     memory_path: str = "cog_memory.db"
     log_level: str = "INFO"
     sandbox_enabled: bool = False

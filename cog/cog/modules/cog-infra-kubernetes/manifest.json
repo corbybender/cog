@@ -1,9 +1,0 @@
-{
-  "name": "cog-infra-kubernetes",
-  "version": "1.0.0",
-  "description": "Kubernetes orchestration expertise including pods, deployments, services, ConfigMaps, Secrets, Helm, Ingress, and RBAC",
-  "capabilities": ["k8s_deployments", "k8s_services", "helm_charts", "k8s_networking", "config_management", "k8s_rbac", "ingress_setup", "k8s_troubleshooting"],
-  "requires": ["tool-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
-  "entrypoint": "module.py"
-}

@@ -1,9 +1,0 @@
-{
-  "name": "cog-infra-docker",
-  "version": "1.0.0",
-  "description": "Docker containerization expertise including Dockerfiles, Compose, multi-stage builds, networking, volumes, and best practices",
-  "capabilities": ["docker_build", "docker_compose", "dockerfile_authoring", "container_networking", "volume_management", "multi_stage_builds", "container_optimization"],
-  "requires": ["tool-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
-  "entrypoint": "module.py"
-}

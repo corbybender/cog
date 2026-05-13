@@ -1,9 +1,0 @@
-{
-  "name": "cog-framework-angular",
-  "version": "1.0.0",
-  "description": "Angular framework expertise including components, services, RxJS, dependency injection, signals, routing, forms, and testing",
-  "capabilities": ["angular", "components", "services", "rxjs", "dependency_injection", "signals", "pipes", "directives", "routing", "forms", "http_client", "testing"],
-  "requires": ["code-core", "language-core", "web-core"],
-  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
-  "entrypoint": "module.py"
-}
