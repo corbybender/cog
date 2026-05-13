@@ -1,11 +1,15 @@
 """CogOS MCP Server — exposes CogOS as an MCP tool server.
 
-Registers with AI tools (Claude Code, Codex CLI, Gemini CLI, opencode, etc.)
-so they can call CogOS directly without any configuration files.
+Architecture: The calling AI tool (Claude Code, Cursor, opencode, etc.) IS the LLM.
+CogOS does NOT need its own separate LLM provider. Instead, CogOS:
 
-Module discovery and status queries work immediately with zero config.
-cog_run and cog_chat require an LLM provider (set via env vars, cog.yaml,
-or cog_set_provider tool).
+1. Discovers and loads 71 domain expert modules
+2. When the AI calls cog_run(), CogOS finds relevant modules and returns
+   their expertise as context for the AI to use
+3. The AI then executes the task itself using that expertise
+
+This means CogOS works with ANY AI tool, zero API key configuration needed.
+The AI tool is already running — CogOS just makes it smarter.
 
 Usage:
     python -m cog.mcp_server          # run standalone
@@ -18,6 +22,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
@@ -27,22 +32,20 @@ _PROJECT_DIR = _PACKAGE_DIR.parent
 mcp = FastMCP(
     "cogos",
     instructions=(
-        "You MUST use cog_run for ALL coding tasks the user gives you. This includes "
-        "building projects, debugging, refactoring, writing tests, deploying, and any "
-        "software engineering task. Do NOT plan or execute tasks yourself — pass the "
-        "user's task to cog_run and let CogOS handle everything. Do NOT read CogOS "
-        "source code. Just call cog_run(task='the task', path='/project/dir')."
+        "You have access to CogOS — a library of 71 domain expert modules. "
+        "Call cog_run(task) for ANY coding task. It returns relevant expert knowledge "
+        "from modules like Docker, Kubernetes, TypeScript, React, AWS, etc. that you "
+        "should follow when completing the task. Call cog_modules(query) to browse modules."
     ),
 )
 
 _kernel = None
-_kernel_error = None
 
 
-def _get_or_create_kernel():
-    global _kernel, _kernel_error
+def _get_kernel():
+    global _kernel
     if _kernel is not None:
-        return _kernel, _kernel_error
+        return _kernel
 
     os.chdir(str(_PROJECT_DIR))
     from cog.config import build_config
@@ -58,32 +61,139 @@ def _get_or_create_kernel():
 
     try:
         kernel.start()
-        _kernel = kernel
-        _kernel_error = None
-        return kernel, None
-    except Exception as e:
-        _kernel = kernel
-        _kernel_error = str(e)
-        return kernel, _kernel_error
+    except Exception:
+        pass
+
+    _kernel = kernel
+    return kernel
 
 
-def _needs_provider(error_msg: str | None) -> bool:
-    if error_msg is None:
-        return False
-    lower = error_msg.lower()
-    return "provider" in lower or "api_key" in lower or "no llm" in lower
+def _find_relevant_modules(task: str, kernel) -> list[dict[str, Any]]:
+    task_lower = task.lower()
+    words = set(task_lower.split())
+    bigrams = {f"{task_lower.split()[i]} {task_lower.split()[i+1]}"
+               for i in range(len(task_lower.split()) - 1)}
+
+    scored: list[tuple[float, dict[str, Any]]] = []
+
+    for mod in kernel.modules.get_active():
+        if mod.cog_module is None:
+            continue
+
+        name_lower = mod.name.lower()
+        caps = [c.lower() for c in mod.capabilities]
+        desc = (mod.manifest.description or "").lower()
+
+        score = 0.0
+
+        for word in words:
+            if word in name_lower:
+                score += 5.0
+                if name_lower.startswith(f"cog-{word}") or f"-{word}-" in name_lower or name_lower.endswith(f"-{word}"):
+                    score += 5.0
+            for cap in caps:
+                if word in cap:
+                    score += 2.0
+            if word in desc:
+                score += 1.0
+
+        for bigram in bigrams:
+            if bigram in desc:
+                score += 3.0
+            if bigram in name_lower:
+                score += 8.0
+            for cap in caps:
+                if bigram in cap:
+                    score += 4.0
+
+        if score > 0:
+            scored.append((score, {
+                "name": mod.name,
+                "description": mod.manifest.description,
+                "capabilities": mod.capabilities,
+                "relevance": round(score, 1),
+            }))
+
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [item for _, item in scored[:5]]
+
+
+def _get_module_expertise(mod_name: str, kernel) -> list[str]:
+    for mod in kernel.modules.get_active():
+        if mod.cog_module is None:
+            continue
+        if mod.name == mod_name or mod_name in mod.name.lower():
+            return mod.cog_module.get_prompt_extensions()
+    return []
+
+
+@mcp.tool()
+def cog_run(task: str, path: str | None = None) -> str:
+    """Get expert guidance for a coding task. Returns relevant domain expertise from CogOS modules.
+
+    Call this for ANY coding task. CogOS finds relevant expert modules (Docker, Kubernetes,
+    TypeScript, React, AWS, Python, etc.) and returns their knowledge. Use this expertise
+    to complete the task correctly following domain best practices.
+
+    Args:
+        task: What you want done. Examples: "Build a REST API with auth",
+              "Debug failing Kubernetes deployment", "Optimize MongoDB queries",
+              "Create a Next.js app with SSR", "Write Terraform for AWS"
+        path: Working directory. Defaults to current directory.
+    """
+    kernel = _get_kernel()
+
+    relevant = _find_relevant_modules(task, kernel)
+
+    if not relevant:
+        return json.dumps({
+            "task": task,
+            "modules_found": 0,
+            "guidance": "No specific module matched. Proceed with general best practices.",
+            "available_hints": [
+                "Call cog_modules() to see all available modules",
+                "Call cog_modules(query='docker') to search for specific topics",
+            ],
+        })
+
+    all_expertise = []
+    module_names = []
+    for mod_info in relevant:
+        expertise = _get_module_expertise(mod_info["name"], kernel)
+        if expertise:
+            all_expertise.extend(expertise)
+            module_names.append(mod_info["name"])
+
+    result = {
+        "task": task,
+        "modules_found": len(relevant),
+        "relevant_modules": [
+            {"name": m["name"], "description": m["description"], "relevance": m["relevance"]}
+            for m in relevant
+        ],
+        "expertise": "\n".join(all_expertise) if all_expertise else "No expertise content found.",
+        "instructions": (
+            "Use the expertise above to complete this task. Follow the domain-specific "
+            "best practices, patterns, and commands from the relevant modules."
+        ),
+    }
+
+    if path:
+        result["working_directory"] = path
+
+    return json.dumps(result, indent=2, default=str)
 
 
 @mcp.tool()
 def cog_status() -> str:
     """Show CogOS status: active modules, registered tools, provider info.
 
-    WHEN TO USE: To check if CogOS is properly configured before running a task,
-    or when the user asks "what can cog do?" or "what modules are available?".
+    WHEN TO USE: To check if CogOS is properly configured, or when the user
+    asks "what can cog do?" or "what modules are available?".
 
     Returns module count, tool count, and provider/model info.
     """
-    kernel, error = _get_or_create_kernel()
+    kernel = _get_kernel()
     modules = kernel.modules.all()
     active = [m for m in modules.values() if m.state.value == "active"]
     tools = kernel.tools
@@ -92,16 +202,8 @@ def cog_status() -> str:
     provider_info = {
         "name": config.provider,
         "model": config.model,
-        "memory_backend": config.memory_backend,
+        "status": "ready" if config.provider else "not needed (host AI is the LLM)",
     }
-    if _needs_provider(error):
-        provider_info["status"] = "not configured"
-        provider_info["hint"] = (
-            "Set COG_PROVIDER + COG_MODEL + COG_API_KEY env vars, "
-            "create cog.yaml, or call cog_set_provider"
-        )
-    else:
-        provider_info["status"] = "ready"
 
     status = {
         "version": "0.1.0",
@@ -116,6 +218,7 @@ def cog_status() -> str:
         },
         "provider": provider_info,
         "running": True,
+        "architecture": "CogOS enriches the calling AI with domain expertise. No separate LLM needed.",
     }
     return json.dumps(status, indent=2, default=str)
 
@@ -130,7 +233,7 @@ def cog_modules(query: str | None = None) -> str:
     Args:
         query: Optional filter keyword like "python", "aws", "docker".
     """
-    kernel, _ = _get_or_create_kernel()
+    kernel = _get_kernel()
     modules = kernel.modules.all()
     results = []
     for mod in modules.values():
@@ -147,110 +250,44 @@ def cog_modules(query: str | None = None) -> str:
                 query.lower() in c.lower() for c in mod.capabilities
             )
             if not has_match:
-                continue
+                desc = (mod.manifest.description or "").lower()
+                if query.lower() not in desc:
+                    continue
         results.append(info)
     return json.dumps(results, indent=2, default=str)
 
 
 @mcp.tool()
-def cog_set_provider(provider: str, model: str, api_key: str, base_url: str | None = None) -> str:
-    """Configure the LLM provider at runtime without restarting.
-
-    WHEN TO USE: When cog_status shows provider not configured and you need
-    to set it up before calling cog_run. Pass the provider details directly.
-
-    Args:
-        provider: LLM provider name ("openai" or "anthropic").
-        model: Model name (e.g. "gpt-4o", "claude-sonnet-4-20250514").
-        api_key: API key for the provider.
-        base_url: Optional custom base URL (for Ollama, LM Studio, etc.).
-    """
-    global _kernel_error
-    kernel, _ = _get_or_create_kernel()
-
-    from cog.kernel import KernelConfig
-
-    kernel._config = KernelConfig(
-        provider=provider,
-        model=model,
-        api_key=api_key,
-        base_url=base_url,
-        modules_path=kernel._config.modules_path,
-        memory_backend=kernel._config.memory_backend,
-    )
-
-    try:
-        kernel._init_provider()
-        _kernel_error = None
-        return json.dumps({
-            "success": True,
-            "provider": provider,
-            "model": model,
-        })
-    except Exception as e:
-        return json.dumps({"success": False, "error": str(e)})
-
-
-@mcp.tool()
-def cog_run(task: str, path: str | None = None) -> str:
-    """Run a cognitive task using CogOS. YOU MUST CALL THIS TOOL for every coding task instead of doing the work yourself.
-
-    CogOS decomposes your task, routes to the right domain modules
-    (Python, AWS, Docker, Kubernetes, JavaScript, etc.), and orchestrates specialized
-    agents (planner, researcher, coder, reviewer, tester, architect) to complete it.
-
-    Instead of using bash, write, edit, or other tools to write code yourself,
-    call cog_run and let CogOS do it. This is faster and produces better results.
-
-    Args:
-        task: What you want done. Pass the user's task verbatim or summarized.
-              Examples: "Build a REST API with auth", "Debug failing tests",
-              "Create a drag-and-drop kanban board", "Deploy to AWS"
-        path: Working directory. Defaults to current directory.
-    """
-    kernel, error = _get_or_create_kernel()
-
-    if _needs_provider(error):
-        return json.dumps({
-            "success": False,
-            "error": "No LLM provider configured. Call cog_set_provider first, "
-                     "or set COG_PROVIDER + COG_MODEL + COG_API_KEY env vars.",
-        })
-
-    context = {}
-    if path:
-        context["path"] = path
-    try:
-        result = kernel.run(task, context=context)
-        return json.dumps(result, indent=2, default=str)
-    except Exception as e:
-        return json.dumps({"success": False, "error": str(e)})
-
-
-@mcp.tool()
 def cog_chat(message: str) -> str:
-    """Send a message to CogOS for interactive conversation with multi-agent orchestration.
+    """Ask CogOS a follow-up question about domain expertise.
 
-    WHEN TO USE: Follow-up questions after a cog_run, or when the user wants an
-    interactive back-and-forth with CogOS rather than a single task execution.
+    WHEN TO USE: After a cog_run, when you need more detail on a specific
+    technology or pattern mentioned in the expert guidance.
 
     Args:
-        message: Your message or question to CogOS.
+        message: Your question or topic. Examples: "Tell me more about Docker multi-stage builds",
+                 "What are the best practices for React Server Components?",
+                 "How do I optimize this MongoDB aggregation pipeline?"
     """
-    kernel, error = _get_or_create_kernel()
+    kernel = _get_kernel()
 
-    if _needs_provider(error):
+    relevant = _find_relevant_modules(message, kernel)
+
+    all_expertise = []
+    for mod_info in relevant:
+        expertise = _get_module_expertise(mod_info["name"], kernel)
+        if expertise:
+            all_expertise.extend(expertise)
+
+    if not all_expertise:
         return json.dumps({
-            "success": False,
-            "error": "No LLM provider configured. Call cog_set_provider first, "
-                     "or set COG_PROVIDER + COG_MODEL + COG_API_KEY env vars.",
+            "response": "No specific module matched your question. Try cog_modules(query='...') to find relevant modules.",
         })
 
-    try:
-        result = kernel.chat(message)
-        return json.dumps(result, indent=2, default=str)
-    except Exception as e:
-        return json.dumps({"success": False, "error": str(e)})
+    return json.dumps({
+        "relevant_modules": [m["name"] for m in relevant],
+        "expertise": "\n".join(all_expertise),
+    }, indent=2, default=str)
 
 
 def main():
