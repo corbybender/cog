@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable
 
 from cog.cache import get_cache
-from cog.logging import get_logger
+from cog.cog_logger import get_logger
 from cog.permissions import Permission, PermissionSet
 from cog.providers.base import (
     LLMMessage,

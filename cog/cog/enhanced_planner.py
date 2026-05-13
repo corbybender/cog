@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Any
 
 from cog.llm import LLMProvider, LLMMessage, MessageRole
-from cog.logging import get_logger
+from cog.cog_logger import get_logger
 from cog.planner import Plan, PlanStep
 
 

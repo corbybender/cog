@@ -6,7 +6,7 @@ from typing import Any, Callable
 
 from cog.agent import Agent, AgentConfig, AgentResult, ApprovalCallback
 from cog.cog_module import HookContext
-from cog.logging import CogLogger, get_logger
+from cog.cog_logger import CogLogger, get_logger
 from cog.memory import MemoryBackend, MemoryEntry, MemoryType
 from cog.memory.mem0_backend import Mem0MemoryBackend
 from cog.memory.sqlite_backend import SQLiteMemoryBackend
@@ -119,12 +119,22 @@ class Kernel:
         if self._memory is not None:
             return
         if self._config.memory_backend == "mem0":
-            self._memory = Mem0MemoryBackend(
-                config=self._config.mem0_config,
-                agent_id=self._config.memory_agent_id,
-                user_id=self._config.memory_user_id,
-            )
-            self._logger.info("kernel", "Memory backend: Mem0")
+            try:
+                self._memory = Mem0MemoryBackend(
+                    config=self._config.mem0_config,
+                    agent_id=self._config.memory_agent_id,
+                    user_id=self._config.memory_user_id,
+                )
+                self._logger.info("kernel", "Memory backend: Mem0")
+            except Exception as e:
+                self._logger.warning(
+                    "kernel",
+                    f"Mem0 backend failed ({e}), falling back to SQLite",
+                )
+                self._memory = SQLiteMemoryBackend(self._config.memory_path)
+                self._logger.info(
+                    "kernel", f"Memory backend: SQLite ({self._config.memory_path})"
+                )
         else:
             self._memory = SQLiteMemoryBackend(self._config.memory_path)
             self._logger.info(

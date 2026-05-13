@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from cog.logging import get_logger
+from cog.cog_logger import get_logger
 from cog.permissions import Permission
 
 

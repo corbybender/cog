@@ -6,7 +6,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from cog.logging import get_logger
+from cog.cog_logger import get_logger
 
 
 class TrustLevel(str, Enum):

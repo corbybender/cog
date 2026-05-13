@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from cog.logging import get_logger
+from cog.cog_logger import get_logger
 from cog.tools.base import Tool, ToolResult
 from cog.tools.shell import ShellTool
 
