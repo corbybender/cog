@@ -336,18 +336,218 @@ def cmd_init(args: argparse.Namespace) -> None:
     from pathlib import Path
 
     target = Path(args.output)
-    if target.exists() and not args.force:
-        print(f"{target} already exists. Use --force to overwrite.")
-        return
-    content = generate_default_config()
-    target.write_text(content)
-    print(f"Created {target}")
+
+    provider_info = _detect_provider()
+
+    if provider_info:
+        config_content = _generate_config(**provider_info)
+        if target.exists() and not args.force:
+            print(f"{target} exists. Use --force to overwrite.")
+        else:
+            target.write_text(config_content)
+            print(f"Created {target} with auto-detected provider:")
+            print(f"  provider: {provider_info['provider']}")
+            print(f"  model: {provider_info['model']}")
+            base = provider_info.get("base_url")
+            if base:
+                print(f"  base_url: {base}")
+    else:
+        if target.exists() and not args.force:
+            print(f"{target} exists. Use --force to overwrite.")
+        else:
+            content = _generate_template_config()
+            target.write_text(content)
+            print(f"Created {target}")
+            print()
+            print("No LLM provider detected. Edit cog.yaml and set:")
+            print("  provider: openai        # or anthropic")
+            print("  model: gpt-4o           # your model name")
+            print("  api_key: sk-...          # your API key")
+            print()
+            print("Or set env vars: COG_PROVIDER, COG_MODEL, COG_API_KEY")
+            if _is_ollama_running():
+                print()
+                print("Detected Ollama running at http://localhost:11434")
+                print("Quick fix:")
+                print("  provider: openai")
+                print("  model: llama3           # or any model from 'ollama list'")
+                print("  api_key: ollama")
+                print("  base_url: http://localhost:11434/v1")
 
     _register_all()
     _write_agents_md(Path("AGENTS.md"))
 
     print()
     print("CogOS is ready. Your AI tool will discover it automatically via MCP.")
+
+
+def _detect_provider() -> dict | None:
+    import os
+
+    # 1. Check existing env vars
+    provider = os.environ.get("COG_PROVIDER")
+    model = os.environ.get("COG_MODEL")
+    api_key = os.environ.get("COG_API_KEY")
+    base_url = os.environ.get("COG_BASE_URL")
+
+    if provider and model:
+        return {
+            "provider": provider,
+            "model": model,
+            "api_key": api_key or "ollama",
+            "base_url": base_url,
+        }
+
+    # 2. Check OpenAI env
+    if os.environ.get("OPENAI_API_KEY"):
+        return {
+            "provider": "openai",
+            "model": os.environ.get("COG_MODEL", "gpt-4o"),
+            "api_key": os.environ["OPENAI_API_KEY"],
+            "base_url": os.environ.get("OPENAI_BASE_URL"),
+        }
+
+    # 3. Check Anthropic env
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return {
+            "provider": "anthropic",
+            "model": os.environ.get("COG_MODEL", "claude-sonnet-4-20250514"),
+            "api_key": os.environ["ANTHROPIC_API_KEY"],
+            "base_url": None,
+        }
+
+    # 4. Scan AI tool configs for provider info
+    tool_provider = _scan_tool_configs()
+    if tool_provider:
+        return tool_provider
+
+    # 5. Check for Ollama
+    if _is_ollama_running():
+        model_name = _get_ollama_default_model()
+        return {
+            "provider": "openai",
+            "model": model_name,
+            "api_key": "ollama",
+            "base_url": "http://localhost:11434/v1",
+        }
+
+    return None
+
+
+def _scan_tool_configs() -> dict | None:
+    import json
+    from pathlib import Path
+
+    # opencode config has full provider details
+    opencode_cfg = Path.home() / ".config" / "opencode" / "opencode.json"
+    if opencode_cfg.exists():
+        try:
+            data = json.loads(opencode_cfg.read_text())
+            providers = data.get("provider", {})
+            for prov_name, prov_cfg in providers.items():
+                opts = prov_cfg.get("options", {})
+                base_url = opts.get("baseURL")
+                api_key = opts.get("apiKey")
+                models = prov_cfg.get("models", {})
+
+                if base_url and models:
+                    first_model = next(iter(models))
+                    return {
+                        "provider": "openai",
+                        "model": first_model,
+                        "api_key": api_key or "ollama",
+                        "base_url": base_url,
+                    }
+        except Exception:
+            pass
+
+    return None
+
+
+def _is_ollama_running() -> bool:
+    import urllib.request
+    import urllib.error
+
+    try:
+        req = urllib.request.Request("http://localhost:11434/api/tags", method="GET")
+        with urllib.request.urlopen(req, timeout=1):
+            return True
+    except Exception:
+        return False
+
+
+def _get_ollama_default_model() -> str:
+    import json
+    import urllib.request
+
+    try:
+        req = urllib.request.Request("http://localhost:11434/api/tags", method="GET")
+        with urllib.request.urlopen(req, timeout=2) as resp:
+            data = json.loads(resp.read())
+            models = data.get("models", [])
+            if models:
+                return models[0].get("name", "llama3")
+    except Exception:
+        pass
+    return "llama3"
+
+
+def _generate_config(
+    provider: str, model: str, api_key: str, base_url: str | None
+) -> str:
+    lines = [
+        f"provider: {provider}",
+        f"model: {model}",
+        f"api_key: {api_key}",
+    ]
+    if base_url:
+        lines.append(f"base_url: {base_url}")
+    lines.extend([
+        "",
+        "modules_path: modules",
+        "memory_backend: sqlite",
+        "memory_path: cog_memory.db",
+        "log_level: INFO",
+        "max_agent_iterations: 20",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def _generate_template_config() -> str:
+    return (
+        "# CogOS Configuration\n"
+        "# CogOS needs an LLM provider to run tasks (cog_run, cog_chat).\n"
+        "# cog_status and cog_modules work without a provider.\n"
+        "#\n"
+        "# Option 1: OpenAI / any OpenAI-compatible API (Ollama, LM Studio, etc.)\n"
+        "#   provider: openai\n"
+        "#   model: gpt-4o\n"
+        "#   api_key: sk-...\n"
+        "#   base_url: https://api.openai.com/v1  # optional, for compatible APIs\n"
+        "#\n"
+        "# Option 2: Ollama (local, free)\n"
+        "#   provider: openai\n"
+        "#   model: llama3  # run 'ollama list' to see available models\n"
+        "#   api_key: ollama\n"
+        "#   base_url: http://localhost:11434/v1\n"
+        "#\n"
+        "# Option 3: Anthropic\n"
+        "#   provider: anthropic\n"
+        "#   model: claude-sonnet-4-20250514\n"
+        "#   api_key: sk-ant-...\n"
+        "#\n"
+        "# Or set env vars: COG_PROVIDER, COG_MODEL, COG_API_KEY, COG_BASE_URL\n"
+        "\n"
+        "provider: openai\n"
+        "model: gpt-4o\n"
+        "api_key: YOUR_API_KEY_HERE\n"
+        "\n"
+        "modules_path: modules\n"
+        "memory_backend: sqlite\n"
+        "memory_path: cog_memory.db\n"
+        "log_level: INFO\n"
+        "max_agent_iterations: 20\n"
+    )
 
 
 _AGENTS_BLOCK_START = "<!-- cogos:start -->"
