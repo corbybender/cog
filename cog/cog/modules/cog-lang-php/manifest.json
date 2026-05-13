@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-php",
+  "version": "1.0.0",
+  "description": "PHP language expertise including Laravel, Symfony, Composer, PSR standards, PHP 8.x features, PHPUnit, and PHP-FPM",
+  "capabilities": ["php", "laravel", "symfony", "composer", "psr_standards", "php8_features", "enums", "attributes", "phpunit", "php_fpm", "opcache", "eloquent", "blade_templates"],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

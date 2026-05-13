@@ -1,0 +1,9 @@
+{
+  "name": "cog-infra-terraform",
+  "version": "1.0.0",
+  "description": "Terraform infrastructure-as-code expertise including HCL, state management, providers, modules, workspaces, and remote backends",
+  "capabilities": ["terraform_hcl", "state_management", "terraform_modules", "terraform_providers", "workspace_management", "remote_backends", "infrastructure_as_code"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

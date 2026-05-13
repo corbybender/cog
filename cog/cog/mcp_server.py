@@ -11,10 +11,14 @@ Usage:
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
+
+_PACKAGE_DIR = Path(__file__).resolve().parent
+_PROJECT_DIR = _PACKAGE_DIR.parent
 
 mcp = FastMCP(
     "cogos",
@@ -34,6 +38,7 @@ def _get_kernel():
     global _kernel
     if _kernel is not None:
         return _kernel
+    os.chdir(str(_PROJECT_DIR))
     from cog.config import build_config
     from cog.kernel import Kernel
 

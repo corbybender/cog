@@ -1,0 +1,22 @@
+{
+  "name": "cog-db-elasticsearch",
+  "version": "1.0.0",
+  "description": "Elasticsearch module covering indexing, mappings, analyzers, search queries, aggregations, cluster management, shards, replicas, Elasticsearch DSL, Kibana, Logstash pipelines, and ingest pipelines",
+  "capabilities": [
+    "indexing",
+    "mappings",
+    "analyzers",
+    "search-queries",
+    "aggregations",
+    "cluster-management",
+    "shards",
+    "replicas",
+    "elasticsearch-dsl",
+    "kibana",
+    "logstash",
+    "ingest-pipelines"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "cog-infra-jenkins",
+  "version": "1.0.0",
+  "description": "Jenkins CI/CD expertise including Jenkinsfile, declarative and scripted pipelines, shared libraries, agents, credentials, and plugins",
+  "capabilities": ["jenkins_pipelines", "declarative_pipeline", "scripted_pipeline", "shared_libraries", "agent_management", "credential_management", "jenkins_plugins"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

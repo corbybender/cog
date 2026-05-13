@@ -1,0 +1,23 @@
+{
+  "name": "cog-backend-nodejs",
+  "version": "1.0.0",
+  "description": "Node.js backend module covering Express/Fastify, middleware patterns, async/await, error handling, streams, clustering, Worker threads, npm scripts, PM2, environment config, logging, and health checks",
+  "capabilities": [
+    "express",
+    "fastify",
+    "middleware",
+    "async-await",
+    "error-handling",
+    "streams",
+    "clustering",
+    "worker-threads",
+    "npm-scripts",
+    "pm2",
+    "environment-config",
+    "logging",
+    "health-checks"
+  ],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

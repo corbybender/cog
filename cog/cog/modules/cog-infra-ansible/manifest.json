@@ -1,0 +1,9 @@
+{
+  "name": "cog-infra-ansible",
+  "version": "1.0.0",
+  "description": "Ansible automation expertise including playbooks, roles, inventory, modules, Galaxy, and Jinja2 templates",
+  "capabilities": ["ansible_playbooks", "ansible_roles", "inventory_management", "ansible_modules", "jinja2_templates", "ansible_galaxy", "configuration_management"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

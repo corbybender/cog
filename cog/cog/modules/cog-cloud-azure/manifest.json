@@ -1,0 +1,26 @@
+{
+  "name": "cog-cloud-azure",
+  "version": "1.0.0",
+  "description": "Microsoft Azure cloud platform module covering Azure CLI, App Services, Functions, Storage, Azure SQL, CosmosDB, VMs, AKS, Azure DevOps, Resource Groups, ARM/Bicep templates, Managed Identities, and Key Vault",
+  "capabilities": [
+    "azure-cli",
+    "app-services",
+    "azure-functions",
+    "blob-storage",
+    "queue-storage",
+    "table-storage",
+    "azure-sql",
+    "cosmosdb",
+    "virtual-machines",
+    "aks",
+    "azure-devops",
+    "resource-groups",
+    "arm-templates",
+    "bicep-templates",
+    "managed-identities",
+    "key-vault"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

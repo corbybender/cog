@@ -1,0 +1,21 @@
+{
+  "name": "cog-package-npm",
+  "version": "1.0.0",
+  "description": "npm package manager module covering package.json, scripts, dependency management, semantic versioning, lock files, publishing, scoped packages, .npmrc, workspaces, npm audit, and npx",
+  "capabilities": [
+    "package-json",
+    "npm-scripts",
+    "dependency-management",
+    "semantic-versioning",
+    "lock-files",
+    "npm-publishing",
+    "scoped-packages",
+    "npmrc-config",
+    "npm-workspaces",
+    "npm-audit",
+    "npx"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "network.request", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

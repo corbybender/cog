@@ -1,0 +1,22 @@
+{
+  "name": "cog-web-css",
+  "version": "1.0.0",
+  "description": "CSS3 development module covering Flexbox, Grid, animations, responsive design, media queries, custom properties, Tailwind CSS, CSS modules, PostCSS, BEM, container queries, and cascade layers",
+  "capabilities": [
+    "flexbox",
+    "css-grid",
+    "animations-transitions",
+    "responsive-design",
+    "media-queries",
+    "css-custom-properties",
+    "tailwind-css",
+    "css-modules",
+    "postcss",
+    "bem-methodology",
+    "container-queries",
+    "cascade-layers"
+  ],
+  "requires": ["code-core", "web-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

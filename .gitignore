@@ -204,7 +204,7 @@ QUICKSTART.md
 V1.1_FEATURES.md
 WEBSITE_UPDATE_GUIDE.md
 install_cogos.py
-modules/
+/modules/
 
 # Claude / GitNexus skill configs
 .claude/

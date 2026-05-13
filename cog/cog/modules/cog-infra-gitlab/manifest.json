@@ -1,0 +1,9 @@
+{
+  "name": "cog-infra-gitlab",
+  "version": "1.0.0",
+  "description": "GitLab CI/CD expertise including .gitlab-ci.yml, pipelines, runners, stages, artifacts, environments, and merge requests",
+  "capabilities": ["gitlab_ci", "pipeline_authoring", "runner_management", "environment_deployments", "artifact_management", "merge_requests", "gitlab_api"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

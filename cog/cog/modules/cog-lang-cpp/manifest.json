@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-cpp",
+  "version": "1.0.0",
+  "description": "C++ language expertise including memory management, RAII, smart pointers, templates, STL, move semantics, C++17/20/23 features, CMake, and concurrency",
+  "capabilities": ["cpp", "memory_management", "raii", "smart_pointers", "templates", "stl", "move_semantics", "constexpr", "cpp17", "cpp20", "cpp23", "cmake", "concurrency", "modern_cpp"],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

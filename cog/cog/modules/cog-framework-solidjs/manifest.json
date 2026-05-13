@@ -1,0 +1,9 @@
+{
+  "name": "cog-framework-solidjs",
+  "version": "1.0.0",
+  "description": "SolidJS framework expertise including reactive primitives, fine-grained reactivity, JSX without virtual DOM, control flow components, and resources",
+  "capabilities": ["solidjs", "reactive_primitives", "fine_grained_reactivity", "signals", "effects", "memos", "resources", "control_flow", "context"],
+  "requires": ["code-core", "language-core", "web-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

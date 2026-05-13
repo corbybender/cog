@@ -1,0 +1,19 @@
+{
+  "name": "cog-package-yarn",
+  "version": "1.0.0",
+  "description": "Yarn package manager module covering Yarn Berry/PnP, workspaces, plugins, constraints, lock files, Zero-Installs, .yarnrc.yml, yarn dlx, and package extensions",
+  "capabilities": [
+    "yarn-berry-pnp",
+    "yarn-workspaces",
+    "yarn-plugins",
+    "yarn-constraints",
+    "lock-files",
+    "zero-installs",
+    "yarnrc-config",
+    "yarn-dlx",
+    "package-extensions"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "network.request", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "cog-lang-typescript",
+  "version": "1.0.0",
+  "description": "TypeScript language expertise including type system, generics, utility types, decorators, tsconfig, and advanced type patterns",
+  "capabilities": ["typescript", "type_system", "generics", "utility_types", "type_guards", "discriminated_unions", "decorators", "tsconfig", "declaration_files", "mapped_types", "conditional_types", "narrowing"],
+  "requires": ["code-core", "language-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

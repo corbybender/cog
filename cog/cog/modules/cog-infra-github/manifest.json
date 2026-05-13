@@ -1,0 +1,9 @@
+{
+  "name": "cog-infra-github",
+  "version": "1.0.0",
+  "description": "GitHub Actions CI/CD expertise including workflows, pipelines, matrix builds, artifacts, releases, issues, and pull requests",
+  "capabilities": ["github_actions", "cicd_pipelines", "matrix_builds", "artifact_management", "release_automation", "github_api", "pull_requests", "issue_management"],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write", "network.request"],
+  "entrypoint": "module.py"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "cog-framework-nextjs",
+  "version": "1.0.0",
+  "description": "Next.js framework expertise including App Router, Pages Router, SSR/SSG/ISR, API routes, middleware, and server components",
+  "capabilities": ["nextjs", "app_router", "pages_router", "ssr", "ssg", "isr", "api_routes", "middleware", "server_components", "client_components", "image_optimization", "routing"],
+  "requires": ["code-core", "language-core", "web-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

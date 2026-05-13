@@ -1,0 +1,19 @@
+{
+  "name": "cog-package-pnpm",
+  "version": "1.0.0",
+  "description": "pnpm package manager module covering content-addressable storage, strict node_modules, workspaces, lock files, .npmrc, hoisting, peer dependencies, catalog feature, and pnpm deploy",
+  "capabilities": [
+    "content-addressable-storage",
+    "strict-node-modules",
+    "pnpm-workspaces",
+    "lock-files",
+    "npmrc-config",
+    "hoisting",
+    "peer-dependencies",
+    "catalog-feature",
+    "pnpm-deploy"
+  ],
+  "requires": ["tool-core"],
+  "permissions": ["shell.execute", "network.request", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

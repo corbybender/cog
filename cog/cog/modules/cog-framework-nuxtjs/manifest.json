@@ -1,0 +1,9 @@
+{
+  "name": "cog-framework-nuxtjs",
+  "version": "1.0.0",
+  "description": "Nuxt.js framework expertise including auto-imports, Nitro server engine, SSR/SSG, composables, layers, and Vue ecosystem integration",
+  "capabilities": ["nuxtjs", "auto_imports", "nitro", "ssr", "ssg", "composables", "layers", "server_routes", "vue_ecosystem"],
+  "requires": ["code-core", "language-core", "web-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

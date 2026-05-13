@@ -1,0 +1,9 @@
+{
+  "name": "cog-framework-remix",
+  "version": "1.0.0",
+  "description": "Remix framework expertise including loaders, actions, nested routing, progressive enhancement, form handling, and error boundaries",
+  "capabilities": ["remix", "loaders", "actions", "nested_routing", "progressive_enhancement", "form_handling", "error_boundaries", "defer", "resource_routes"],
+  "requires": ["code-core", "language-core", "web-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}

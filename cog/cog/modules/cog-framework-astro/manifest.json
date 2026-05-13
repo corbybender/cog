@@ -1,0 +1,9 @@
+{
+  "name": "cog-framework-astro",
+  "version": "1.0.0",
+  "description": "Astro framework expertise including islands architecture, content collections, SSR/SSG, integrations, view transitions, and partial hydration",
+  "capabilities": ["astro", "islands_architecture", "content_collections", "ssr", "ssg", "integrations", "view_transitions", "partial_hydration", "mdx"],
+  "requires": ["code-core", "language-core", "web-core"],
+  "permissions": ["shell.execute", "filesystem.read", "filesystem.write"],
+  "entrypoint": "module.py"
+}
