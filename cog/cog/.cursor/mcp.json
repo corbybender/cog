@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cogos": {
+      "command": "/usr/bin/python",
+      "args": [
+        "-m",
+        "cog.mcp_server"
+      ]
+    }
+  }
+}

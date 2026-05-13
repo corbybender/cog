@@ -208,7 +208,7 @@
             <section class="docs-hero">
                 <span class="section-eyebrow">Documentation</span>
                 <h1>Install once.<br><span style="background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Every AI tool gets CogOS.</span></h1>
-                <p>Run <code>cog init</code> and CogOS registers itself as an MCP server. Claude Code, Codex, Gemini, and any MCP-compatible tool discovers it automatically. No config files to edit, no instructions to paste.</p>
+                <p>Run <code>cog init</code> and CogOS registers as an MCP server. Your AI tool discovers CogOS and gets instant access to 71 domain expert modules. No API key needed — the AI tool IS the LLM, CogOS just makes it smarter.</p>
             </section>
 
             <div class="docs-layout">
@@ -218,7 +218,8 @@
                     <ul>
                         <li><a href="#mcp">MCP integration</a></li>
                         <li><a href="#agents-md">AGENTS.md &amp; auto-instructions</a></li>
-                        <li><a href="#overview">How it works</a></li>
+                        <li><a href="#zero-config">How it works</a></li>
+                        <li><a href="#overview">Provider config</a></li>
                         <li><a href="#passthrough">Pass-through mode</a></li>
                         <li><a href="#string">String-based init</a></li>
                         <li><a href="#env">Environment variables</a></li>
@@ -257,11 +258,11 @@ $ cog init
                         <tbody>
                             <tr>
                                 <td><code>cog_run</code></td>
-                                <td>Run a cognitive task with multi-agent orchestration</td>
+                                <td>Returns relevant expert knowledge from matching modules. The AI uses this expertise to complete the task correctly.</td>
                             </tr>
                             <tr>
                                 <td><code>cog_chat</code></td>
-                                <td>Interactive conversation with CogOS</td>
+                                <td>Ask follow-up questions about domain topics</td>
                             </tr>
                             <tr>
                                 <td><code>cog_status</code></td>
@@ -287,33 +288,38 @@ $ cog init
                         <tbody>
                             <tr>
                                 <td>Claude Code</td>
-                                <td>Auto &mdash; reads <code>~/.claude.json</code> MCP servers</td>
+                                <td>Auto &mdash; registers in <code>~/.claude.json</code></td>
                                 <td><code>~/.claude.json</code></td>
                             </tr>
                             <tr>
                                 <td>OpenAI Codex CLI</td>
-                                <td>Auto &mdash; reads <code>~/.codex/config.toml</code></td>
+                                <td>Auto &mdash; registers in <code>~/.codex/config.toml</code></td>
                                 <td><code>~/.codex/config.toml</code></td>
                             </tr>
                             <tr>
                                 <td>Gemini CLI</td>
-                                <td>Auto &mdash; reads <code>~/.gemini/settings.json</code></td>
+                                <td>Auto &mdash; registers in <code>~/.gemini/settings.json</code></td>
                                 <td><code>~/.gemini/settings.json</code></td>
                             </tr>
                             <tr>
-                                <td>OpenCode</td>
-                                <td>Auto &mdash; reads <code>~/.config/opencode/opencode.json</code></td>
+                                <td>opencode</td>
+                                <td>Auto &mdash; registers in config, reads provider</td>
                                 <td><code>~/.config/opencode/opencode.json</code></td>
                             </tr>
                             <tr>
                                 <td>Cursor</td>
-                                <td>Add manually in Settings &gt; MCP</td>
-                                <td>Settings UI</td>
+                                <td>Auto &mdash; creates <code>.cursor/mcp.json</code></td>
+                                <td><code>.cursor/mcp.json</code></td>
                             </tr>
                             <tr>
-                                <td>Any MCP client</td>
-                                <td><code>python -m cog.mcp_server</code></td>
-                                <td>stdio transport</td>
+                                <td>VS Code / Cline / Roo</td>
+                                <td>Auto &mdash; creates <code>.vscode/mcp.json</code></td>
+                                <td><code>.vscode/mcp.json</code></td>
+                            </tr>
+                            <tr>
+                                <td>Goose</td>
+                                <td>Auto &mdash; registers in config</td>
+                                <td><code>~/.config/goose/config.yaml</code></td>
                             </tr>
                         </tbody>
                     </table>
@@ -361,6 +367,21 @@ $ cog init
                         <p><strong>Why this matters:</strong> Without AGENTS.md instructions, AI tools default to reading CogOS source code (~2500 lines) to understand how it works. The AGENTS.md block short-circuits that &mdash; they see the instructions and immediately call <code>cog_run</code> instead. Faster, cheaper, and more reliable.</p>
                     </div>
 
+                    <h2 id="zero-config">How It Works &mdash; Zero Config</h2>
+
+                    <p>CogOS uses a simple but powerful architecture: the AI tool is the LLM. When Claude Code, Cursor, or any MCP-compatible AI calls <code>cog_run()</code>, CogOS finds relevant expert modules and returns their knowledge. The AI then uses that expertise to complete the task.</p>
+
+                    <ol>
+                        <li><strong>You run <code>cog init</code></strong> &mdash; Registers CogOS as MCP server with your AI tools. Auto-detects your LLM provider from environment, opencode config, or Ollama.</li>
+                        <li><strong>Your AI calls <code>cog_run(task)</code></strong> &mdash; CogOS matches the task against 71 modules using keyword and capability scoring.</li>
+                        <li><strong>CogOS returns expert knowledge</strong> &mdash; The top 5 matching modules' prompt extensions (best practices, patterns, commands) are returned as context.</li>
+                        <li><strong>Your AI completes the task</strong> &mdash; Using the expert context, the AI executes with deep domain knowledge it didn't have before.</li>
+                    </ol>
+
+                    <div class="callout">
+                        <p><strong>No API key needed for MCP usage.</strong> The AI tool is already authenticated and running. CogOS enriches it with expertise. Provider config is only needed for standalone CLI usage.</p>
+                    </div>
+
                     <h2 id="overview">How Provider Configuration Works</h2>
 
                     <p>CogOS does not ship with a built-in LLM. You bring your own provider &mdash; whether that's OpenAI, Anthropic, DeepSeek, Zhipu/GLM, OpenRouter, or any OpenAI-compatible endpoint.</p>
@@ -405,6 +426,8 @@ $ cog init
                     <div class="callout">
                         <p><strong>Ideal for:</strong> AI tools that embed CogOS as a library. The host tool manages the LLM connection; CogOS provides the cognitive runtime (modules, agents, tools, memory).</p>
                     </div>
+
+                    <p>For MCP usage, pass-through happens automatically — the AI tool IS the LLM.</p>
 
                     <h2 id="string">String-Based Initialization</h2>
 
@@ -460,6 +483,10 @@ $ cog init
                     </ol>
 
                     <h2 id="config-file">Config File (cog.yaml)</h2>
+
+                    <div class="callout">
+                        <p><strong>For MCP usage</strong> (Claude Code, Cursor, etc.), no config file is needed. The AI tool handles LLM calls. <code>cog.yaml</code> is only needed for standalone CLI usage (<code>cog run</code>, <code>cog chat</code>).</p>
+                    </div>
 
                     <p>Create a <code>cog.yaml</code> in your project root. This file is automatically gitignored:</p>
 
