@@ -38,8 +38,19 @@ cog init
 
 That's it. `cog init` does three things automatically:
 
-1. **Detects your LLM provider** — reads opencode.json, env vars (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`), or probes for Ollama on localhost. Writes `cog.yaml` for you.
-2. **Registers as MCP server** — adds CogOS to Claude Code, Codex CLI, Gemini CLI, opencode. Your AI tool discovers it automatically.
+1. **Detects your LLM provider** — reads opencode.json, env vars (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`), or probes for Ollama/LM Studio on localhost. Writes `cog.yaml` for you.
+2. **Registers as MCP server** — adds CogOS to all detected AI tools. Currently supports:
+
+| Tool | Config Location | Notes |
+|------|----------------|-------|
+| Claude Code | `~/.claude.json` | Full MCP support |
+| Codex CLI | `~/.codex/config.toml` | Full MCP support |
+| Gemini CLI | `~/.gemini/settings.json` | Full MCP support |
+| opencode | `~/.config/opencode/opencode.json` | Full MCP support |
+| Cursor | `.cursor/mcp.json` | Project-level config |
+| VS Code / Cline / Roo | `.vscode/mcp.json` | Shared MCP config |
+| Goose | `~/.config/goose/config.yaml` | Extension config |
+
 3. **Writes AGENTS.md** — injects CogOS instructions into your project so the AI knows how to use it.
 
 No config files to edit, no instructions to paste.
@@ -73,6 +84,24 @@ cog status                      # show modules, tools, provider info
 
 <details>
 <summary>Click to expand all provider options</summary>
+
+**How provider detection works:**
+
+`cog init` checks these sources in order:
+1. `COG_PROVIDER` / `COG_MODEL` / `COG_API_KEY` env vars
+2. `OPENAI_API_KEY` env var → uses OpenAI provider
+3. `ANTHROPIC_API_KEY` env var → uses Anthropic provider
+4. AI tool configs (reads opencode.json provider settings)
+5. Running Ollama on localhost:11434
+6. Running LM Studio on localhost:1234
+
+**Claude Code / Codex / Gemini users:** These tools use their own internal API keys. CogOS can't reuse them — you need your own key. The easiest option is [Ollama](https://ollama.com) (free, local):
+
+```bash
+# Install Ollama, pull a model, then re-run init
+ollama pull llama3
+cog init --force
+```
 
 **Pass-through** — for tool builders embedding CogOS:
 

@@ -359,20 +359,7 @@ def cmd_init(args: argparse.Namespace) -> None:
             target.write_text(content)
             print(f"Created {target}")
             print()
-            print("No LLM provider detected. Edit cog.yaml and set:")
-            print("  provider: openai        # or anthropic")
-            print("  model: gpt-4o           # your model name")
-            print("  api_key: sk-...          # your API key")
-            print()
-            print("Or set env vars: COG_PROVIDER, COG_MODEL, COG_API_KEY")
-            if _is_ollama_running():
-                print()
-                print("Detected Ollama running at http://localhost:11434")
-                print("Quick fix:")
-                print("  provider: openai")
-                print("  model: llama3           # or any model from 'ollama list'")
-                print("  api_key: ollama")
-                print("  base_url: http://localhost:11434/v1")
+            _print_provider_setup_help()
 
     _register_all()
     _write_agents_md(Path("AGENTS.md"))
@@ -460,6 +447,40 @@ def _scan_tool_configs() -> dict | None:
                     }
         except Exception:
             pass
+
+    # Cursor settings may have API key info
+    cursor_settings = Path.home() / ".cursor" / "settings.json"
+    if cursor_settings.exists():
+        try:
+            data = json.loads(cursor_settings.read_text())
+            ai_key = data.get("aiKey") or data.get("apiKey")
+            if ai_key and ai_key != "":
+                return {
+                    "provider": "openai",
+                    "model": "gpt-4o",
+                    "api_key": ai_key,
+                    "base_url": None,
+                }
+        except Exception:
+            pass
+
+    # Check for LM Studio (common local dev setup)
+    try:
+        import urllib.request
+        req = urllib.request.Request("http://localhost:1234/v1/models", method="GET")
+        with urllib.request.urlopen(req, timeout=1) as resp:
+            data = json.loads(resp.read())
+            models = data.get("data", [])
+            if models:
+                model_id = models[0].get("id", "default")
+                return {
+                    "provider": "openai",
+                    "model": model_id,
+                    "api_key": "lm-studio",
+                    "base_url": "http://localhost:1234/v1",
+                }
+    except Exception:
+        pass
 
     return None
 
@@ -550,6 +571,54 @@ def _generate_template_config() -> str:
     )
 
 
+def _print_provider_setup_help() -> None:
+    import os
+    from pathlib import Path
+
+    print("No LLM provider auto-detected. CogOS needs one to run tasks.")
+    print("Pick the easiest option for your setup:")
+    print()
+
+    detected_tools = []
+    if Path.home() / ".claude.json" in [Path.home() / ".claude.json"] if (Path.home() / ".claude.json").exists() else []:
+        detected_tools.append("claude")
+    if (Path.home() / ".codex" / "config.toml").exists():
+        detected_tools.append("codex")
+    if (Path.home() / ".gemini" / "settings.json").exists():
+        detected_tools.append("gemini")
+
+    if detected_tools:
+        print(f"Detected: {', '.join(detected_tools)}")
+        print("These tools use their own API keys internally — CogOS can't reuse them.")
+        print()
+
+    if _is_ollama_running():
+        model_name = _get_ollama_default_model()
+        print("EASIEST: Ollama is running! Just add to cog.yaml:")
+        print(f"  provider: openai")
+        print(f"  model: {model_name}")
+        print(f"  api_key: ollama")
+        print(f"  base_url: http://localhost:11434/v1")
+        print()
+        print("Or set env vars:")
+        print(f"  export COG_PROVIDER=openai COG_MODEL={model_name} COG_API_KEY=ollama COG_BASE_URL=http://localhost:11434/v1")
+    else:
+        print("EASIEST: Use Ollama (free, local):")
+        print("  1. Install: curl -fsSL https://ollama.com/install.sh | sh")
+        print("  2. Run:     ollama pull llama3 && ollama serve")
+        print("  3. Re-run:  cog init --force")
+        print()
+        print("Or edit cog.yaml with any OpenAI-compatible provider:")
+        print("  provider: openai")
+        print("  model: gpt-4o")
+        print("  api_key: sk-...")
+        print()
+        print("Or set env vars: COG_PROVIDER, COG_MODEL, COG_API_KEY")
+
+    print()
+    print("(cog_status and cog_modules work without a provider — only cog_run needs one)")
+
+
 _AGENTS_BLOCK_START = "<!-- cogos:start -->"
 _AGENTS_BLOCK_END = "<!-- cogos:end -->"
 
@@ -637,6 +706,21 @@ _TOOL_CONFIGS = {
         "key": "mcp",
         "format": "opencode",
     },
+    "cursor": {
+        "file": ".cursor/mcp.json",
+        "key": "mcpServers",
+        "format": "json",
+    },
+    "vscode": {
+        "file": ".vscode/mcp.json",
+        "key": "servers",
+        "format": "json",
+    },
+    "goose": {
+        "file": "~/.config/goose/config.yaml",
+        "key": "extensions",
+        "format": "goose",
+    },
 }
 
 
@@ -656,10 +740,13 @@ def _register_all() -> None:
 
     for tool_name, cfg in _TOOL_CONFIGS.items():
         cfg_path = Path(cfg["file"]).expanduser()
-        if not cfg_path.exists():
-            continue
+        cfg_path.parent.mkdir(parents=True, exist_ok=True)
         try:
             if cfg["format"] == "json":
+                if not cfg_path.exists():
+                    if tool_name in ("cursor", "vscode"):
+                        _register_project_json(cfg_path, server_entry, tool_name, registered)
+                    continue
                 with open(cfg_path) as f:
                     data = json.load(f)
                 servers = data.setdefault(cfg["key"], {})
@@ -671,6 +758,8 @@ def _register_all() -> None:
                 _register_toml(cfg_path, server_entry, tool_name, registered)
             elif cfg["format"] == "opencode":
                 _register_opencode(cfg_path, server_entry, tool_name, registered)
+            elif cfg["format"] == "goose":
+                _register_goose(cfg_path, server_entry, tool_name, registered)
         except Exception as e:
             print(f"  Warning: could not register with {tool_name}: {e}")
 
@@ -728,6 +817,54 @@ def _register_opencode(
     }
     with open(cfg_path, "w") as f:
         _json.dump(data, f, indent=2)
+    registered.append(f"{tool_name} ({cfg_path})")
+
+
+def _register_project_json(
+    cfg_path: Path, server_entry: dict, tool_name: str, registered: list
+) -> None:
+    import json as _json
+
+    cfg_path.parent.mkdir(parents=True, exist_ok=True)
+    if cfg_path.exists():
+        with open(cfg_path) as f:
+            data = _json.load(f)
+    else:
+        data = {}
+    key = _TOOL_CONFIGS[tool_name]["key"]
+    servers = data.setdefault(key, {})
+    servers["cogos"] = server_entry
+    with open(cfg_path, "w") as f:
+        _json.dump(data, f, indent=2)
+    registered.append(f"{tool_name} ({cfg_path})")
+
+
+def _register_goose(
+    cfg_path: Path, server_entry: dict, tool_name: str, registered: list
+) -> None:
+    try:
+        import yaml
+    except ImportError:
+        return
+    cfg_path.parent.mkdir(parents=True, exist_ok=True)
+    if cfg_path.exists():
+        with open(cfg_path) as f:
+            data = yaml.safe_load(f) or {}
+    else:
+        data = {}
+    extensions = data.setdefault("extensions", [])
+    ext_entry = {
+        "name": "cogos",
+        "type": "stdio",
+        "cmd": server_entry["command"],
+        "args": server_entry["args"],
+    }
+    for ext in extensions:
+        if ext.get("name") == "cogos":
+            return
+    extensions.append(ext_entry)
+    with open(cfg_path, "w") as f:
+        yaml.dump(data, f, default_flow_style=False)
     registered.append(f"{tool_name} ({cfg_path})")
 
 
