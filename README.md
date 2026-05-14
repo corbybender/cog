@@ -18,7 +18,7 @@ CogOS is a **modular cognitive runtime** that enhances any LLM with:
 - **55 Domain Modules** - Prompt extensions, tools, and verifiers for Python, JavaScript, AWS, Docker, Kubernetes, and more
 - **Multi-Agent Orchestration** - Specialized agents that collaborate on complex tasks (planner, researcher, coder, reviewer, tester, critic, documenter, optimizer, security, architect)
 - **70 Built-in & Module Tools** - Filesystem operations, shell execution, web fetching/search, plus module-contributed tools for AWS, Docker, databases, languages, and more
-- **Caching** - Response and tool-result caching to reduce token usage
+- **Token-Efficient by Design** - Chunk indexer, session deduplication, and a configurable character budget keep context overhead minimal
 - **Memory** - SQLite or Mem0-backed conversation and task memory
 - **Approval Gates** - Require user approval for destructive operations
 - **Web UI** - Optional dashboard for task management and analytics
@@ -80,6 +80,50 @@ cog run "your task here"        # run a cognitive task
 cog chat                        # interactive chat
 cog status                      # show modules, tools, provider info
 ```
+
+### Token Efficiency — Built In
+
+CogOS has 7,275+ prompt extensions across 55 modules. Without safeguards, a single `cog_run` call could dump 10,000–15,000 tokens of expertise into your context window before your AI writes a line of code. Three mechanisms work together automatically to prevent this:
+
+#### 1. Chunk-level indexing (not module dumps)
+
+The old approach returned every extension from the top 5 matching modules. The new approach scores each extension individually against your task and returns only the highest-relevance ones — across all modules — up to a character budget. A typical `cog_run` call now returns **~1,500 tokens** of tightly targeted knowledge instead of a broad module dump.
+
+#### 2. Session deduplication
+
+Every chunk of expertise returned is fingerprinted. If a follow-up `cog_run` or `cog_chat` call would return a chunk the AI already received this session, it's skipped. The response includes a `chunks_skipped_dedup` count so the AI knows its prior context is still valid. For a long working session, this compounds: the 10th call on a Python/Docker project returns almost nothing because almost everything relevant was already delivered in calls 1–3.
+
+#### 3. Character budget
+
+Total expertise per call is capped. The default is 6,000 characters (~1,500 tokens). Chunks are scored and filled greedily — the most relevant content first — so the budget cut always removes the least useful tail, not random content.
+
+**These three features are automatic. No configuration required.** The budget is tunable in `cog.yaml` or via environment variable if your project genuinely needs more context:
+
+```yaml
+# cog.yaml
+max_expertise_chars: 6000   # default — ~1,500 tokens per call
+```
+
+```bash
+export COG_MAX_EXPERTISE_CHARS=10000   # raise for large, complex tasks
+```
+
+The response from `cog_run` tells your AI exactly what happened:
+
+```json
+{
+  "chunks_returned": 12,
+  "chunks_skipped_dedup": 8,
+  "total_chars": 5840,
+  "modules_contributing": [
+    { "name": "cog-code-python", "chunks": 7 },
+    { "name": "cog-infra-docker", "chunks": 5 }
+  ],
+  "expertise": "..."
+}
+```
+
+---
 
 ### Model Configuration
 

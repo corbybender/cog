@@ -4,12 +4,15 @@ Architecture: The calling AI tool (Claude Code, Cursor, opencode, etc.) IS the L
 CogOS does NOT need its own separate LLM provider. Instead, CogOS:
 
 1. Discovers and loads 55 domain expert modules
-2. When the AI calls cog_run(), CogOS finds relevant modules and returns
-   their expertise as context for the AI to use
+2. When the AI calls cog_run(), CogOS queries the ChunkIndex to find the most
+   relevant individual prompt extensions and returns them as context
 3. The AI then executes the task itself using that expertise
 
-This means CogOS works with ANY AI tool, zero API key configuration needed.
-The AI tool is already running — CogOS just makes it smarter.
+Token efficiency features (automatic, no config needed):
+- Chunk-level scoring: returns the best individual extensions, not whole modules
+- Session deduplication: chunks already returned this session are skipped
+- Character budget: total expertise is capped at max_expertise_chars (default 6000)
+- Module count: top-3 modules for browsing, chunk index for expertise retrieval
 
 Usage:
     python -m cog.mcp_server          # run standalone
@@ -20,7 +23,6 @@ from __future__ import annotations
 
 import json
 import os
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -40,6 +42,11 @@ mcp = FastMCP(
 )
 
 _kernel = None
+_chunk_index = None
+
+# Session-level deduplication: chunk hashes returned this server process lifetime.
+# Resets only when the MCP server process restarts (i.e. a new session).
+_session_hashes: set[str] = set()
 
 
 def _get_kernel():
@@ -69,6 +76,23 @@ def _get_kernel():
     return kernel
 
 
+def _get_chunk_index():
+    """Return the session-scoped ChunkIndex, building it on first call."""
+    global _chunk_index
+    if _chunk_index is not None and _chunk_index.built:
+        return _chunk_index
+
+    from cog.chunk_index import ChunkIndex
+    kernel = _get_kernel()
+    _chunk_index = ChunkIndex()
+    _chunk_index.build(kernel)
+    return _chunk_index
+
+
+# ---------------------------------------------------------------------------
+# Module-level browsing helper (used by cog_modules, NOT for expertise text)
+# ---------------------------------------------------------------------------
+
 _STOPWORDS = frozenset(
     "a an the to is are was were be been being have has had do does did "
     "will would shall should can could may might must of in on at by for "
@@ -78,38 +102,40 @@ _STOPWORDS = frozenset(
     "most other some such only own same also about up out into over after".split()
 )
 
+_TECH_KEYWORDS = {
+    "js": "javascript", "ts": "typescript", "k8s": "kubernetes",
+    "docker": "docker", "container": "docker", "pod": "kubernetes",
+    "deploy": "deploy", "api": "api", "rest": "api",
+    "graphql": "graphql", "grpc": "grpc", "db": "database",
+    "sql": "database", "postgres": "database", "mysql": "database",
+    "mongo": "database", "redis": "database", "aws": "aws",
+    "gcp": "gcp", "azure": "azure", "react": "react",
+    "vue": "vue", "angular": "angular", "svelte": "svelte",
+    "next": "nextjs", "nuxt": "nuxtjs", "python": "python",
+    "rust": "rust", "go": "go", "java": "java", "php": "php",
+    "ruby": "ruby", "swift": "swift", "kotlin": "kotlin",
+    "css": "css", "html": "html", "git": "git",
+    "terraform": "terraform", "ansible": "ansible",
+    "helm": "kubernetes", "npm": "npm", "yarn": "yarn",
+    "linux": "linux", "mac": "macos", "windows": "windows",
+    "test": "testing", "playwright": "playwright", "selenium": "selenium",
+}
+
 
 def _tokenize(text: str) -> tuple[list[str], list[str]]:
     words = [w for w in text.lower().split() if w not in _STOPWORDS and len(w) > 1]
-    bigrams = [f"{words[i]} {words[i+1]}" for i in range(len(words) - 1)]
+    bigrams = [f"{words[i]} {words[i + 1]}" for i in range(len(words) - 1)]
     return words, bigrams
 
 
-def _find_relevant_modules(task: str, kernel) -> list[dict[str, Any]]:
+def _find_relevant_modules(task: str, kernel, top_n: int = 3) -> list[dict[str, Any]]:
+    """Score modules by name/capability/description match. Used for browsing only."""
     words, bigrams = _tokenize(task)
 
-    tech_keywords = {
-        "js": "javascript", "ts": "typescript", "k8s": "kubernetes",
-        "docker": "docker", "container": "docker", "pod": "kubernetes",
-        "deploy": "deploy", "api": "api", "rest": "api",
-        "graphql": "graphql", "grpc": "grpc", "db": "database",
-        "sql": "database", "postgres": "database", "mysql": "database",
-        "mongo": "database", "redis": "database", "aws": "aws",
-        "gcp": "gcp", "azure": "azure", "react": "react",
-        "vue": "vue", "angular": "angular", "svelte": "svelte",
-        "next": "nextjs", "nuxt": "nuxtjs", "python": "python",
-        "rust": "rust", "go": "go", "java": "java", "php": "php",
-        "ruby": "ruby", "swift": "swift", "kotlin": "kotlin",
-        "css": "css", "html": "html", "git": "git",
-        "terraform": "terraform", "ansible": "ansible",
-        "helm": "kubernetes", "npm": "npm", "yarn": "yarn",
-        "linux": "linux", "mac": "macos", "windows": "windows",
-        "test": "testing", "playwright": "playwright", "selenium": "selenium",
-    }
-    expanded = set()
+    expanded: set[str] = set()
     for w in words:
         expanded.add(w)
-        mapped = tech_keywords.get(w)
+        mapped = _TECH_KEYWORDS.get(w)
         if mapped:
             expanded.add(mapped)
     words = list(expanded)
@@ -125,18 +151,20 @@ def _find_relevant_modules(task: str, kernel) -> list[dict[str, Any]]:
         desc = (mod.manifest.description or "").lower()
 
         score = 0.0
-
         for word in words:
             if word in name_lower:
                 score += 5.0
-                if name_lower.startswith(f"cog-{word}") or f"-{word}-" in name_lower or name_lower.endswith(f"-{word}"):
+                if (
+                    name_lower.startswith(f"cog-{word}")
+                    or f"-{word}-" in name_lower
+                    or name_lower.endswith(f"-{word}")
+                ):
                     score += 5.0
             for cap in caps:
                 if word in cap:
                     score += 2.0
             if word in desc:
                 score += 1.0
-
         for bigram in bigrams:
             if bigram in desc:
                 score += 3.0
@@ -155,17 +183,12 @@ def _find_relevant_modules(task: str, kernel) -> list[dict[str, Any]]:
             }))
 
     scored.sort(key=lambda x: x[0], reverse=True)
-    return [item for _, item in scored[:5]]
+    return [item for _, item in scored[:top_n]]
 
 
-def _get_module_expertise(mod_name: str, kernel) -> list[str]:
-    for mod in kernel.modules.get_active():
-        if mod.cog_module is None:
-            continue
-        if mod.name == mod_name or mod_name in mod.name.lower():
-            return mod.cog_module.get_prompt_extensions()
-    return []
-
+# ---------------------------------------------------------------------------
+# MCP tools
+# ---------------------------------------------------------------------------
 
 @mcp.tool()
 def cog_run(task: str, path: str | None = None) -> str:
@@ -175,6 +198,10 @@ def cog_run(task: str, path: str | None = None) -> str:
     TypeScript, React, AWS, Python, etc.) and returns their knowledge. Use this expertise
     to complete the task correctly following domain best practices.
 
+    Token-efficient: returns only the highest-scoring individual knowledge chunks,
+    capped to a character budget, with session deduplication so repeated topics
+    don't re-consume context.
+
     Args:
         task: What you want done. Examples: "Build a REST API with auth",
               "Debug failing Kubernetes deployment", "Optimize MongoDB queries",
@@ -182,36 +209,68 @@ def cog_run(task: str, path: str | None = None) -> str:
         path: Working directory. Defaults to current directory.
     """
     kernel = _get_kernel()
+    index = _get_chunk_index()
+    max_chars = kernel.config.max_expertise_chars
 
-    relevant = _find_relevant_modules(task, kernel)
+    if not index.built or index.size == 0:
+        # Chunk index empty — fall back to module-level metadata only
+        relevant = _find_relevant_modules(task, kernel)
+        if not relevant:
+            return json.dumps({
+                "task": task,
+                "modules_found": 0,
+                "guidance": "No specific module matched. Proceed with general best practices.",
+            })
+        return json.dumps({
+            "task": task,
+            "modules_found": len(relevant),
+            "relevant_modules": relevant,
+            "guidance": "Module index not yet built. Use module names above as domain context.",
+        })
 
-    if not relevant:
+    chunks = index.query(task, max_chars=max_chars, exclude_hashes=_session_hashes)
+
+    skipped = 0
+    if not chunks:
+        # Everything relevant was already returned this session
+        skipped_check = index.query(task, max_chars=max_chars)
+        skipped = len(skipped_check)
+        if skipped:
+            return json.dumps({
+                "task": task,
+                "note": (
+                    f"All {skipped} relevant knowledge chunks were already returned "
+                    "earlier in this session. Proceed using the expertise already in context."
+                ),
+            })
         return json.dumps({
             "task": task,
             "modules_found": 0,
             "guidance": "No specific module matched. Proceed with general best practices.",
-            "available_hints": [
-                "Call cog_modules() to see all available modules",
-                "Call cog_modules(query='docker') to search for specific topics",
-            ],
         })
 
-    all_expertise = []
-    module_names = []
-    for mod_info in relevant:
-        expertise = _get_module_expertise(mod_info["name"], kernel)
-        if expertise:
-            all_expertise.extend(expertise)
-            module_names.append(mod_info["name"])
+    # Register returned chunks for session deduplication
+    for chunk in chunks:
+        _session_hashes.add(chunk.hash)
 
-    result = {
+    # Derive which modules contributed (for the AI's awareness)
+    modules_hit: dict[str, int] = {}
+    for chunk in chunks:
+        modules_hit[chunk.module] = modules_hit.get(chunk.module, 0) + 1
+
+    expertise_text = "\n\n".join(chunk.text for chunk in chunks)
+    total_chars = len(expertise_text)
+
+    result: dict[str, Any] = {
         "task": task,
-        "modules_found": len(relevant),
-        "relevant_modules": [
-            {"name": m["name"], "description": m["description"], "relevance": m["relevance"]}
-            for m in relevant
+        "chunks_returned": len(chunks),
+        "chunks_skipped_dedup": skipped,
+        "total_chars": total_chars,
+        "modules_contributing": [
+            {"name": name, "chunks": count}
+            for name, count in sorted(modules_hit.items(), key=lambda x: -x[1])
         ],
-        "expertise": "\n".join(all_expertise) if all_expertise else "No expertise content found.",
+        "expertise": expertise_text,
         "instructions": (
             "Use the expertise above to complete this task. Follow the domain-specific "
             "best practices, patterns, and commands from the relevant modules."
@@ -226,14 +285,13 @@ def cog_run(task: str, path: str | None = None) -> str:
 
 @mcp.tool()
 def cog_status() -> str:
-    """Show CogOS status: active modules, registered tools, provider info.
+    """Show CogOS status: active modules, chunk index size, token budget, provider info.
 
     WHEN TO USE: To check if CogOS is properly configured, or when the user
     asks "what can cog do?" or "what modules are available?".
-
-    Returns module count, tool count, and provider/model info.
     """
     kernel = _get_kernel()
+    index = _get_chunk_index()
     modules = kernel.modules.all()
     active = [m for m in modules.values() if m.state.value == "active"]
     tools = kernel.tools
@@ -242,7 +300,7 @@ def cog_status() -> str:
     provider_info = {
         "name": config.provider,
         "model": config.model,
-        "status": "ready" if config.provider else "not needed (host AI is the LLM)",
+        "status": "ready" if config.provider and config.provider != "host" else "host AI is the LLM",
     }
 
     status = {
@@ -251,6 +309,12 @@ def cog_status() -> str:
             "discovered": len(modules),
             "active": len(active),
             "names": sorted(m.name for m in active),
+        },
+        "chunk_index": {
+            "built": index.built,
+            "total_chunks": index.size,
+            "max_expertise_chars": config.max_expertise_chars,
+            "session_chunks_returned": len(_session_hashes),
         },
         "tools": {
             "count": len(tools),
@@ -286,9 +350,7 @@ def cog_modules(query: str | None = None) -> str:
         if mod.error:
             info["error"] = mod.error
         if query and query.lower() not in mod.name.lower():
-            has_match = any(
-                query.lower() in c.lower() for c in mod.capabilities
-            )
+            has_match = any(query.lower() in c.lower() for c in mod.capabilities)
             if not has_match:
                 desc = (mod.manifest.description or "").lower()
                 if query.lower() not in desc:
@@ -304,29 +366,37 @@ def cog_chat(message: str) -> str:
     WHEN TO USE: After a cog_run, when you need more detail on a specific
     technology or pattern mentioned in the expert guidance.
 
+    Uses the same chunk index and session deduplication as cog_run, so
+    follow-up calls won't re-send expertise already in context.
+
     Args:
         message: Your question or topic. Examples: "Tell me more about Docker multi-stage builds",
                  "What are the best practices for React Server Components?",
                  "How do I optimize this MongoDB aggregation pipeline?"
     """
     kernel = _get_kernel()
+    index = _get_chunk_index()
+    max_chars = kernel.config.max_expertise_chars
 
-    relevant = _find_relevant_modules(message, kernel)
+    chunks = index.query(message, max_chars=max_chars, exclude_hashes=_session_hashes)
 
-    all_expertise = []
-    for mod_info in relevant:
-        expertise = _get_module_expertise(mod_info["name"], kernel)
-        if expertise:
-            all_expertise.extend(expertise)
-
-    if not all_expertise:
+    if not chunks:
         return json.dumps({
-            "response": "No specific module matched your question. Try cog_modules(query='...') to find relevant modules.",
+            "response": (
+                "No new expertise found — either no module matched or all relevant "
+                "chunks were already returned this session. "
+                "Try cog_modules(query='...') to find relevant modules."
+            ),
         })
 
+    for chunk in chunks:
+        _session_hashes.add(chunk.hash)
+
+    modules_hit = sorted({chunk.module for chunk in chunks})
     return json.dumps({
-        "relevant_modules": [m["name"] for m in relevant],
-        "expertise": "\n".join(all_expertise),
+        "relevant_modules": modules_hit,
+        "chunks_returned": len(chunks),
+        "expertise": "\n\n".join(chunk.text for chunk in chunks),
     }, indent=2, default=str)
 
 

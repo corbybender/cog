@@ -30,6 +30,7 @@ _DEFAULTS: dict[str, Any] = {
     "max_total_tokens": 0,
     "require_approval": False,
     "agents": {},
+    "max_expertise_chars": 6000,
 }
 
 _ENV_MAP: dict[str, str] = {
@@ -40,6 +41,7 @@ _ENV_MAP: dict[str, str] = {
     "memory_path": "COG_MEMORY_PATH",
     "log_level": "COG_LOG_LEVEL",
     "max_agent_iterations": "COG_MAX_ITERATIONS",
+    "max_expertise_chars": "COG_MAX_EXPERTISE_CHARS",
     "memory_user_id": "COG_USER_ID",
     "memory_agent_id": "COG_AGENT_ID",
     "api_key": "COG_API_KEY",
@@ -52,6 +54,7 @@ _ENV_MAP: dict[str, str] = {
 _TYPE_COERCIONS: dict[str, type] = {
     "max_agent_iterations": int,
     "max_total_tokens": int,
+    "max_expertise_chars": int,
     "sandbox_enabled": lambda v: str(v).lower() in ("true", "1", "yes"),
     "dry_run": lambda v: str(v).lower() in ("true", "1", "yes"),
     "stream": lambda v: str(v).lower() not in ("false", "0", "no"),

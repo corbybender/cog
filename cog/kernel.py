@@ -62,6 +62,7 @@ class KernelConfig:
     require_approval: bool = False
     stream: bool = True
     agents: dict[str, AgentProviderConfig] = field(default_factory=dict)
+    max_expertise_chars: int = 6000
 
 
 class Kernel:

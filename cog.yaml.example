@@ -44,3 +44,8 @@ modules_path: modules
 memory_path: cog_memory.db
 log_level: INFO
 max_agent_iterations: 20
+
+# Max characters of expertise text returned per cog_run / cog_chat call.
+# ~6000 chars ≈ 1500 tokens. Raise if you want richer context per call;
+# lower if you're hitting context limits. Set COG_MAX_EXPERTISE_CHARS to override.
+max_expertise_chars: 6000
