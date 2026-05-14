@@ -61,13 +61,14 @@ After `cog init`, your AI tool sees CogOS tools automatically:
 
 | MCP Tool | What it does |
 |----------|-------------|
-| `cog_run` | Run a cognitive task with multi-agent orchestration |
-| `cog_chat` | Interactive conversation with CogOS |
-| `cog_status` | Show active modules, tools, provider info |
+| `cog_run` | Returns expert knowledge from matching domain modules. The AI uses it to complete the task. |
+| `cog_chat` | Ask follow-up questions about domain topics |
+| `cog_status` | Show active modules, tools, and provider info |
 | `cog_modules` | List available domain modules |
-| `cog_set_provider` | Configure LLM provider at runtime (no restart) |
 
-Your AI can now call these directly. CogOS uses whatever LLM provider your environment already has (OpenAI, Anthropic, Ollama, etc.) — no duplicate API keys.
+**CogOS does not need its own LLM.** The AI tool you are already running (Claude Code, Cursor, Gemini CLI, opencode, etc.) is the LLM. When your AI calls `cog_run()`, CogOS finds the relevant expert modules and returns their knowledge as context. Your AI then uses that context to complete the task with deep domain expertise it didn't have before.
+
+No API key. No separate model. No duplicate configuration. Zero cost to add CogOS to an existing workflow.
 
 ### CLI commands
 
@@ -80,74 +81,64 @@ cog chat                        # interactive chat
 cog status                      # show modules, tools, provider info
 ```
 
-### Advanced: Provider Configuration
+### Model Configuration
 
-<details>
-<summary>Click to expand all provider options</summary>
+**The default is zero configuration.** CogOS uses whatever AI model you are already interacting with. This is called "host AI" mode and it works automatically for every MCP-compatible tool — Claude Code, Cursor, Gemini CLI, opencode, Codex, Goose, and any other tool that supports MCP.
 
-**How provider detection works:**
+#### Saving tokens with per-agent models (optional)
 
-`cog init` checks these sources in order:
-1. `COG_PROVIDER` / `COG_MODEL` / `COG_API_KEY` env vars
-2. `OPENAI_API_KEY` env var → uses OpenAI provider
-3. `ANTHROPIC_API_KEY` env var → uses Anthropic provider
-4. AI tool configs (reads opencode.json provider settings)
-5. Running Ollama on localhost:11434
-6. Running LM Studio on localhost:1234
+Some internal CogOS agents — like the planner that breaks tasks into steps, or the document writer — don't need your premium model. You can point them at a smaller, cheaper model while keeping your main AI for the actual work.
 
-**Claude Code / Codex / Gemini users:** These tools use their own internal API keys. CogOS can't reuse them — you need your own key. The easiest option is [Ollama](https://ollama.com) (free, local):
-
-```bash
-# Install Ollama, pull a model, then re-run init
-ollama pull llama3
-cog init --force
-```
-
-**Pass-through** — for tool builders embedding CogOS:
-
-```python
-from cog import CogOS
-from cog.providers.openai_provider import OpenAIProvider
-
-provider = OpenAIProvider(model="gpt-4o", api_key="sk-...")
-cog = CogOS(provider=provider)
-```
-
-**String-based** — for quick scripts:
-
-```python
-cog = CogOS(llm="gpt-4o", api_key="sk-...")
-cog = CogOS(llm="claude-sonnet-4-20250514", api_key="sk-ant-...")
-cog = CogOS(llm="deepseek-chat", api_key="...", base_url="https://api.deepseek.com/v1")
-```
-
-**Config file** — for project-level settings:
-
-```bash
-cog init   # creates cog.yaml
-```
+Create or edit `cog.yaml` in your project root:
 
 ```yaml
-# cog.yaml (gitignored by default)
-provider: openai
-model: gpt-4o
-api_key: sk-...
-base_url: null          # optional, for custom endpoints
+# provider: host means "use my current AI tool" (the default)
+provider: host
+
+# Per-agent overrides — each can have its own model
+agents:
+  planner:
+    provider: openai
+    model: gpt-4o-mini        # cheap model for task planning
+    api_key: YOUR_KEY_HERE
+    # base_url: optional, for custom endpoints
+
+  document_writer:
+    provider: openai
+    model: gpt-4o-mini        # cheap model for doc generation
+    api_key: YOUR_KEY_HERE
+
+  # executor: not set — uses your current AI (host mode)
+  # researcher: not set — uses your current AI (host mode)
+
+memory_backend: sqlite
+modules_path: modules
+memory_path: cog_memory.db
+log_level: INFO
+max_agent_iterations: 20
 ```
 
-**Environment variables** — full list:
+If an agent is not listed, it falls back to the global `provider` setting. With `provider: host`, that means your current AI handles it — no extra tokens charged to a separate key.
+
+**Known agent roles:**
+
+| Role | What it does | Cost profile |
+|------|-------------|-------------|
+| `planner` | Decomposes tasks into steps | Low — short prompts, structured output |
+| `document_writer` | Generates docs and summaries | Medium — can use a small model |
+| `executor` | Writes and runs code | High — use your best model (host AI by default) |
+| `researcher` | Web search and analysis | Medium — use a small model or host AI |
+
+#### Environment variables
 
 | Variable | Purpose |
 |----------|---------|
-| `COG_PROVIDER` | Override provider (openai, anthropic) |
-| `COG_MODEL` | Override model name |
+| `COG_PROVIDER` | Override global provider (openai, anthropic, host) |
+| `COG_MODEL` | Override global model name |
 | `COG_API_KEY` | API key (any provider) |
 | `COG_BASE_URL` | Custom endpoint URL |
 | `OPENAI_API_KEY` | Auto-detected, sets provider=openai |
 | `ANTHROPIC_API_KEY` | Auto-detected, sets provider=anthropic |
-| `OPENAI_BASE_URL` | Custom OpenAI endpoint |
-
-</details>
 
 ---
 

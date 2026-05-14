@@ -34,6 +34,15 @@ def _default_modules_path() -> str:
 
 
 @dataclass
+class AgentProviderConfig:
+    """Per-agent LLM provider settings. Unset fields fall back to KernelConfig globals."""
+    provider: str | None = None
+    model: str | None = None
+    api_key: str | None = None
+    base_url: str | None = None
+
+
+@dataclass
 class KernelConfig:
     modules_path: str = field(default_factory=_default_modules_path)
     memory_path: str = "cog_memory.db"
@@ -52,6 +61,7 @@ class KernelConfig:
     max_total_tokens: int = 0
     require_approval: bool = False
     stream: bool = True
+    agents: dict[str, AgentProviderConfig] = field(default_factory=dict)
 
 
 class Kernel:
@@ -146,14 +156,52 @@ class Kernel:
                 "kernel", f"Memory backend: SQLite ({self._config.memory_path})"
             )
 
+    def _build_provider_for_role(self, role: str) -> LLMProvider | None:
+        """Build a provider for a named agent role.
+
+        Resolution order: per-role config → global config → None (host AI).
+        Returns None when the resolved provider is "host" or unconfigured.
+        """
+        agent_cfg = self._config.agents.get(role)
+
+        provider_name = (agent_cfg.provider if agent_cfg else None) or self._config.provider
+        model = (agent_cfg.model if agent_cfg else None) or self._config.model
+        api_key = (agent_cfg.api_key if agent_cfg else None) or self._config.api_key
+        base_url = (agent_cfg.base_url if agent_cfg else None) or self._config.base_url
+
+        if not provider_name or provider_name == "host":
+            return None
+        if not model or not api_key:
+            self._logger.warning(
+                "kernel",
+                f"Role '{role}' provider '{provider_name}' missing model or api_key — skipping",
+            )
+            return None
+
+        if provider_name == "anthropic":
+            from cog.providers.anthropic_provider import AnthropicProvider
+            p = AnthropicProvider(model=model, api_key=api_key)
+        else:
+            from cog.providers.openai_provider import OpenAIProvider
+            p = OpenAIProvider(model=model, api_key=api_key, base_url=base_url)
+
+        self._logger.info("kernel", f"Provider for '{role}': {p.get_model_name()}")
+        return p
+
     def _init_provider(self) -> None:
+        """Initialize the global executor provider.
+
+        When provider is 'host' or unset, cog runs in host-AI mode:
+        the MCP path returns expertise text and the calling AI executes.
+        CLI callers that reach kernel.run() with no executor provider will
+        get a clear error at that point.
+        """
         if self._provider is not None:
             return
-        if not self._config.provider:
-            raise ValueError(
-                "No LLM provider configured. Set 'provider' in cog.yaml, "
-                "use --provider on the CLI, or set COG_PROVIDER env var."
-            )
+        provider_name = self._config.provider
+        if not provider_name or provider_name == "host":
+            self._logger.info("kernel", "Provider: host AI (no separate executor LLM)")
+            return
         if not self._config.model:
             raise ValueError(
                 "No LLM model configured. Set 'model' in cog.yaml, "
@@ -165,7 +213,7 @@ class Kernel:
                 "set COG_API_KEY / OPENAI_API_KEY / ANTHROPIC_API_KEY env var, "
                 "or pass api_key= to the constructor."
             )
-        if self._config.provider == "anthropic":
+        if provider_name == "anthropic":
             from cog.providers.anthropic_provider import AnthropicProvider
 
             self._provider = AnthropicProvider(
@@ -218,15 +266,29 @@ Rules:
 
     def _init_agent(self, task: str = "") -> None:
         self._init_provider()
-        assert self._provider is not None
-        self._planner = Planner(provider=self._provider)
+
+        # Planner can use a cheaper per-role model; falls back to global provider.
+        planner_provider = self._build_provider_for_role("planner") or self._provider
+        self._planner = Planner(provider=planner_provider)
+
+        # Executor provider: use per-role "executor" config, then global provider.
+        executor_provider = self._build_provider_for_role("executor") or self._provider
+        if executor_provider is None:
+            raise ValueError(
+                "No executor provider configured for CLI usage.\n"
+                "Set 'provider' in cog.yaml (or 'agents.executor.provider') "
+                "when running cog from the CLI.\n"
+                "Use 'provider: host' only when running via MCP "
+                "(Claude Code, Cursor, opencode, etc.) — the host AI handles execution there."
+            )
+
         agent_config = AgentConfig(
             max_iterations=self._config.max_agent_iterations,
             system_prompt=self._build_system_prompt(task),
             max_total_tokens=self._config.max_total_tokens,
         )
         self._agent = Agent(
-            provider=self._provider,
+            provider=executor_provider,
             tools=self._tools,
             permissions=self._permissions,
             config=agent_config,

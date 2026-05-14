@@ -1,8 +1,45 @@
-provider: openai
-model: glm-5.1
-base_url: https://api.z.ai/api/coding/paas/v4
-api_key: YOUR_API_KEY_HERE
-memory_backend: sqlite
+# CogOS configuration
+#
+# provider: the global fallback for agents that don't have a specific config.
+# Use "host" (or omit) to rely on the AI already running cog — saves tokens
+# when cog is invoked via MCP (Claude Code, Cursor, opencode, Gemini CLI, etc.)
+#
+provider: host
+
+# Per-agent model overrides.
+# Each agent role can declare its own provider / model / api_key / base_url.
+# If a role is omitted here it inherits the global provider above.
+#
+# Known roles: planner, executor, document_writer, researcher
+#
+agents:
+  # planner — decomposes tasks into steps (cheap, use a small model)
+  planner:
+    provider: openai          # openai | anthropic
+    model: gpt-4o-mini
+    api_key: YOUR_KEY_HERE
+    # base_url: https://api.openai.com/v1   # optional, for custom endpoints
+
+  # document_writer — generates docs, summaries, reports (cheap model is fine)
+  document_writer:
+    provider: openai
+    model: gpt-4o-mini
+    api_key: YOUR_KEY_HERE
+
+  # executor — the main agent that writes / runs code (leave unset to use host AI)
+  # executor:
+  #   provider: openai
+  #   model: gpt-4o
+  #   api_key: YOUR_KEY_HERE
+
+  # researcher — web search + analysis (leave unset to use host AI)
+  # researcher:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+# --- Other settings ---
+memory_backend: sqlite        # sqlite | mem0
 modules_path: modules
 memory_path: cog_memory.db
 log_level: INFO

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cogos": {
+      "command": "cog",
+      "args": ["mcp"]
+    }
+  }
+}

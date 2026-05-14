@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-from cog.kernel import KernelConfig
+from cog.kernel import AgentProviderConfig, KernelConfig
 
 CONFIG_FILENAME = "cog.yaml"
 LOCAL_CONFIG_FILENAME = "cog.local.yaml"
@@ -28,6 +29,7 @@ _DEFAULTS: dict[str, Any] = {
     "stream": True,
     "max_total_tokens": 0,
     "require_approval": False,
+    "agents": {},
 }
 
 _ENV_MAP: dict[str, str] = {
@@ -147,17 +149,42 @@ def build_config(
             elif key in env_cfg:
                 merged[key] = env_cfg[key]
 
+    # Parse per-agent provider configs from the "agents:" yaml block
+    raw_agents: dict[str, Any] = file_cfg.get("agents") or {}
+    parsed_agents: dict[str, AgentProviderConfig] = {}
+    for role, cfg in raw_agents.items():
+        if not isinstance(cfg, dict):
+            continue
+        parsed_agents[role] = AgentProviderConfig(
+            provider=cfg.get("provider"),
+            model=cfg.get("model"),
+            api_key=cfg.get("api_key"),
+            base_url=cfg.get("base_url"),
+        )
+    merged["agents"] = parsed_agents
+
     return KernelConfig(**merged)
 
 
 def generate_default_config() -> str:
     return yaml.dump(
         {
-            "provider": "openai",
-            "model": "gpt-4o",
-            "api_key": "YOUR_API_KEY_HERE",
-            "base_url": None,
-            "memory_backend": "mem0",
+            "provider": "host",
+            "agents": {
+                "planner": {
+                    "provider": "openai",
+                    "model": "gpt-4o-mini",
+                    "api_key": "YOUR_KEY_HERE",
+                    "base_url": None,
+                },
+                "document_writer": {
+                    "provider": "openai",
+                    "model": "gpt-4o-mini",
+                    "api_key": "YOUR_KEY_HERE",
+                    "base_url": None,
+                },
+            },
+            "memory_backend": "sqlite",
             "modules_path": "modules",
             "memory_path": "cog_memory.db",
             "log_level": "INFO",
