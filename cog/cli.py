@@ -537,16 +537,64 @@ def _generate_config(
         "    model: gpt-4o-mini        # cheap model for doc generation",
         "    api_key: YOUR_KEY_HERE",
         "",
-        "  # executor — writes and runs code (uncomment to override host AI)",
+        "  # executor — writes and runs code",
         "  # executor:",
         "  #   provider: openai",
         "  #   model: gpt-4o",
         "  #   api_key: YOUR_KEY_HERE",
         "",
-        "  # researcher — web search and analysis (uncomment to override host AI)",
+        "  # researcher — web search and analysis",
         "  # researcher:",
         "  #   provider: openai",
         "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # coder — writes implementation code",
+        "  # coder:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # reviewer — reviews and critiques code",
+        "  # reviewer:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # critic — finds flaws and improvements",
+        "  # critic:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # tester — tests and validates output",
+        "  # tester:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # documenter — writes inline documentation",
+        "  # documenter:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # optimizer — optimizes performance",
+        "  # optimizer:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # security — security analysis",
+        "  # security:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # architect — system design decisions",
+        "  # architect:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o",
         "  #   api_key: YOUR_KEY_HERE",
         "",
         "modules_path: modules",
@@ -599,16 +647,64 @@ def _generate_template_config() -> str:
         "    model: gpt-4o-mini        # cheap model for doc generation\n"
         "    api_key: YOUR_KEY_HERE\n"
         "\n"
-        "  # executor — writes and runs code (uncomment to override host AI)\n"
+        "  # executor — writes and runs code\n"
         "  # executor:\n"
         "  #   provider: openai\n"
         "  #   model: gpt-4o\n"
         "  #   api_key: YOUR_KEY_HERE\n"
         "\n"
-        "  # researcher — web search and analysis (uncomment to override host AI)\n"
+        "  # researcher — web search and analysis\n"
         "  # researcher:\n"
         "  #   provider: openai\n"
         "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # coder — writes implementation code\n"
+        "  # coder:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # reviewer — reviews and critiques code\n"
+        "  # reviewer:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # critic — finds flaws and improvements\n"
+        "  # critic:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # tester — tests and validates output\n"
+        "  # tester:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # documenter — writes inline documentation\n"
+        "  # documenter:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # optimizer — optimizes performance\n"
+        "  # optimizer:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # security — security analysis\n"
+        "  # security:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # architect — system design decisions\n"
+        "  # architect:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o\n"
         "  #   api_key: YOUR_KEY_HERE\n"
         "\n"
         "modules_path: modules\n"

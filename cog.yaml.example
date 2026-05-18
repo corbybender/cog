@@ -10,7 +10,9 @@ provider: host
 # Each agent role can declare its own provider / model / api_key / base_url.
 # If a role is omitted here it inherits the global provider above.
 #
-# Known roles: planner, executor, document_writer, researcher
+# Known roles: planner, document_writer, executor, researcher,
+#              coder, reviewer, critic, tester, documenter,
+#              optimizer, security, architect
 #
 agents:
   # planner — decomposes tasks into steps (cheap, use a small model)
@@ -26,16 +28,64 @@ agents:
     model: gpt-4o-mini
     api_key: YOUR_KEY_HERE
 
-  # executor — the main agent that writes / runs code (leave unset to use host AI)
+  # executor — the main agent that writes / runs code
   # executor:
   #   provider: openai
   #   model: gpt-4o
   #   api_key: YOUR_KEY_HERE
 
-  # researcher — web search + analysis (leave unset to use host AI)
+  # researcher — web search + analysis
   # researcher:
   #   provider: openai
   #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # coder — writes implementation code
+  # coder:
+  #   provider: openai
+  #   model: gpt-4o
+  #   api_key: YOUR_KEY_HERE
+
+  # reviewer — reviews and critiques code
+  # reviewer:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # critic — finds flaws and improvements
+  # critic:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # tester — tests and validates output
+  # tester:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # documenter — writes inline documentation
+  # documenter:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # optimizer — optimizes performance
+  # optimizer:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # security — security analysis
+  # security:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # architect — system design decisions
+  # architect:
+  #   provider: openai
+  #   model: gpt-4o
   #   api_key: YOUR_KEY_HERE
 
 # --- Other settings ---

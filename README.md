@@ -152,16 +152,64 @@ agents:
     model: gpt-4o-mini        # cheap model for doc generation
     api_key: YOUR_KEY_HERE
 
-  # executor — writes and runs code (uncomment to override host AI)
+  # executor — writes and runs code
   # executor:
   #   provider: openai
   #   model: gpt-4o
   #   api_key: YOUR_KEY_HERE
 
-  # researcher — web search and analysis (uncomment to override host AI)
+  # researcher — web search and analysis
   # researcher:
   #   provider: openai
   #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # coder — writes implementation code
+  # coder:
+  #   provider: openai
+  #   model: gpt-4o
+  #   api_key: YOUR_KEY_HERE
+
+  # reviewer — reviews and critiques code
+  # reviewer:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # critic — finds flaws and improvements
+  # critic:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # tester — tests and validates output
+  # tester:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # documenter — writes inline documentation
+  # documenter:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # optimizer — optimizes performance
+  # optimizer:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # security — security analysis
+  # security:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
+
+  # architect — system design decisions
+  # architect:
+  #   provider: openai
+  #   model: gpt-4o
   #   api_key: YOUR_KEY_HERE
 
 memory_backend: sqlite
@@ -181,6 +229,14 @@ If an agent is not listed, it falls back to the global `provider` setting. With 
 | `document_writer` | Generates docs and summaries | Medium — can use a small model |
 | `executor` | Writes and runs code | High — use your best model (host AI by default) |
 | `researcher` | Web search and analysis | Medium — use a small model or host AI |
+| `coder` | Writes implementation code | High — use your best model (host AI by default) |
+| `reviewer` | Reviews and critiques code | Low — can use a small model |
+| `critic` | Finds flaws and suggests improvements | Low — can use a small model |
+| `tester` | Tests and validates output | Medium — can use a small model |
+| `documenter` | Writes inline documentation | Low — can use a small model |
+| `optimizer` | Optimizes performance | Medium — can use a small model |
+| `security` | Security analysis and review | Medium — can use a small model |
+| `architect` | System design decisions | High — use your best model (host AI by default) |
 
 #### Environment variables
 
