@@ -152,8 +152,17 @@ agents:
     model: gpt-4o-mini        # cheap model for doc generation
     api_key: YOUR_KEY_HERE
 
-  # executor: not set — uses your current AI (host mode)
-  # researcher: not set — uses your current AI (host mode)
+  # executor — writes and runs code (uncomment to override host AI)
+  # executor:
+  #   provider: openai
+  #   model: gpt-4o
+  #   api_key: YOUR_KEY_HERE
+
+  # researcher — web search and analysis (uncomment to override host AI)
+  # researcher:
+  #   provider: openai
+  #   model: gpt-4o-mini
+  #   api_key: YOUR_KEY_HERE
 
 memory_backend: sqlite
 modules_path: modules

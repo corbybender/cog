@@ -525,6 +525,30 @@ def _generate_config(
         lines.append(f"base_url: {base_url}")
     lines.extend([
         "",
+        "# Per-agent overrides — each can have its own model",
+        "agents:",
+        "  planner:",
+        "    provider: openai",
+        "    model: gpt-4o-mini        # cheap model for task planning",
+        "    api_key: YOUR_KEY_HERE",
+        "",
+        "  document_writer:",
+        "    provider: openai",
+        "    model: gpt-4o-mini        # cheap model for doc generation",
+        "    api_key: YOUR_KEY_HERE",
+        "",
+        "  # executor — writes and runs code (uncomment to override host AI)",
+        "  # executor:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
+        "  # researcher — web search and analysis (uncomment to override host AI)",
+        "  # researcher:",
+        "  #   provider: openai",
+        "  #   model: gpt-4o-mini",
+        "  #   api_key: YOUR_KEY_HERE",
+        "",
         "modules_path: modules",
         "memory_backend: sqlite",
         "memory_path: cog_memory.db",
@@ -562,6 +586,30 @@ def _generate_template_config() -> str:
         "provider: openai\n"
         "model: gpt-4o\n"
         "api_key: YOUR_API_KEY_HERE\n"
+        "\n"
+        "# Per-agent overrides — each can have its own model\n"
+        "agents:\n"
+        "  planner:\n"
+        "    provider: openai\n"
+        "    model: gpt-4o-mini        # cheap model for task planning\n"
+        "    api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  document_writer:\n"
+        "    provider: openai\n"
+        "    model: gpt-4o-mini        # cheap model for doc generation\n"
+        "    api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # executor — writes and runs code (uncomment to override host AI)\n"
+        "  # executor:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
+        "\n"
+        "  # researcher — web search and analysis (uncomment to override host AI)\n"
+        "  # researcher:\n"
+        "  #   provider: openai\n"
+        "  #   model: gpt-4o-mini\n"
+        "  #   api_key: YOUR_KEY_HERE\n"
         "\n"
         "modules_path: modules\n"
         "memory_backend: sqlite\n"
